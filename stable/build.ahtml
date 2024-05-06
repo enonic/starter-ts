@@ -484,7 +484,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev @enonic-types/core @enonic-types/lib-content @enonic-types/lib-portal @enonic-types/global @enonic-types/lib-context @enonic-types/lib-auth @enonic-types/lib-event @enonic-types/lib-common @enonic-types/lib-repo @enonic-types/lib-websocket @enonic-types/lib-node @enonic-types/lib-i18n @enonic-types/lib-task @enonic-types/lib-io @enonic-types/lib-project @enonic-types/lib-mail @enonic-types/lib-export @enonic-types/lib-scheduler @enonic-types/lib-admin @enonic-types/lib-cluster</code></pre>
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev @enonic-types/core @enonic-types/lib-content @enonic-types/lib-portal @enonic-types/global @enonic-types/lib-context @enonic-types/lib-auth @enonic-types/lib-event @enonic-types/lib-common @enonic-types/lib-repo @enonic-types/lib-websocket @enonic-types/lib-node @enonic-types/lib-i18n @enonic-types/lib-task @enonic-types/lib-io @enonic-types/lib-project @enonic-types/lib-mail @enonic-types/lib-export @enonic-types/lib-scheduler @enonic-types/lib-admin @enonic-types/lib-cluster @enonic-types/lib-value</code></pre>
 </div>
 </div>
 </div>
@@ -1032,7 +1032,7 @@ processResources {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-06 08:52:24 UTC
+Last updated 2024-05-06 11:46:03 UTC
 </div>
 </div>
 </body>
