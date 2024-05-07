@@ -466,7 +466,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="language"><a class="link" href="#language">Language</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Currently the Enonic XP engine supports <code>JavaScript 1.9</code> (2011) with some <code>ECMAScript 2015</code> (ES6) features. This is because it runs on the <code>Nashorn</code> JavaScript engine inside the JVM (Java Virtual Machine).</p>
+<p>Currently, the Enonic XP engine supports <code>JavaScript 1.9</code> (2011) with some <code>ECMAScript 2015</code> (ES6) features. This is because it runs on the <code>Nashorn</code> JavaScript engine inside the JVM (Java Virtual Machine).</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -553,7 +553,7 @@ For many years <code>Webpack</code> has been the most common tool for working wi
 </table>
 </div>
 <div class="paragraph">
-<p>Recently <code>TSup</code> appeared on the scene. TSup is a simple and fast tool that is specifically designed for TypeScript code. It is easy to use and configure. It also has all the features you need to work with Enonic XP server-side code.</p>
+<p>Recently <code>TSup</code> appeared on the scene. TSup is a simple and fast tool that is specifically designed for TypeScript code. It is easy to use and configure. It also has all the features you need to work with server-side code in Enonic XP.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -562,7 +562,7 @@ For many years <code>Webpack</code> has been the most common tool for working wi
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-<code>bun</code> is an up and coming even faster tool, but is still missing some features to work with Enonic XP server-side code. It receives regular updates so hopefully we will be able to use it soon.
+<code>bun</code> is an even faster up and coming tool, but is still missing some features to work with Enonic XP server-side code. It receives regular updates, so hopefully we will be able to use it soon.
 </td>
 </tr>
 </table>
@@ -572,7 +572,7 @@ For many years <code>Webpack</code> has been the most common tool for working wi
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-06 11:46:03 UTC
+Last updated 2024-05-07 11:17:49 UTC
 </div>
 </div>
 </body>

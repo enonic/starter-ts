@@ -442,7 +442,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#start_point">Start point</a></li>
-<li><a href="#solution">Solution</a></li>
+<li><a href="#tldr">TLDR</a></li>
 </ul>
 </div>
 </div>
@@ -450,10 +450,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The idea behind this tutorial is to learn how to add TypeScript to an existing project.</p>
+<p>The idea behind this tutorial is to learn how to configure transpilation of TypeScript in an existing XP project.</p>
 </div>
 <div class="paragraph">
-<p>Most projects start with a simple setup and then grows in complexity as more an more features are added. This is where TypeScript can help you to keep your codebase clean and maintainable.</p>
+<p>Most projects start with a simple setup and then grow in complexity as more and more features are added. This is where TypeScript can help you keep your codebase clean and maintainable.</p>
 </div>
 </div>
 </div>
@@ -461,24 +461,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="start_point"><a class="link" href="#start_point">Start point</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We start this tutorial with the most basic setup possible, a vanilla project:</p>
+<p>We start this tutorial with the most basic setup possible, a vanilla XP project:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">enonic project create com.example.myproject -r starter-vanilla -d myproject</code></pre>
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">enonic create myproject -r starter-vanilla</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="solution"><a class="link" href="#solution">Solution</a></h2>
+<h2 id="tldr"><a class="link" href="#tldr">TLDR</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>If you are starting a new project from scratch or you just want to see the final result of this tutorial, you can use the following command to create a new project with all the TypeScript features already added:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">enonic project create com.example.myproject -r starter-ts -d myproject</code></pre>
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">enonic create myproject -r starter-ts</code></pre>
 </div>
 </div>
 </div>
@@ -486,7 +486,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-06 11:46:03 UTC
+Last updated 2024-05-07 11:17:49 UTC
 </div>
 </div>
 </body>

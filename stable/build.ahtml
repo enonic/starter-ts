@@ -449,7 +449,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#configure">Configure</a>
 <ul class="sectlevel2">
-<li><a href="#check_if_there_are_any_files_to_build">Check if there are any files to build</a></li>
+<li><a href="#file_processing">File processing</a></li>
 <li><a href="#package_json">package.json</a></li>
 <li><a href="#typescript_configuration">TypeScript configuration</a></li>
 <li><a href="#tsup_configuration">TSup configuration</a></li>
@@ -459,20 +459,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#node_gradle_plugin">Node-gradle plugin</a></li>
 <li><a href="#npmbuild_task">npmBuild task</a></li>
-<li><a href="#avoid_source_files_in_the_build_folder_and_jar_file">Avoid source files in the build folder and jar file</a></li>
+<li><a href="#clean_up_jar_file">Clean up jar file</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this chapter we will learn how to set up transpilation of Typescript code - both client- and server-side - to JavaScript.</p>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="install"><a class="link" href="#install">Install</a></h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="types"><a class="link" href="#types">Types</a></h3>
 <div class="paragraph">
-<p>Types useful when configuring the build system:</p>
+<p>Install types needed to configure the build system:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -480,7 +487,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>Types useful when programming Enonic XP server-side code:</p>
+<p>Install types needed to work with Enonic Core API:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -490,10 +497,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="sect2">
 <h3 id="tools"><a class="link" href="#tools">Tools</a></h3>
+<div class="paragraph">
+<p>Install tools required to set up transpilation and bundling of Typescript code:</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev @swc/core concurrently tsup typescript</code></pre>
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev typescript tsup @swc/core concurrently</code></pre>
 </div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>typescript</code> will enable support of Typescript language by adding syntax for type declarations and annotations</p>
+</li>
+<li>
+<p><code>tsup</code> is a TypeScript bundler powered by esbuild</p>
+</li>
+<li>
+<p><code>@swc/core</code> is a TypeScript / JavaScript compiler</p>
+</li>
+<li>
+<p><code>concurrently</code> is a tool to run multiple commands concurrently</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -502,9 +528,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="configure"><a class="link" href="#configure">Configure</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="check_if_there_are_any_files_to_build"><a class="link" href="#check_if_there_are_any_files_to_build">Check if there are any files to build</a></h3>
+<h3 id="file_processing"><a class="link" href="#file_processing">File processing</a></h3>
 <div class="paragraph">
-<p>We need a cross platform way to check if there are any files to build, so here&#8217;s are a couple scripts that does just that:</p>
+<p>We need a cross-platform way to check if there are any files to build, so here are a couple scripts that do just that:</p>
 </div>
 <div class="listingblock">
 <div class="title">tsup/anyAssetFiles.js</div>
@@ -570,7 +596,7 @@ if (checkFilesRecursively(folderPath)) {
 <div class="sect2">
 <h3 id="package_json"><a class="link" href="#package_json">package.json</a></h3>
 <div class="paragraph">
-<p>Add the following scripts to the package.json file:</p>
+<p>Add the following scripts to the <code>package.json</code> file (the first script concurrently executes the other two):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -606,7 +632,7 @@ You will typically NOT publish an Enonic XP project to npm, so it&#8217;s a good
 <div class="sect2">
 <h3 id="typescript_configuration"><a class="link" href="#typescript_configuration">TypeScript configuration</a></h3>
 <div class="paragraph">
-<p>Add the following files to the project:</p>
+<p>Add the following config files to the project:</p>
 </div>
 <div class="listingblock">
 <div class="title">tsconfig.json</div>
@@ -702,10 +728,6 @@ You will typically NOT publish an Enonic XP project to npm, so it&#8217;s a good
 
     "skipLibCheck": true,
 
-    // WARNING: Target must be set in ../../../tsup/server.ts to work correctly!
-    // "target": "ES3", // tsup WARNING Unrecognized target environment "ES3"
-		// "target": "ES5", // tsup Transforming const to the configured target environment ("ES5") is not supported yet
-
     // By default all visible ”@types” packages are included in your compilation.
     // Packages in node_modules/@types of any enclosing folder are considered visible.
     // For example, that means packages within ./node_modules/@types/,
@@ -756,27 +778,9 @@ You will typically NOT publish an Enonic XP project to npm, so it&#8217;s a good
   ],
 
   "compilerOptions": {
-
-    // If you are planning to write tsx files, you should comment in the next
-    // line:
-    // "jsx": "react",
-
     "lib": [
       "DOM", // console, document, window, etc...
-      // "ES2020", // Modern browsers
     ],
-
-    // "moduleResolution": "node",
-
-    // "skipLibCheck": true,
-
-    // "target": "ES2020", // Modern browsers
-
-    // "types": [
-      // If you are planning to write tsx files, you should install @types/react
-      // and comment in the next line:
-      // "react"
-    // ],
   },
 }</code></pre>
 </div>
@@ -785,12 +789,12 @@ You will typically NOT publish an Enonic XP project to npm, so it&#8217;s a good
 <div class="sect2">
 <h3 id="tsup_configuration"><a class="link" href="#tsup_configuration">TSup configuration</a></h3>
 <div class="paragraph">
-<p>Add the following files to the project:</p>
+<p>Add the following config files to the project:</p>
 </div>
 <div class="listingblock">
 <div class="title">tsup.config.ts</div>
 <div class="content">
-<pre class="highlight"><code class="language-JSON" data-lang="JSON">import type { Options } from './tsup';
+<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">import type { Options } from './tsup';
 
 
 import { defineConfig } from 'tsup';
@@ -811,7 +815,7 @@ export default defineConfig(async (options: Options) =&gt; {
 <div class="listingblock">
 <div class="title">tsup/index.d.ts</div>
 <div class="content">
-<pre class="highlight"><code class="language-JSON" data-lang="JSON">import type { Options as TsupOptions } from 'tsup';
+<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">import type { Options as TsupOptions } from 'tsup';
 
 export declare interface Options extends TsupOptions {
   d?: string
@@ -821,7 +825,7 @@ export declare interface Options extends TsupOptions {
 <div class="listingblock">
 <div class="title">tsup/constants.ts</div>
 <div class="content">
-<pre class="highlight"><code class="language-JSON" data-lang="JSON">export const AND_BELOW = '**';
+<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">export const AND_BELOW = '**';
 
 export const DIR_DST = 'build/resources/main';
 export const DIR_DST_ASSETS = `${DIR_DST}/assets`;
@@ -833,7 +837,7 @@ export const DIR_SRC_ASSETS = `${DIR_SRC}/assets`;</code></pre>
 <div class="listingblock">
 <div class="title">tsup/client-asset.ts</div>
 <div class="content">
-<pre class="highlight"><code class="language-JSON" data-lang="JSON">import type { Options } from '.';
+<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">import type { Options } from '.';
 
 
 import { globSync } from 'glob';
@@ -874,7 +878,7 @@ export default function buildAssetConfig(): Options {
 <div class="listingblock">
 <div class="title">tsup/server.ts</div>
 <div class="content">
-<pre class="highlight"><code class="language-JSON" data-lang="JSON">import type { Options } from '.';
+<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">import type { Options } from '.';
 
 
 import { globSync } from 'glob';
@@ -952,7 +956,7 @@ export default function buildServerConfig(): Options {
 <div class="sect2">
 <h3 id="node_gradle_plugin"><a class="link" href="#node_gradle_plugin">Node-gradle plugin</a></h3>
 <div class="paragraph">
-<p>In order for gradle to be able to run npm scripts, you need to use the node-gradle plugin.</p>
+<p>In order for Gradle to be able to run npm scripts, you need to use the node-gradle plugin.</p>
 </div>
 <div class="paragraph">
 <p>Add the following to the build.gradle file:</p>
@@ -981,7 +985,7 @@ node {
 <div class="sect2">
 <h3 id="npmbuild_task"><a class="link" href="#npmbuild_task">npmBuild task</a></h3>
 <div class="paragraph">
-<p>Add the following task to the build.gradle file:</p>
+<p>Add the following task to the build.gradle file, which will run the npm build script defined in package.json:</p>
 </div>
 <div class="listingblock">
 <div class="title">build.gradle</div>
@@ -1007,7 +1011,7 @@ jar.dependsOn npmBuild</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="avoid_source_files_in_the_build_folder_and_jar_file"><a class="link" href="#avoid_source_files_in_the_build_folder_and_jar_file">Avoid source files in the build folder and jar file</a></h3>
+<h3 id="clean_up_jar_file"><a class="link" href="#clean_up_jar_file">Clean up jar file</a></h3>
 <div class="paragraph">
 <p>Add the following to the build.gradle file:</p>
 </div>
@@ -1019,12 +1023,15 @@ jar.dependsOn npmBuild</code></pre>
 }
 
 processResources {
-	exclude '**/.gitkeep'
+  exclude '**/.gitkeep'
   exclude '**/*.json'
-	exclude '**/*.ts'
-	exclude '**/*.tsx'
+  exclude '**/*.ts'
+  exclude '**/*.tsx'
 }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>This will make sure that assembled jar file contains only required assets and none of the original source TypeScript files.</p>
 </div>
 </div>
 </div>
@@ -1032,7 +1039,7 @@ processResources {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-06 11:46:03 UTC
+Last updated 2024-05-07 11:17:49 UTC
 </div>
 </div>
 </body>

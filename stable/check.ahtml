@@ -451,6 +451,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Type checking is useful to catch errors early in the development process. This chapter will explain how to set up type checking for your project.</p>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="configure"><a class="link" href="#configure">Configure</a></h2>
 <div class="sectionbody">
@@ -475,7 +482,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect2">
 <h3 id="build_gradle"><a class="link" href="#build_gradle">build.gradle</a></h3>
 <div class="paragraph">
-<p>Add the following task to the build.gradle file:</p>
+<p>Add the following task to the build.gradle file, which will run the npm check script defined in package.json:</p>
 </div>
 <div class="listingblock">
 <div class="title">build.gradle</div>
@@ -494,13 +501,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 check.dependsOn npmCheck</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>The last command makes sure that type checking is executed as a part of the build, but it can also be run separately (to skip the entire build process and just check for errors) with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">./gradlew check</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-06 11:46:03 UTC
+Last updated 2024-05-07 11:17:49 UTC
 </div>
 </div>
 </body>

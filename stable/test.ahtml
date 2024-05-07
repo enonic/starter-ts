@@ -444,9 +444,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#install">Install</a></li>
 <li><a href="#configure">Configure</a>
 <ul class="sectlevel2">
-<li><a href="#jest_config_ts">jest.config.ts</a></li>
-<li><a href="#srcjestserverglobal_d_ts">src/jest/server/global.d.ts</a></li>
-<li><a href="#srcjestserversetupfile_ts">src/jest/server/setupFile.ts</a></li>
+<li><a href="#jest">Jest</a></li>
 <li><a href="#package_json">package.json</a></li>
 <li><a href="#build_gradle">build.gradle</a></li>
 </ul>
@@ -455,6 +453,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are writing Typescript code, chances are you want to write tests for that code, and you want to write them in Typescript. Here&#8217;s how to configure test runs in your application. In our example we will configure Jest, a JavaScript testing framework designed to ensure correctness of your JavaScript codebase.</p>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="install"><a class="link" href="#install">Install</a></h2>
 <div class="sectionbody">
@@ -469,9 +474,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="configure"><a class="link" href="#configure">Configure</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="jest_config_ts"><a class="link" href="#jest_config_ts">jest.config.ts</a></h3>
+<h3 id="jest"><a class="link" href="#jest">Jest</a></h3>
 <div class="paragraph">
-<p>Create a jest.config.js file in the root of the project with the following content:</p>
+<p>In our example we will configure processing of server-side Typescript code, but you can similarly configure client-side code.</p>
+</div>
+<div class="paragraph">
+<p>Create a file called jest.config.js in the root of the project with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -616,9 +624,12 @@ const customJestConfig: Config.InitialOptions = {
 export default customJestConfig;</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>With this config Jest will find and execute test files in the 'src/main/resources' folder called <code><strong>.test.ts</code> (or <code>.tsx</code>) or <code></strong>.spec.ts</code> (or <code>.tsx</code>).</p>
 </div>
-<div class="sect2">
-<h3 id="srcjestserverglobal_d_ts"><a class="link" href="#srcjestserverglobal_d_ts">src/jest/server/global.d.ts</a></h3>
+<div class="paragraph">
+<p>Set up <code>src/jest/server</code> folder structure and create two files inside:</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">/// &lt;reference types="@enonic-types/global" /&gt;
@@ -630,9 +641,6 @@ export declare type Require = typeof require;
 export declare type Resolve = typeof resolve;</code></pre>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="srcjestserversetupfile_ts"><a class="link" href="#srcjestserversetupfile_ts">src/jest/server/setupFile.ts</a></h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">import type {App, Log} from './global';
@@ -672,6 +680,9 @@ globalThis.log = {
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><code>test</code> command starts execution of tests. <code>cov</code> command does exactly the same, but also generates coverage report.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="build_gradle"><a class="link" href="#build_gradle">build.gradle</a></h3>
@@ -697,13 +708,21 @@ globalThis.log = {
 test.dependsOn npmTest</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>With this setup tests will be executed on every build, but you can also run them separately with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">./gradlew test</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-06 11:46:03 UTC
+Last updated 2024-05-07 11:17:49 UTC
 </div>
 </div>
 </body>
