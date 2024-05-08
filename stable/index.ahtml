@@ -435,21 +435,68 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="article">
+<body class="article toc2 toc-right">
 <div id="header">
 <h1>TypeScript Starter</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#audience">Audience</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#chapters">Chapters:</a></li>
+<li><a href="#additional_reading">Additional reading</a></li>
+</ul>
+</div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>How to add TypeScript to an Enonic XP project based on starter-vanilla.</p>
+<p>How to add a <code>TypeScript development environment</code> to an <code>existing Enonic XP project</code>.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="setup.ahtml">Setup</a></p>
-</li>
+</div>
+</div>
+<div class="sect1">
+<h2 id="audience"><a class="link" href="#audience">Audience</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This tutorial is primarily for people who are already working on an <code>existing Enonic XP project</code> and want to start using TypeScript. It may also be helpful for those who already are using TypeScript, but want to <code>understand and improve</code> their setup.</p>
+</div>
+<div class="paragraph">
+<p>If you are starting a <code>new project</code> from scratch, you can use the end <a href="result.ahtml">result</a><sup>[7]</sup> of this tutorial as a starter with everything already setup.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="introduction"><a class="link" href="#introduction">Introduction</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Most projects start with a simple setup and then grow in complexity as more and more features are added. This is where TypeScript can help you keep your codebase clean and maintainable.</p>
+</div>
+<div class="paragraph">
+<p>Before we start it&#8217;s a good idea to have a basic understanding of some development environment <a href="concepts.ahtml">concepts</a><sup>[1]</sup>.</p>
+</div>
+<div class="paragraph">
+<p>Then we will start by <a href="project.ahtml">creating a project</a><sup>[2]</sup> without any TypeScript support.</p>
+</div>
+<div class="paragraph">
+<p>Then we will learn how to configure <a href="build.ahtml">building</a><sup>[3]</sup>, <a href="check.ahtml">type-checking</a><sup>[4]</sup>, <a href="lint.ahtml">linting</a><sup>[5]</sup> and <a href="test.ahtml">testing</a><sup>[7]</sup> for TypeScript.</p>
+</div>
+<div class="paragraph">
+<p>Finally we can use the <a href="result.ahtml">result</a><sup>[7]</sup> to create future projects with everything already setup.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="chapters"><a class="link" href="#chapters">Chapters:</a></h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p><a href="concepts.ahtml">Concepts</a></p>
+</li>
+<li>
+<p><a href="project.ahtml">Create project</a></p>
 </li>
 <li>
 <p><a href="build.ahtml">Building</a></p>
@@ -463,12 +510,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p><a href="test.ahtml">Testing</a></p>
 </li>
-</ul>
+<li>
+<p><a href="result.ahtml">Result</a></p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="additional_reading"><a class="link" href="#additional_reading">Additional reading</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you want to go into more detail and see some actual code examples, you can check out the <a href="https://developer.enonic.com/docs/tsup-starter">Tsup Starter</a> documentation.</p>
+</div>
+<div class="paragraph">
+<p>If you want to learn more about writing tests in TypeScript, you can check out the <a href="https://developer.enonic.com/docs/testing-with-jest-and-mock-xp">Testing with Jest and Mock-XP</a> tutorial.</p>
+</div>
+</div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-07 11:17:49 UTC
+Last updated 2024-05-08 07:54:23 UTC
 </div>
 </div>
 </body>

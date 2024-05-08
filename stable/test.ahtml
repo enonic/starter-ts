@@ -449,6 +449,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#build_gradle">build.gradle</a></li>
 </ul>
 </li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#additional_reading">Additional reading</a></li>
 </ul>
 </div>
 </div>
@@ -719,10 +721,26 @@ test.dependsOn npmTest</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the next chapter we will learn how to use the <a href="result.ahtml">result</a> to create future projects with everything already setup.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="additional_reading"><a class="link" href="#additional_reading">Additional reading</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you want to learn more about writing tests in TypeScript, you can check out the <a href="https://developer.enonic.com/docs/testing-with-jest-and-mock-xp">Testing with Jest and Mock-XP</a> tutorial.</p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-07 11:17:49 UTC
+Last updated 2024-05-08 07:54:23 UTC
 </div>
 </div>
 </body>

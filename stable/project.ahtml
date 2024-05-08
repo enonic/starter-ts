@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.22">
-<title>Setup</title>
+<title>Project</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,28 +437,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Setup</h1>
+<h1>Project</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#start_point">Start point</a></li>
-<li><a href="#tldr">TLDR</a></li>
+<li><a href="#create">Create</a></li>
+<li><a href="#summary">Summary</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p>The idea behind this tutorial is to learn how to configure transpilation of TypeScript in an existing XP project.</p>
-</div>
-<div class="paragraph">
-<p>Most projects start with a simple setup and then grow in complexity as more and more features are added. This is where TypeScript can help you keep your codebase clean and maintainable.</p>
-</div>
-</div>
-</div>
 <div class="sect1">
-<h2 id="start_point"><a class="link" href="#start_point">Start point</a></h2>
+<h2 id="create"><a class="link" href="#create">Create</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We start this tutorial with the most basic setup possible, a vanilla XP project:</p>
@@ -471,22 +461,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="tldr"><a class="link" href="#tldr">TLDR</a></h2>
+<h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you are starting a new project from scratch or you just want to see the final result of this tutorial, you can use the following command to create a new project with all the TypeScript features already added:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">enonic create myproject -r starter-ts</code></pre>
-</div>
+<p>In the next chapter we will learn how to configure <a href="build.ahtml">Transpilation and Bundling</a> of TypeScript code.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-07 11:17:49 UTC
+Last updated 2024-05-08 07:54:23 UTC
 </div>
 </div>
 </body>

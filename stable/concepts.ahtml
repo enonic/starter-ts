@@ -445,6 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#module_format">Module format</a></li>
 <li><a href="#bundling">Bundling</a></li>
 <li><a href="#meta_tools">Meta tools</a></li>
+<li><a href="#summary">Summary</a></li>
 </ul>
 </div>
 </div>
@@ -569,10 +570,18 @@ For many years <code>Webpack</code> has been the most common tool for working wi
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now that we have a basic understanding of some developer environment concepts, let&#8217;s start by <a href="project.ahtml">creating a project</a>.</p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-07 11:17:49 UTC
+Last updated 2024-05-08 07:54:23 UTC
 </div>
 </div>
 </body>

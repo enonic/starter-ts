@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.22">
-<title>Lint</title>
+<title>Result</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,131 +437,37 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Lint</h1>
+<h1>Result</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#install">Install</a></li>
-<li><a href="#configure">Configure</a>
-<ul class="sectlevel2">
-<li><a href="#package_json">package.json</a></li>
-<li><a href="#eslint_config_mjs">eslint.config.mjs</a></li>
-</ul>
-</li>
-<li><a href="#summary">Summary</a></li>
+<li><a href="#tldr">TLDR</a></li>
+<li><a href="#additional_reading">Additional reading</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div id="preamble">
+<div class="sect1">
+<h2 id="tldr"><a class="link" href="#tldr">TLDR</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>ESLint is a static code analysis tool for identifying problematic patterns found in JavaScript code. It is highly configurable and can be used to enforce a consistent coding style. Having linting as a part of the build process is considered a good practice.</p>
+<p>If you are starting a new project from scratch or you just want to see the final result of this tutorial, you can use the following command to create a new project with all the TypeScript features already added:</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="install"><a class="link" href="#install">Install</a></h2>
-<div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev eslint @eslint/js typescript-eslint</code></pre>
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">enonic create myproject -r starter-ts</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="configure"><a class="link" href="#configure">Configure</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="package_json"><a class="link" href="#package_json">package.json</a></h3>
-<div class="paragraph">
-<p>Add the following scripts to the package.json file:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
-  "scripts": {
-    "check": "concurrently -c auto -g --timings npm:check:types npm:lint",
-    "lint": "eslint --cache",
-  }
-}</code></pre>
-</div>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-Note that <code>check</code> command was added to package.json in the previous chapter about type checking. Here we just modify it to execute linting as a part of the <code>check</code> command.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="eslint_config_mjs"><a class="link" href="#eslint_config_mjs">eslint.config.mjs</a></h3>
-<div class="paragraph">
-<p>Create the following file:</p>
-</div>
-<div class="listingblock">
-<div class="title">eslint.config.mjs</div>
-<div class="content">
-<pre class="highlight"><code class="language-Javascript" data-lang="Javascript">import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-
-export default tseslint.config(
-
-  // If ignores is used without any other keys in the configuration object,
-  // then the patterns act as global ignores.
-  {
-    // An array of glob patterns indicating the files that the configuration
-    // object should not apply to. If not specified, the configuration
-    // object applies to all files matched by files.
-    ignores: [
-      'build/**/*.*',
-    ],
-  },
-
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
-
-  {
-    // An array of glob patterns indicating the files that the configuration
-    // object should apply to. If not specified, the configuration object
-    // applies to all files matched by any other configuration object.
-    files: [
-      './src/**/*.ts',
-      './src/**/*.tsx'
-    ],
-
-
-    rules: {
-      '@typescript-eslint/no-unused-vars': [
-        "warn",
-        {
-          "argsIgnorePattern": "^_"
-        }
-      ]
-    }
-  }
-
-);</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Linting will now be executed as a part of the <code>check</code> command and, therefore, as a part of the build process.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
+<h2 id="additional_reading"><a class="link" href="#additional_reading">Additional reading</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the next chapter we will learn how to configure <a href="test.ahtml">Testing</a> of TypeScript code.</p>
+<p>If you want to go into more detail and see some actual code examples, you can check out the <a href="https://developer.enonic.com/docs/tsup-starter">Tsup Starter</a> documentation.</p>
+</div>
+<div class="paragraph">
+<p>If you want to learn more about writing tests in TypeScript, you can check out the <a href="https://developer.enonic.com/docs/testing-with-jest-and-mock-xp">Testing with Jest and Mock-XP</a> tutorial.</p>
 </div>
 </div>
 </div>
