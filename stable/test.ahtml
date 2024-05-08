@@ -478,7 +478,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect2">
 <h3 id="jest"><a class="link" href="#jest">Jest</a></h3>
 <div class="paragraph">
-<p>In our example we will configure processing of server-side Typescript code, but you can similarly configure client-side code.</p>
+<p>In our example we will configure processing of both client-side and server-side Typescript code.</p>
 </div>
 <div class="paragraph">
 <p>Create a file called jest.config.js in the root of the project with the following content:</p>
@@ -627,12 +627,56 @@ export default customJestConfig;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>With this config Jest will find and execute test files in the 'src/main/resources' folder called <code><strong>.test.ts</code> (or <code>.tsx</code>) or <code></strong>.spec.ts</code> (or <code>.tsx</code>).</p>
+<p>With this config Jest will find and execute test files in the 'src/jest/client' and 'src/jest/server' folders called <code><strong>.test.ts</code> (or <code>.tsx</code>) or <code></strong>.spec.ts</code> (or <code>.tsx</code>).</p>
 </div>
 <div class="paragraph">
-<p>Set up <code>src/jest/server</code> folder structure and create two files inside:</p>
+<p>Set up <code>src/jest</code> folder structure with thess files inside:</p>
 </div>
 <div class="listingblock">
+<div class="title">src/jest/client/tsconfig.json</div>
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  "extends": "../../main/resources/assets/tsconfig.json",
+
+  "include": [
+    "./**/*.spec.ts",
+    "./**/*.spec.tsx",
+    "./**/*.test.ts",
+    "./**/*.test.tsx",
+  ],
+
+  "compilerOptions": {
+    // "baseUrl": ".",
+
+    // A series of entries which re-map imports to lookup locations relative
+    // to the baseUrl if set, or to the tsconfig file itself otherwise.
+    "paths": {
+      "/assets/*": ["../../main/resources/assets/*"],
+    },
+
+    "sourceMap": true, // Important to get correct line numbers when running coverage tests
+
+    // By default all visible ”@types” packages are included in your
+    // compilation. Packages in node_modules/@types of any enclosing folder
+    // are considered visible. For example, that means packages within
+    // ./node_modules/@types/, ../node_modules/@types/,
+    // ../../node_modules/@types/, and so on.
+    // If types is specified, only packages listed will be included in the
+    // global scope.
+    // This feature differs from typeRoots in that it is about specifying
+    // only the exact types you want included, whereas typeRoots supports
+    // saying you want particular folders.
+    // "types": [
+      // "jest", // Doesn't even work for test files in this folder?
+    // ],
+
+  }, // compilerOptions
+
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">src/jest/server/global.d.ts</div>
 <div class="content">
 <pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">/// &lt;reference types="@enonic-types/global" /&gt;
 
@@ -644,6 +688,7 @@ export declare type Resolve = typeof resolve;</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">src/jest/server/setupFile.ts</div>
 <div class="content">
 <pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">import type {App, Log} from './global';
 
@@ -663,6 +708,39 @@ globalThis.log = {
     info: console.info,
     error: console.error,
     warning: console.warn
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">src/jest/server/tsconfig.json</div>
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  "extends": "../../main/resources/tsconfig.json",
+
+  // Specifies an array of filenames or patterns to include in the program.
+  // These filenames are resolved relative to the directory containing the
+  // tsconfig.json file.
+  "include": [
+    "./**/*.spec.ts",
+    "./**/*.spec.tsx",
+    "./**/*.test.ts",
+    "./**/*.test.tsx",
+  ],
+
+  "compilerOptions": {
+    // A series of entries which re-map imports to lookup locations relative
+    // to the baseUrl if set, or to the tsconfig file itself otherwise.
+    "paths": {
+      "/lib/xp/*": ["../../../node_modules/@enonic-types/lib-*"],
+      "/*": ["../../main/resources/*"],
+    },
+    "sourceMap": true, // Important to get correct line numbers when running coverage tests
+    "types": [
+      "@enonic-types/global",
+      // "jest", // Doesn't even work for test files in this folder?
+      "node", // console
+    ],
+  }, // compilerOptions
 }</code></pre>
 </div>
 </div>
@@ -740,7 +818,7 @@ test.dependsOn npmTest</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-08 08:36:54 UTC
+Last updated 2024-05-08 09:05:14 UTC
 </div>
 </div>
 </body>
