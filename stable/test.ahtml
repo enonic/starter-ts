@@ -690,7 +690,7 @@ export declare type Resolve = typeof resolve;</code></pre>
 <div class="listingblock">
 <div class="title">src/jest/server/setupFile.ts</div>
 <div class="content">
-<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">import type {App, Log} from './global';
+<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">import type {App, Log} from './global.d';
 
 
 // Avoid type errors
@@ -818,7 +818,7 @@ test.dependsOn npmTest</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-08 09:10:35 UTC
+Last updated 2024-05-13 12:08:15 UTC
 </div>
 </div>
 </body>

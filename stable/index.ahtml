@@ -449,21 +449,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div id="content">
-<div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p>How to add a <code>TypeScript development environment</code> to an <code>existing Enonic XP project</code>.</p>
-</div>
-</div>
-</div>
 <div class="sect1">
 <h2 id="audience"><a class="link" href="#audience">Audience</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This tutorial is primarily for people who are already working on an <code>existing Enonic XP project</code> and want to start using TypeScript. It may also be helpful for those who already are using TypeScript, but want to <code>understand and improve</code> their setup.</p>
+<p>This tutorial is primarily for developers who are already working on an <em>existing</em> Enonic XP project and want to start using TypeScript. It may also be helpful for those who already are using TypeScript, but want to <em>understand</em> and <em>improve</em> their setup.</p>
 </div>
 <div class="paragraph">
-<p>If you are starting a <code>new project</code> from scratch, you can use the end <a href="result.ahtml">result</a><sup>[7]</sup> of this tutorial as a starter with everything already setup.</p>
+<p>If you are starting a <em>new</em> project from scratch, you can use the end <a href="result.ahtml">result</a><sup>[7]</sup> of this tutorial as a starter with proper configuration already in place.</p>
 </div>
 </div>
 </div>
@@ -483,7 +476,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Then we will learn how to configure <a href="build.ahtml">building</a><sup>[3]</sup>, <a href="check.ahtml">type-checking</a><sup>[4]</sup>, <a href="lint.ahtml">linting</a><sup>[5]</sup> and <a href="test.ahtml">testing</a><sup>[7]</sup> for TypeScript.</p>
 </div>
 <div class="paragraph">
-<p>Finally we can use the <a href="result.ahtml">result</a><sup>[7]</sup> to create future projects with everything already setup.</p>
+<p>Finally, we can use the <a href="result.ahtml">result</a><sup>[7]</sup> to create future projects with proper configuration already in place.</p>
 </div>
 </div>
 </div>
@@ -521,17 +514,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="additional_reading"><a class="link" href="#additional_reading">Additional reading</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you want to go into more detail and see some actual code examples, you can check out the <a href="https://developer.enonic.com/docs/tsup-starter">Tsup Starter</a> documentation.</p>
+<p>If you want to go into more details and see some actual code examples, you can check out the <a href="https://developer.enonic.com/docs/tsup-starter">Tsup Starter</a> documentation.</p>
 </div>
 <div class="paragraph">
-<p>If you want to learn more about writing tests in TypeScript, you can check out the <a href="https://developer.enonic.com/docs/testing-with-jest-and-mock-xp">Testing with Jest and Mock-XP</a> tutorial.</p>
+<p>If you want to learn more about writing tests in TypeScript, you can check out the <a href="https://developer.enonic.com/docs/testing-with-jest-and-mock-xp">Testing with Jest and Mock XP</a> tutorial.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-08 09:10:35 UTC
+Last updated 2024-05-13 12:08:15 UTC
 </div>
 </div>
 </body>

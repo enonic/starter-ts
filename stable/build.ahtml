@@ -807,7 +807,7 @@ export default defineConfig(async (options: Options) =&gt; {
     return import('./tsup/server').then(m =&gt; m.default());
   }
   if (options.d === DIR_DST_ASSETS) {
-    return import('./tsup/client-asset').then(m =&gt; m.default());
+    return import('./tsup/client').then(m =&gt; m.default());
   }
   throw new Error(`Unconfigured directory:${options.d}!`)
 });</code></pre>
@@ -836,7 +836,7 @@ export const DIR_SRC_ASSETS = `${DIR_SRC}/assets`;</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">tsup/client-asset.ts</div>
+<div class="title">tsup/client.ts</div>
 <div class="content">
 <pre class="highlight"><code class="language-Typescript" data-lang="Typescript">import type { Options } from '.';
 
@@ -1048,7 +1048,7 @@ processResources {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-08 09:10:35 UTC
+Last updated 2024-05-13 12:08:15 UTC
 </div>
 </div>
 </body>
