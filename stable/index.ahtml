@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.22">
-<title>TypeScript Starter</title>
+<title>Using TypeScript</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,26 +437,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>TypeScript Starter</h1>
+<h1>Using TypeScript</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#audience">Audience</a></li>
 <li><a href="#introduction">Introduction</a></li>
-<li><a href="#contents">Contents:</a></li>
-<li><a href="#additional_reading">Additional reading</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="audience"><a class="link" href="#audience">Audience</a></h2>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This tutorial is primarily for developers who are already working on an <em>existing</em> Enonic XP project and want to start using TypeScript. It may also be helpful for those who already are using TypeScript, but want to <em>understand</em> and <em>improve</em> their setup.</p>
+<p>This tutorial explains the steps involved in adapting your Enonic app to a best-practice TypeScript build setup - matching that of the <a href="https://market.enonic.com/vendors/enonic/ts-starter">TypeScript starter</a></p>
 </div>
-<div class="paragraph">
-<p>If you are starting a <em>new</em> project from scratch, you can use the end <a href="result.ahtml">result</a> of this tutorial as a starter with proper configuration already in place.</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Starting a new project? Get all the good stuff explained in this tutorial by running <code>enonic project create -r starter-ts</code>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -464,76 +469,54 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="introduction"><a class="link" href="#introduction">Introduction</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Most projects start with a simple setup and then grow in complexity as more and more features are added. This is where TypeScript can help you keep your codebase clean and maintainable.</p>
+<p>This tutorial is aimed at existing Enonic projects, based on JavaScript, or using an older TypeScript setup.</p>
 </div>
 <div class="paragraph">
-<p>Before we start it&#8217;s a good idea to have a basic understanding of some development environment <a href="concepts/index.ahtml">concepts</a>.</p>
+<p>Most projects start with a simple setup and then grow in complexity as more and more features are added. TypeScript can help keep your codebase clean and maintainable.</p>
 </div>
 <div class="paragraph">
-<p>Then we will start by <a href="project.ahtml">creating a project</a> without any TypeScript support.</p>
+<p>The tutorial covers:</p>
 </div>
-<div class="paragraph">
-<p>Then we will learn how to configure <a href="build.ahtml">building</a>, <a href="check.ahtml">type-checking</a>, <a href="lint.ahtml">linting</a> and <a href="test.ahtml">testing</a> for TypeScript.</p>
-</div>
-<div class="paragraph">
-<p>Finally, we can use the <a href="result.ahtml">result</a> to create future projects with proper configuration already in place.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="contents"><a class="link" href="#contents">Contents:</a></h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
+<div class="ulist">
+<ul>
 <li>
-<p><a href="concepts/index.ahtml">Concepts</a></p>
-<div class="paragraph">
-<p>1.1. <a href="concepts/environments.ahtml">Environments</a></p>
-</div>
-<div class="paragraph">
-<p>1.2. <a href="concepts/sourceProcessing.ahtml">Source processing</a></p>
-</div>
-<div class="paragraph">
-<p>1.3. <a href="concepts/globals.ahtml">Globals</a></p>
-</div>
+<p>Essential <a href="concepts.ahtml">concepts</a></p>
 </li>
 <li>
-<p><a href="project.ahtml">Create project</a></p>
+<p>Setting up the <a href="build.ahtml">Build system</a></p>
 </li>
 <li>
-<p><a href="build.ahtml">Building</a></p>
+<p>How to enable <a href="check.ahtml">Type checking</a></p>
 </li>
 <li>
-<p><a href="check.ahtml">Type checking</a></p>
+<p>Activating <a href="lint.ahtml">Linting</a></p>
 </li>
 <li>
-<p><a href="lint.ahtml">Linting</a></p>
+<p>Preparing for <a href="test.ahtml">Testing</a></p>
 </li>
-<li>
-<p><a href="test.ahtml">Testing</a></p>
-</li>
-<li>
-<p><a href="result.ahtml">Result</a></p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="additional_reading"><a class="link" href="#additional_reading">Additional reading</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>If you want to go into more details and see some actual code examples, you can check out the <a href="https://developer.enonic.com/docs/tsup-starter">Tsup Starter</a> documentation.</p>
+</ul>
 </div>
 <div class="paragraph">
-<p>If you want to learn more about writing tests in TypeScript, you can check out the <a href="https://developer.enonic.com/docs/testing-with-jest-and-mock-xp">Testing with Jest and Mock XP</a> tutorial.</p>
+<p>For some actual TypeScript code examples, check out the <a href="https://developer.enonic.com/docs/tsup-starter">Tsup</a> documentation.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If you want to learn more about writing tests in TypeScript, you can check out the <a href="https://developer.enonic.com/docs/testing-with-jest-and-mock-xp">Testing with Jest and Mock XP</a> tutorial.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-16 14:28:31 UTC
+Last updated 2024-05-16 15:24:37 UTC
 </div>
 </div>
 </body>

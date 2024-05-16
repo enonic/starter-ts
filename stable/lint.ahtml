@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#eslint_config_mjs">eslint.config.mjs</a></li>
 </ul>
 </li>
-<li><a href="#navigation">Navigation</a></li>
+<li><a href="#summary">Summary</a></li>
 </ul>
 </div>
 </div>
@@ -456,7 +456,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>ESLint is a static code analysis tool for identifying problematic patterns found in JavaScript code. It is highly configurable and can be used to enforce a consistent coding style. Having linting as a part of the build process is considered a good practice.</p>
+<p>ESLint is a static code analysis tool for identifying problematic patterns found in JavaScript code.</p>
+</div>
+<div class="paragraph">
+<p>ESlint is highly configurable and can be used to enforce a consistent coding style. Having linting as a part of the build process is considered a good practice.</p>
 </div>
 </div>
 </div>
@@ -558,17 +561,18 @@ export default tseslint.config(
 </div>
 </div>
 <div class="sect1">
-<h2 id="navigation"><a class="link" href="#navigation">Navigation</a></h2>
+<h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the next chapter we will learn how to configure <a href="test.ahtml">Testing</a> of TypeScript code.</p>
+<p>Now, you have activated linting - and only one step remains.
+Prepare your project for <a href="test.ahtml">testing</a>.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-16 14:28:31 UTC
+Last updated 2024-05-16 15:24:37 UTC
 </div>
 </div>
 </body>

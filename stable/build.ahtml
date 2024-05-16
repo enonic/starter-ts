@@ -441,7 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#install">Install</a>
+<li><a href="#create_project">Create project</a></li>
+<li><a href="#npm_modules">NPM modules</a>
 <ul class="sectlevel2">
 <li><a href="#types">Types</a></li>
 <li><a href="#tools">Tools</a></li>
@@ -462,7 +463,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#clean_up_jar_file">Clean up jar file</a></li>
 </ul>
 </li>
-<li><a href="#navigation">Navigation</a></li>
+<li><a href="#summary">Summary</a></li>
 </ul>
 </div>
 </div>
@@ -475,7 +476,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="install"><a class="link" href="#install">Install</a></h2>
+<h2 id="create_project"><a class="link" href="#create_project">Create project</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We start this tutorial with the most basic setup possible, a vanilla XP project:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">enonic create myproject -r starter-vanilla</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="npm_modules"><a class="link" href="#npm_modules">NPM modules</a></h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="types"><a class="link" href="#types">Types</a></h3>
@@ -1038,17 +1052,18 @@ processResources {
 </div>
 </div>
 <div class="sect1">
-<h2 id="navigation"><a class="link" href="#navigation">Navigation</a></h2>
+<h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the next chapter we will learn how to configure <a href="check.ahtml">Type checking</a>.</p>
+<p>You should now be able to perform basic builds that transpile TypeScript code to JavaScript.
+In the next chapter we&#8217;ll have a look at <a href="check.ahtml">Type checking</a>.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-16 14:28:31 UTC
+Last updated 2024-05-16 15:24:37 UTC
 </div>
 </div>
 </body>

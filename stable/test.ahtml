@@ -450,7 +450,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#additional_reading">Additional reading</a></li>
-<li><a href="#navigation">Navigation</a></li>
+<li><a href="#summary">Summary</a></li>
 </ul>
 </div>
 </div>
@@ -811,17 +811,39 @@ test.dependsOn npmTest</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="navigation"><a class="link" href="#navigation">Navigation</a></h2>
+<h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the next chapter we will learn how to use the <a href="result.ahtml">result</a> to create future projects with everything already setup.</p>
+<p>With testing enabled, you have reached the end of this tutorial.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+The <a href="https://market.enonic.com/vendors/enonic/ts-starter">TypeScript Starter</a> is basically the end result of this tutorial, so when creating your next project - simply run <code>enonic project create -r starter-ts</code> to get a best practice development setup, just like that!
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Enjoy!</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The Enonic team</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-16 14:28:31 UTC
+Last updated 2024-05-16 15:24:37 UTC
 </div>
 </div>
 </body>
