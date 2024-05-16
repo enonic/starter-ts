@@ -449,8 +449,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#build_gradle">build.gradle</a></li>
 </ul>
 </li>
-<li><a href="#summary">Summary</a></li>
 <li><a href="#additional_reading">Additional reading</a></li>
+<li><a href="#navigation">Navigation</a></li>
 </ul>
 </div>
 </div>
@@ -687,6 +687,9 @@ export declare type Require = typeof require;
 export declare type Resolve = typeof resolve;</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>This Jest setupFile is used to mock the XP Framework <a href="concepts/globals.ahtml">Globals</a> into the server-side test environment:</p>
+</div>
 <div class="listingblock">
 <div class="title">src/jest/server/setupFile.ts</div>
 <div class="content">
@@ -800,14 +803,6 @@ test.dependsOn npmTest</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In the next chapter we will learn how to use the <a href="result.ahtml">result</a> to create future projects with everything already setup.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
 <h2 id="additional_reading"><a class="link" href="#additional_reading">Additional reading</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -815,10 +810,18 @@ test.dependsOn npmTest</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="navigation"><a class="link" href="#navigation">Navigation</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the next chapter we will learn how to use the <a href="result.ahtml">result</a> to create future projects with everything already setup.</p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-13 12:08:15 UTC
+Last updated 2024-05-16 14:28:31 UTC
 </div>
 </div>
 </body>

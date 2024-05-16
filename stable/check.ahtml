@@ -447,7 +447,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#build_gradle">build.gradle</a></li>
 </ul>
 </li>
-<li><a href="#summary">Summary</a></li>
+<li><a href="#navigation">Navigation</a></li>
 </ul>
 </div>
 </div>
@@ -514,7 +514,7 @@ check.dependsOn npmCheck</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
+<h2 id="navigation"><a class="link" href="#navigation">Navigation</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In the next chapter we will learn how to configure <a href="lint.ahtml">Linting</a> of TypeScript code.</p>
@@ -524,7 +524,7 @@ check.dependsOn npmCheck</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-13 12:08:15 UTC
+Last updated 2024-05-16 14:28:31 UTC
 </div>
 </div>
 </body>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.22">
-<title>Project</title>
+<title>Globals</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,26 +437,61 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Project</h1>
+<h1>Globals</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#create">Create</a></li>
+<li><a href="#browser">Browser</a></li>
+<li><a href="#xp_framework">XP Framework</a></li>
 <li><a href="#navigation">Navigation</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="create"><a class="link" href="#create">Create</a></h2>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>We start this tutorial with the most basic setup possible, a vanilla XP project:</p>
+<p>When programming in Javascript there is always a global scope. Depending on which Javascript engine/environment you are in, the global scope is different.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">enonic create myproject -r starter-vanilla</code></pre>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Useful reading: <a href="https://developer.mozilla.org/en-US/docs/Glossary/Global_object" target="_blank" rel="noopener">Global object</a>
+</td>
+</tr>
+</table>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="browser"><a class="link" href="#browser">Browser</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the browser, the global scope is the <code>window</code> object. The <code>window</code> object contains the <code>document</code> object that represents the current web page. The <code>document</code> object contains functions and properties that allow you to inspect and manipulate the web page.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="xp_framework"><a class="link" href="#xp_framework">XP Framework</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the Enonic XP Framework the global scope contains a bunch of objects and functions that are useful when developing applications.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+You can read about them <a href="https://developer.enonic.com/docs/xp/stable/framework/globals" target="_blank" rel="noopener">here</a>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -464,7 +499,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="navigation"><a class="link" href="#navigation">Navigation</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the next chapter we will learn how to configure <a href="build.ahtml">Transpilation and Bundling</a> of TypeScript code.</p>
+<p>Now that we have a basic understanding of the concepts, let&#8217;s get started and <a href="../project.ahtml">create a project</a>.</p>
 </div>
 </div>
 </div>

@@ -443,7 +443,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#audience">Audience</a></li>
 <li><a href="#introduction">Introduction</a></li>
-<li><a href="#chapters">Chapters:</a></li>
+<li><a href="#contents">Contents:</a></li>
 <li><a href="#additional_reading">Additional reading</a></li>
 </ul>
 </div>
@@ -456,7 +456,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>This tutorial is primarily for developers who are already working on an <em>existing</em> Enonic XP project and want to start using TypeScript. It may also be helpful for those who already are using TypeScript, but want to <em>understand</em> and <em>improve</em> their setup.</p>
 </div>
 <div class="paragraph">
-<p>If you are starting a <em>new</em> project from scratch, you can use the end <a href="result.ahtml">result</a><sup>[7]</sup> of this tutorial as a starter with proper configuration already in place.</p>
+<p>If you are starting a <em>new</em> project from scratch, you can use the end <a href="result.ahtml">result</a> of this tutorial as a starter with proper configuration already in place.</p>
 </div>
 </div>
 </div>
@@ -467,26 +467,35 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Most projects start with a simple setup and then grow in complexity as more and more features are added. This is where TypeScript can help you keep your codebase clean and maintainable.</p>
 </div>
 <div class="paragraph">
-<p>Before we start it&#8217;s a good idea to have a basic understanding of some development environment <a href="concepts.ahtml">concepts</a><sup>[1]</sup>.</p>
+<p>Before we start it&#8217;s a good idea to have a basic understanding of some development environment <a href="concepts/index.ahtml">concepts</a>.</p>
 </div>
 <div class="paragraph">
-<p>Then we will start by <a href="project.ahtml">creating a project</a><sup>[2]</sup> without any TypeScript support.</p>
+<p>Then we will start by <a href="project.ahtml">creating a project</a> without any TypeScript support.</p>
 </div>
 <div class="paragraph">
-<p>Then we will learn how to configure <a href="build.ahtml">building</a><sup>[3]</sup>, <a href="check.ahtml">type-checking</a><sup>[4]</sup>, <a href="lint.ahtml">linting</a><sup>[5]</sup> and <a href="test.ahtml">testing</a><sup>[7]</sup> for TypeScript.</p>
+<p>Then we will learn how to configure <a href="build.ahtml">building</a>, <a href="check.ahtml">type-checking</a>, <a href="lint.ahtml">linting</a> and <a href="test.ahtml">testing</a> for TypeScript.</p>
 </div>
 <div class="paragraph">
-<p>Finally, we can use the <a href="result.ahtml">result</a><sup>[7]</sup> to create future projects with proper configuration already in place.</p>
+<p>Finally, we can use the <a href="result.ahtml">result</a> to create future projects with proper configuration already in place.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="chapters"><a class="link" href="#chapters">Chapters:</a></h2>
+<h2 id="contents"><a class="link" href="#contents">Contents:</a></h2>
 <div class="sectionbody">
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><a href="concepts.ahtml">Concepts</a></p>
+<p><a href="concepts/index.ahtml">Concepts</a></p>
+<div class="paragraph">
+<p>1.1. <a href="concepts/environments.ahtml">Environments</a></p>
+</div>
+<div class="paragraph">
+<p>1.2. <a href="concepts/sourceProcessing.ahtml">Source processing</a></p>
+</div>
+<div class="paragraph">
+<p>1.3. <a href="concepts/globals.ahtml">Globals</a></p>
+</div>
 </li>
 <li>
 <p><a href="project.ahtml">Create project</a></p>
@@ -524,7 +533,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-13 12:08:15 UTC
+Last updated 2024-05-16 14:28:31 UTC
 </div>
 </div>
 </body>

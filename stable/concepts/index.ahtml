@@ -435,205 +435,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="article toc2 toc-right">
+<body class="article">
 <div id="header">
 <h1>Concepts</h1>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#language">Language</a></li>
-<li><a href="#module_format">Module format</a></li>
-<li><a href="#bundling">Bundling</a></li>
-<li><a href="#meta_tools">Meta tools</a></li>
-<li><a href="#summary">Summary</a></li>
-<li><a href="#additional_reading">Additional reading</a></li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div id="preamble">
-<div class="sectionbody">
 <div class="paragraph">
-<p>There are currently very few "JavaScript" engines capable of running TypeScript code directly.</p>
+<p>In a development context there are several concepts that are important to understand:</p>
 </div>
 <div class="paragraph">
-<p>This is where TypeScript <code>transpilation</code> comes in.</p>
+<p>1.1. <a href="environments.ahtml">Environments</a></p>
 </div>
 <div class="paragraph">
-<p>A transpiler is a compilator that converts TypeScript code into JavaScript code. This JavaScript code can then be run by any JavaScript engine.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="language"><a class="link" href="#language">Language</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Currently, Enonic XP supports <code>JavaScript 1.9</code> (2011) with some <code>ECMAScript 2015</code> (ES6) features. This is because it uses the <code>Nashorn</code> JavaScript engine inside the JVM (Java Virtual Machine).</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-The next major release of Enonic XP is expected to be using <code>GraalJS</code> which supports the latest ECMAScript standard, which currently is <code>ECMAScript 2023</code>.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="module_format"><a class="link" href="#module_format">Module format</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In JavaScript, a module format is a way to structure your code into reusable, self-contained units called modules. It defines how you:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Export functionality</strong>: Specify which parts of your code (functions, variables, classes) can be used by other code.</p>
-</li>
-<li>
-<p><strong>Import functionality</strong>: Access and utilize the exported functionality from other modules in your program.</p>
-</li>
-</ol>
+<p>1.2. <a href="sourceProcessing.ahtml">Source processing</a></p>
 </div>
 <div class="paragraph">
-<p>The <strong>Nashorn JavaScript engine</strong> doesn&#8217;t support any module formats. It has no concept of modules. It simply interprets JavaScript code "lines".</p>
-</div>
-<div class="paragraph">
-<p>Enonic XP adds supports for the <code>CommonJS</code> module format <code>version 1</code>. This is why you can use <code>require</code> and <code>exports</code> in your server-side code.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>There are several other module formats:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>CommonJS (CJS)</strong> <code>version 2</code> which uses <code>require</code> and <code>module.exports</code>.</p>
-</li>
-<li>
-<p><strong>Asynchronous Module Definition (AMD)</strong>: Designed for asynchronous loading of modules, often used in web development with libraries like RequireJS.</p>
-</li>
-<li>
-<p><strong>Universal Module Definition (UMD)</strong>: Aims to be compatible with both CommonJS and AMD environments.</p>
-</li>
-<li>
-<p><strong>ECMAScript Modules (ESM)</strong>: is the new standard for JavaScript modules and uses <code>import</code> and <code>export</code>.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>AMD and UMD are typically used in client-side code, but are quickly being replaced by ESM.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>TypeScript files are typically written in the <code>ECMAScript module</code> format, which is why (in addition to transpiling the language itself): they have to be <code>transformed</code> into to <code>CommonJS version 1</code> before they can run in Enonic XP.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-The next major release of Enonic XP is expected to support both CommonJS version 1 and 2 and the new ECMAScript module format. 🎉
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="bundling"><a class="link" href="#bundling">Bundling</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In addition to the transpilation and transformation of separate TypeScript files, you may want to use code that other people have written. This code is typically distributed as <code>npm</code> packages. This is where bundling comes in.</p>
-</div>
-<div class="paragraph">
-<p>Bundling is the process of combining all the code you need into a single file. Such a <code>bundle</code> is known as an <code>entry point</code>.</p>
-</div>
-<div class="paragraph">
-<p>In a project you may want to have <code>multiple entry points</code>, each representing a different part of your application.</p>
-</div>
-<div class="paragraph">
-<p>Bundlers are also smart enough to separate shared code into separate bundles, such bundles are known as <code>chunks</code>.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="meta_tools"><a class="link" href="#meta_tools">Meta tools</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>There are a bunch of transpilers, transformers🤖 and bundlers out there, each of them with their own strengths and weaknesses.</p>
-</div>
-<div class="paragraph">
-<p>It has been difficult to find a single tool that supports all the required features. Each tool typically only solves a subset of the problem.</p>
-</div>
-<div class="paragraph">
-<p>This is where <code>meta-tools</code> come in. Meta-tools are tools that combine multiple tools to solve a larger problem.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-For many years <code>Webpack</code> has been the most common tool for working with JavaScript code. It is very powerful and flexible, but also very complex and difficult to configure. In addition, it is not very fast.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Recently <code>TSup</code> appeared on the scene. TSup is a simple and fast tool that is specifically designed for TypeScript code. It is easy to use and configure. It also has all the features you need to work with server-side code in Enonic XP.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<code>bun</code> is an even faster up and coming tool, but is still missing some features to work with Enonic XP server-side code. It receives regular updates, so hopefully we will be able to use it soon.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Now that we have a basic understanding of some developer environment concepts, let&#8217;s start by <a href="project.ahtml">creating a project</a>.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="additional_reading"><a class="link" href="#additional_reading">Additional reading</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>If you want to go into more detail, you can check out the <a href="https://developer.enonic.com/docs/tsup-starter">Tsup Starter</a> documentation.</p>
-</div>
-</div>
+<p>1.3. <a href="globals.ahtml">Globals</a></p>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-13 12:08:15 UTC
+Last updated 2024-05-16 14:28:31 UTC
 </div>
 </div>
 </body>

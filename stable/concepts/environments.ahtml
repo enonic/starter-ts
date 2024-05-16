@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.22">
-<title>Project</title>
+<title>Environments</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,26 +437,54 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Project</h1>
+<h1>Environments</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#create">Create</a></li>
 <li><a href="#navigation">Navigation</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="create"><a class="link" href="#create">Create</a></h2>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>We start this tutorial with the most basic setup possible, a vanilla XP project:</p>
+<p>There are multiple <code>environments</code> to consider:</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">enonic create myproject -r starter-vanilla</code></pre>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Build</strong>: The environment in which <a href="sourceProcessing.ahtml">Source processing</a> tools run.</p>
+</li>
+<li>
+<p><strong>Test</strong>: The environment in which tests run.</p>
+</li>
+<li>
+<p><strong>Run</strong>: The environment in which the built application runs.</p>
+</li>
+</ul>
 </div>
+<div class="paragraph">
+<p>In addition the <strong>Test</strong> and <strong>Run</strong> environments can be further divided into:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Client</strong>: The environment in which the client-side of the application (or tests) runs.</p>
+</li>
+<li>
+<p><strong>Server</strong>: The environment in which the server-side of the application (or tests) runs.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>All these environments support <strong>different features</strong>, and consequently also has <strong>differing limitations</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Typically a test environment is more limited than the run environment, and in order to write useful tests, some runtime features must be simulated.</p>
+</div>
+<div class="paragraph">
+<p>One such feature to consider are <a href="globals.ahtml">Globals</a>.</p>
 </div>
 </div>
 </div>
@@ -464,7 +492,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="navigation"><a class="link" href="#navigation">Navigation</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the next chapter we will learn how to configure <a href="build.ahtml">Transpilation and Bundling</a> of TypeScript code.</p>
+<p>Continue reading about <a href="sourceProcessing.ahtml">Source processing</a>.</p>
 </div>
 </div>
 </div>
