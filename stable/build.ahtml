@@ -611,7 +611,7 @@ if (checkFilesRecursively(folderPath)) {
 <div class="sect2">
 <h3 id="package_json"><a class="link" href="#package_json">package.json</a></h3>
 <div class="paragraph">
-<p>Add the following scripts to the <code>package.json</code> file (the first script concurrently executes the other two):</p>
+<p>Add the following scripts to the package.json file (the first script concurrently executes the other two):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1063,7 +1063,7 @@ In the next chapter we&#8217;ll have a look at <a href="check.ahtml">Type checki
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-16 15:24:37 UTC
+Last updated 2024-05-16 15:37:19 UTC
 </div>
 </div>
 </body>

@@ -470,7 +470,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Build</strong>: The environment in which <a href="sourceProcessing.ahtml">Source processing</a> tools run.</p>
+<p><strong>Build</strong>: The environment in which compilation steps run.</p>
 </li>
 <li>
 <p><strong>Test</strong>: The environment in which tests run.</p>
@@ -564,7 +564,7 @@ You can read about them <a href="https://developer.enonic.com/docs/xp/stable/fra
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-The next major release of Enonic XP is expected to be using <code>GraalJS</code> which supports the latest ECMAScript standard, which currently is <code>ECMAScript 2023</code>.
+The next major release of Enonic XP is expected to be using GraalJS which supports the latest ECMAScript standard, which currently is ECMAScript 2023.
 </td>
 </tr>
 </table>
@@ -588,10 +588,10 @@ The next major release of Enonic XP is expected to be using <code>GraalJS</code>
 </ol>
 </div>
 <div class="paragraph">
-<p>The <strong>Nashorn JavaScript engine</strong> doesn&#8217;t support any module formats. It has no concept of modules. It simply interprets JavaScript code "lines".</p>
+<p>The <strong>Nashorn JavaScript engine</strong> doesn&#8217;t support any module formats. It has no concept of modules. It simply interprets JavaScript code lines.</p>
 </div>
 <div class="paragraph">
-<p>Enonic XP adds supports for the <code>CommonJS</code> module format <code>version 1</code>. This is why you can use <code>require</code> and <code>exports</code> in your server-side code.</p>
+<p>Enonic XP adds supports for the CommonJS module format version 1. This is why you can use <code>require</code> and <code>exports</code> in your server-side code.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -606,7 +606,7 @@ The next major release of Enonic XP is expected to be using <code>GraalJS</code>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>CommonJS (CJS)</strong> <code>version 2</code> which uses <code>require</code> and <code>module.exports</code>.</p>
+<p><strong>CommonJS (CJS)</strong> version 2 which uses <code>require</code> and <code>module.exports</code>.</p>
 </li>
 <li>
 <p><strong>Asynchronous Module Definition (AMD)</strong>: Designed for asynchronous loading of modules, often used in web development with libraries like RequireJS.</p>
@@ -627,7 +627,7 @@ The next major release of Enonic XP is expected to be using <code>GraalJS</code>
 </table>
 </div>
 <div class="paragraph">
-<p>TypeScript files are typically written in the <code>ECMAScript module</code> format, which is why (in addition to transpiling the language itself): they have to be <code>transformed</code> into to <code>CommonJS version 1</code> before they can run in Enonic XP.</p>
+<p>TypeScript files are typically written in the ECMAScript module format, which is why (in addition to transpiling the language itself): they have to be transformed into to CommonJS version 1 before they can run in Enonic XP.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -650,13 +650,13 @@ The next major release of Enonic XP is expected to support both CommonJS version
 <p>In addition to the transpilation and transformation of separate TypeScript files, you may want to use code that other people have written. This code is typically distributed as <code>npm</code> packages. This is where bundling comes in.</p>
 </div>
 <div class="paragraph">
-<p>Bundling is the process of combining all the code you need into a single file. Such a <code>bundle</code> is known as an <code>entry point</code>.</p>
+<p>Bundling is the process of combining all the code you need into a single file. Such a bundle is known as an entry point.</p>
 </div>
 <div class="paragraph">
-<p>In a project you may want to have <code>multiple entry points</code>, each representing a different part of your application.</p>
+<p>In a project you may want to have multiple entry points, each representing a different part of your application.</p>
 </div>
 <div class="paragraph">
-<p>Bundlers are also smart enough to separate shared code into separate bundles, such bundles are known as <code>chunks</code>.</p>
+<p>Bundlers are also smart enough to separate shared code into separate bundles, such bundles are known as chunks.</p>
 </div>
 </div>
 </div>
@@ -670,10 +670,10 @@ The next major release of Enonic XP is expected to support both CommonJS version
 <p>It has been difficult to find a single tool that supports all the required features. Each tool typically only solves a subset of the problem.</p>
 </div>
 <div class="paragraph">
-<p>This is where <code>meta-tools</code> come in. Meta-tools are tools that combine multiple tools to solve a larger problem. For many years <code>Webpack</code> has been the most common tool for working with JavaScript code. It is very powerful and flexible, but also very complex and difficult to configure. In addition, it is not very fast.</p>
+<p>This is where meta-tools come in. Meta-tools are tools that combine multiple tools to solve a larger problem. For many years Webpack has been the most common tool for working with JavaScript code. It is very powerful and flexible, but also very complex and difficult to configure. In addition, it is not very fast.</p>
 </div>
 <div class="paragraph">
-<p>Recently <code>TSup</code> appeared on the scene. TSup is a simple and fast tool that is specifically designed for TypeScript code. It is easy to use and configure. It also has all the features you need to work with server-side code in Enonic XP. This setup will be using</p>
+<p><strong>TSup</strong> is a new kid on the block. TSup is a simple and fast tool that is specifically designed for TypeScript code. It is easy to use and configure. It also has all the features you need to work with server-side code in Enonic XP. Our setup will be using TSup as the meta-tool.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -694,14 +694,14 @@ The next major release of Enonic XP is expected to support both CommonJS version
 <div class="sectionbody">
 <div class="paragraph">
 <p>The fundamental concepts should now be established.
-Moving forward, let&#8217;s create a project and <a href="setup.ahtml">the build system</a>.</p>
+Moving forward, let&#8217;s create a project and <a href="build.ahtml">the build system</a>.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-16 15:24:37 UTC
+Last updated 2024-05-16 15:37:19 UTC
 </div>
 </div>
 </body>

@@ -449,7 +449,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#build_gradle">build.gradle</a></li>
 </ul>
 </li>
-<li><a href="#additional_reading">Additional reading</a></li>
 <li><a href="#summary">Summary</a></li>
 </ul>
 </div>
@@ -458,7 +457,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you are writing Typescript code, chances are you want to write tests for that code, and you want to write them in Typescript. Here&#8217;s how to configure test runs in your application. In our example we will configure Jest, a JavaScript testing framework designed to ensure correctness of your JavaScript codebase.</p>
+<p>Setting up Jest, a JavaScript testing framework designed to ensure correctness of your JavaScript codebase.</p>
+</div>
+<div class="paragraph">
+<p>If you are writing Typescript code, chances are you want to write tests for that code, and you want to write them in Typescript. Here&#8217;s how to configure test runs in your application.</p>
 </div>
 </div>
 </div>
@@ -688,7 +690,7 @@ export declare type Resolve = typeof resolve;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This Jest setupFile is used to mock the XP Framework <a href="concepts/globals.ahtml">Globals</a> into the server-side test environment:</p>
+<p>This Jest setupFile is used to mock the XP Framework, injecting standard Globals into the server-side test environment:</p>
 </div>
 <div class="listingblock">
 <div class="title">src/jest/server/setupFile.ts</div>
@@ -799,14 +801,18 @@ test.dependsOn npmTest</code></pre>
 <pre class="highlight"><code class="language-Terminal" data-lang="Terminal">./gradlew test</code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If you want to learn more about writing tests for your Enonic project, check out the <a href="https://developer.enonic.com/docs/testing-with-jest-and-mock-xp">Testing with Jest and Mock-XP</a> tutorial.
+</td>
+</tr>
+</table>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="additional_reading"><a class="link" href="#additional_reading">Additional reading</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>If you want to learn more about writing tests in TypeScript, you can check out the <a href="https://developer.enonic.com/docs/testing-with-jest-and-mock-xp">Testing with Jest and Mock-XP</a> tutorial.</p>
 </div>
 </div>
 </div>
@@ -843,7 +849,7 @@ The <a href="https://market.enonic.com/vendors/enonic/ts-starter">TypeScript Sta
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-16 15:24:37 UTC
+Last updated 2024-05-16 15:37:19 UTC
 </div>
 </div>
 </body>
