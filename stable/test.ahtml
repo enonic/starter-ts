@@ -829,7 +829,7 @@ If you want to learn more about writing tests for your Enonic project, check out
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-The <a href="https://market.enonic.com/vendors/enonic/ts-starter">TypeScript Starter</a> is basically the end result of this tutorial, so when creating your next project - simply run <code>enonic project create -r starter-ts</code> to get a best practice development setup, just like that!
+The <a href="https://market.enonic.com/vendors/enonic/starter-typescript">TypeScript Starter</a> is basically the end result of this tutorial, so when creating your next project - simply run <code>enonic project create -r starter-ts</code> to get a best practice development setup, just like that!
 </td>
 </tr>
 </table>
@@ -849,7 +849,7 @@ The <a href="https://market.enonic.com/vendors/enonic/ts-starter">TypeScript Sta
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-16 16:52:49 UTC
+Last updated 2024-05-21 08:01:41 UTC
 </div>
 </div>
 </body>
