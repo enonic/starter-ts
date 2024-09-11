@@ -28,7 +28,7 @@ dependencies {
   // include "com.enonic.xp:lib-export:${xpVersion}"
   // include "com.enonic.xp:lib-grid:${xpVersion}"
   // include "com.enonic.xp:lib-i18n:${xpVersion}"
-  // include "com.enonic.xp:lib-io:${xpVersion}"
+  include "com.enonic.xp:lib-io:${xpVersion}"
   // include "com.enonic.xp:lib-mail:${xpVersion}"
   // include "com.enonic.xp:lib-node:${xpVersion}"
   // include "com.enonic.xp:lib-portal:${xpVersion}"
@@ -56,10 +56,11 @@ dependencies {
   // include 'com.enonic.lib:lib-mustache:2.1.1'
 
   // https://market.enonic.com/vendors/enonic/router-lib
-  // include 'com.enonic.lib:lib-router:3.1.0'
+  include 'com.enonic.lib:lib-router:3.1.0'
 
   // https://market.enonic.com/vendors/enonic/static-asset-lib
-  // include 'com.enonic.lib:lib-static:1.0.3'
+  include 'com.enonic.lib:lib-static:1.0.4-SNAPSHOT'
+  include 'com.enonic.lib:lib-asset:1.0.0-SNAPSHOT'
 
   // https://market.enonic.com/vendors/enonic/text-encoding
   // include 'com.enonic.lib:lib-text-encoding:2.1.1'
@@ -88,7 +89,7 @@ node {
 
 processResources {
 	exclude '**/.gitkeep'
-  exclude '**/*.json'
+  // exclude '**/*.json'
 	exclude '**/*.ts'
 	exclude '**/*.tsx'
 }

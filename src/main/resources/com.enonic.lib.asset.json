@@ -1,0 +1,5 @@
+{
+  "cacheBust": false,
+  "cacheControl": "public, max-age=10, stale-while-revalidate=50",
+  "root": "/assets"
+}
