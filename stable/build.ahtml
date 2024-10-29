@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.22">
+<meta name="generator" content="Asciidoctor 2.0.23">
 <title>Building</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -560,7 +560,10 @@ function checkFilesRecursively(folderPath) {
   for (const file of files) {
     const filePath = `${folderPath}/${file}`;
     if (fs.lstatSync(filePath).isDirectory()) {
-      checkFilesRecursively(filePath);
+      const found = checkFilesRecursively(filePath);
+      if (found) {
+        return true; // Exit with code 0 if a matching file is found
+      }
     } else if (file.match(regExpPattern)) {
       return true; // Exit with code 0 if a matching file is found
     }
@@ -592,7 +595,10 @@ function checkFilesRecursively(folderPath) {
       continue; // Skip ignored folders
     }
     if (fs.lstatSync(filePath).isDirectory()) {
-      checkFilesRecursively(filePath);
+      const found = checkFilesRecursively(filePath);
+      if (found) {
+        return true; // Exit with code 0 if a matching file is found
+      }
     } else if (file.match(pattern)) {
       return true; // Exit with code 0 if a matching file is found
     }
@@ -857,17 +863,29 @@ export const DIR_SRC_ASSETS = `${DIR_SRC}/assets`;</code></pre>
 
 import { globSync } from 'glob';
 import { AND_BELOW, DIR_SRC_ASSETS } from './constants';
+import { dict } from './dict';
 
 
 export default function buildAssetConfig(): Options {
+
   const GLOB_EXTENSIONS_ASSETS = '{tsx,ts,jsx,js}';
+
   const FILES_ASSETS = globSync(
-    `${DIR_SRC_ASSETS}/${AND_BELOW}/*.${GLOB_EXTENSIONS_ASSETS}`
-  ).map(s =&gt; s.replaceAll('\\', '/'));
+    `${DIR_SRC_ASSETS}/${AND_BELOW}/*.${GLOB_EXTENSIONS_ASSETS}`,
+    {
+      posix: true
+    }
+  );
+
+  const ASSETS_JS_ENTRY = dict(FILES_ASSETS.map(k =&gt; [
+		k.replace(`${DIR_SRC_ASSETS}/`, '').replace(/\.[^.]*$/, ''), // name
+    k
+	]));
+
   return {
     bundle: true,
     dts: false, // d.ts files are use useless at runtime
-    entry: FILES_ASSETS,
+    entry: ASSETS_JS_ENTRY,
     esbuildPlugins: [],
 
     // By default tsup bundles all imported modules, but dependencies
@@ -902,24 +920,37 @@ import {
   DIR_SRC,
   DIR_SRC_ASSETS,
 } from './constants';
+import { dict } from './dict';
 
 
 export default function buildServerConfig(): Options {
+
   const GLOB_EXTENSIONS_SERVER = '{ts,js}';
+  const GLOB_CONFIG = {
+    absolute: false,
+    posix: true
+  }
+
   const FILES_SERVER = globSync(
     `${DIR_SRC}/${AND_BELOW}/*.${GLOB_EXTENSIONS_SERVER}`,
     {
-      absolute: false,
+      ...GLOB_CONFIG,
       ignore: globSync(
-        `${DIR_SRC_ASSETS}/${AND_BELOW}/*.${GLOB_EXTENSIONS_SERVER}`
+        `${DIR_SRC_ASSETS}/${AND_BELOW}/*.${GLOB_EXTENSIONS_SERVER}`,
+        GLOB_CONFIG
       )
     }
-  ).map(s =&gt; s.replaceAll('\\', '/'));
+  );
+
+  const SERVER_JS_ENTRY = dict(FILES_SERVER.map(k =&gt; [
+		k.replace(`${DIR_SRC}/`, '').replace(/\.[^.]*$/, ''), // name
+    k
+	]));
 
   return {
     bundle: true,
     dts: false, // d.ts files are use useless at runtime
-    entry: FILES_SERVER,
+    entry: SERVER_JS_ENTRY,
     env: {
       BROWSER_SYNC_PORT: '3100',
     },
@@ -957,7 +988,8 @@ export default function buildServerConfig(): Options {
     shims: false,
     splitting: true,
     sourcemap: false,
-    target: 'es5'
+    target: 'es5',
+    tsconfig: `${DIR_SRC}/tsconfig.json`,
   };
 }</code></pre>
 </div>
@@ -1063,7 +1095,7 @@ In the next chapter we&#8217;ll have a look at <a href="check.ahtml">Type checki
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-21 08:12:28 UTC
+Last updated 2024-10-29 12:46:10 UTC
 </div>
 </div>
 </body>

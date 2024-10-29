@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.22">
+<meta name="generator" content="Asciidoctor 2.0.23">
 <title>Linting</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -525,6 +525,8 @@ export default tseslint.config(
     // object applies to all files matched by files.
     ignores: [
       'build/**/*.*',
+      'src/jest/server/setupFile.ts',
+      'tsup/*.*',
     ],
   },
 
@@ -572,7 +574,7 @@ Prepare your project for <a href="test.ahtml">testing</a>.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-21 08:12:28 UTC
+Last updated 2024-10-29 12:46:10 UTC
 </div>
 </div>
 </body>
