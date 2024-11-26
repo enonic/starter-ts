@@ -30,6 +30,12 @@
     // A series of entries which re-map imports to lookup locations relative
     // to the baseUrl if set, or to the tsconfig file itself otherwise.
     "paths": {
+      // Uncomment this if lib-asset is included in ../../../build.gradle
+      // "/lib/enonic/asset": ["../../../node_modules/@enonic-types/lib-asset"],
+
+      // Uncomment this if lib-static is included in ../../../build.gradle
+      // "/lib/enonic/static": ["../../../node_modules/@enonic-types/lib-static"],
+
       "/lib/xp/*": ["../../../node_modules/@enonic-types/lib-*"],
       "/*": ["./*"],
     },

@@ -46,6 +46,10 @@ dependencies {
   // ─────────────────────────────────────────────────────────────────────────
   // https://repo.enonic.com/service/rest/repository/browse/public/com/enonic/lib/
 
+  // https://market.enonic.com/vendors/enonic/lib-asset
+  // Remember to uncomment compilerOptions.paths['/lib/enonic/asset'] for types in src/main/resources/tsconfig.json
+  // include 'com.enonic.lib:lib-asset:1.0.0'
+
   // https://market.enonic.com/vendors/enonic/cache-lib
   // include 'com.enonic.lib:lib-cache:2.2.0'
 
@@ -59,7 +63,8 @@ dependencies {
   // include 'com.enonic.lib:lib-router:3.1.0'
 
   // https://market.enonic.com/vendors/enonic/static-asset-lib
-  // include 'com.enonic.lib:lib-static:1.0.3'
+  // Remember to uncomment compilerOptions.paths['/lib/enonic/static'] for types in src/main/resources/tsconfig.json
+  // include 'com.enonic.lib:lib-static:2.0.0'
 
   // https://market.enonic.com/vendors/enonic/text-encoding
   // include 'com.enonic.lib:lib-text-encoding:2.1.1'
