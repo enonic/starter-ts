@@ -450,7 +450,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Take advantage of our development best-practice via the <a href="https://market.enonic.com/vendors/enonic/starter-typescript">TypeScript Starter</a></p>
+<p>Take advantage of our development best practices via <a href="https://market.enonic.com/starters/typescript-starter">TypeScript Starter</a></p>
 </div>
 </div>
 </div>
@@ -459,18 +459,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="paragraph">
 <p>For new Enonic apps, simply run <code>enonic project create -r starter-ts</code>.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-Extensive TypeScript code examples can be found in the <a href="https://developer.enonic.com/docs/tsup-starter">Tsup examples documentation</a>.
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -522,7 +510,7 @@ If you want to learn more about writing tests in TypeScript, you can check out t
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-10-29 12:46:10 UTC
+Last updated 2025-01-10 16:01:44 UTC
 </div>
 </div>
 </body>
