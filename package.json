@@ -23,7 +23,7 @@
     "@enonic-types/lib-websocket": "^7.16.2",
     "@eslint/js": "^10.0.1",
     "@swc/core": "^1.15.24",
-    "@types/node": "^25.5.2",
+    "@types/node": "^25.6.0",
     "concurrently": "^9.2.1",
     "eslint": "^10.2.0",
     "jest-environment-jsdom": "^30.3.0",
