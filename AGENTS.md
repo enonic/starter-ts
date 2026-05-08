@@ -8,7 +8,7 @@ Enonic XP TypeScript Starter. This is a best practices template for building Eno
 The starter documentation is located in the docs/ folder
 The starter source code is available on https://github.com/enonic/starter-ts
 
-In the file gradle.properties, if appName has changed from com.example.typescript, this description should be updated, as your are currently in a new application that was created based on the starter. The docs/ folder documents how the starter was built and should be removed in derived projects.
+In the file gradle.properties, if appName has changed from com.example.typescript, this description should be updated, as you are currently in a new application that was created based on the starter. The docs/ folder documents how the starter was built and should be removed in derived projects.
 
 ## Build system
 
