@@ -3,7 +3,7 @@
 This file provides guidance to AI agents like Claude and Copilot when working with code in this repository.
 
 ## Description
-Enonic XP TypeScript Starter. This is a best practices template for building Enonic XP applications. 
+Enonic XP TypeScript Starter. This is a best practices template for building Enonic XP applications.
 
 The starter documentation is located in the docs/ folder
 The starter source code is available on https://github.com/enonic/starter-ts
