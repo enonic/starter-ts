@@ -1,14 +1,6 @@
 plugins {
-  id 'com.enonic.xp.app' version '3.6.2'
+  id 'com.enonic.xp.app'
   id 'com.github.node-gradle.node' version '7.1.0'
-}
-
-app {
-  name = "${appName}"
-  displayName = "${appDisplayName}"
-  vendorName = "${vendorName}"
-  vendorUrl = "${vendorUrl}"
-  systemVersion = "${xpVersion}"
 }
 
 dependencies {
@@ -88,14 +80,6 @@ processResources {
   exclude '**/*.json'
 	exclude '**/*.ts'
 	exclude '**/*.tsx'
-}
-
-tasks.register('dev', Exec) {
-  if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
-    commandLine 'cmd', '/c', 'gradlew.bat', 'deploy', '-t'
-  } else {
-    commandLine './gradlew', 'deploy', '-t'
-  }
 }
 
 tasks.register('npmBuild', NpmTask) {
