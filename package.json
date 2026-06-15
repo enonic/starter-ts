@@ -17,7 +17,7 @@
     "@enonic-types/lib-portal": "^8.0.1",
     "@enonic-types/lib-project": "^8.0.1",
     "@enonic-types/lib-repo": "^8.0.1",
-    "@enonic-types/lib-scheduler": "^8.0.1",
+    "@enonic-types/lib-scheduler": "^8.0.2",
     "@enonic-types/lib-task": "^8.0.1",
     "@enonic-types/lib-value": "^8.0.1",
     "@enonic-types/lib-websocket": "^8.0.1",
