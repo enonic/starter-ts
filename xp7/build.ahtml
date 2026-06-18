@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.23">
-<title>Linting</title>
+<meta name="generator" content="Asciidoctor 2.0.26">
+<title>Building</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -116,7 +116,6 @@ h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title str
 :not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
 pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
-pre>code{display:block}
 pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
 em em{font-style:normal}
 strong strong{font-weight:400}
@@ -219,6 +218,7 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
 .literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
 .listingblock>.content{position:relative}
+.listingblock pre>code{display:block}
 .listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
 .listingblock:hover code[data-lang]::before{display:block}
 .listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
@@ -437,15 +437,30 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Linting</h1>
+<h1>Building</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#install">Install</a></li>
+<li><a href="#create_project">Create project</a></li>
+<li><a href="#npm_modules">NPM modules</a>
+<ul class="sectlevel2">
+<li><a href="#types">Types</a></li>
+<li><a href="#tools">Tools</a></li>
+</ul>
+</li>
 <li><a href="#configure">Configure</a>
 <ul class="sectlevel2">
+<li><a href="#file_processing">File processing</a></li>
 <li><a href="#package_json">package.json</a></li>
-<li><a href="#eslint_config_mjs">eslint.config.mjs</a></li>
+<li><a href="#typescript_configuration">TypeScript configuration</a></li>
+<li><a href="#tsup_configuration">TSup configuration</a></li>
+</ul>
+</li>
+<li><a href="#gradle_configuration">Gradle configuration</a>
+<ul class="sectlevel2">
+<li><a href="#node_gradle_plugin">Node-gradle plugin</a></li>
+<li><a href="#npmbuild_task">npmBuild task</a></li>
+<li><a href="#clean_up_jar_file">Clean up jar file</a></li>
 </ul>
 </li>
 <li><a href="#summary">Summary</a></li>
@@ -456,19 +471,70 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>ESLint is a static code analysis tool for identifying problematic patterns found in JavaScript code.</p>
-</div>
-<div class="paragraph">
-<p>ESlint is highly configurable and can be used to enforce a consistent coding style. Having linting as a part of the build process is considered a good practice.</p>
+<p>In this chapter we will learn how to set up transpilation of Typescript code - both client- and server-side - to JavaScript.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="install"><a class="link" href="#install">Install</a></h2>
+<h2 id="create_project"><a class="link" href="#create_project">Create project</a></h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>We start this tutorial with the most basic setup possible, a vanilla XP project:</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev eslint @eslint/js typescript-eslint</code></pre>
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">enonic create myproject -r starter-vanilla</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="npm_modules"><a class="link" href="#npm_modules">NPM modules</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="types"><a class="link" href="#types">Types</a></h3>
+<div class="paragraph">
+<p>Install types needed to configure the build system:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev @types/node</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Install types needed to work with Enonic Core API:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev @enonic-types/core @enonic-types/lib-content @enonic-types/lib-portal @enonic-types/global @enonic-types/lib-context @enonic-types/lib-auth @enonic-types/lib-event @enonic-types/lib-common @enonic-types/lib-repo @enonic-types/lib-websocket @enonic-types/lib-node @enonic-types/lib-i18n @enonic-types/lib-task @enonic-types/lib-io @enonic-types/lib-project @enonic-types/lib-mail @enonic-types/lib-export @enonic-types/lib-scheduler @enonic-types/lib-admin @enonic-types/lib-cluster @enonic-types/lib-value</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="tools"><a class="link" href="#tools">Tools</a></h3>
+<div class="paragraph">
+<p>Install tools required to set up transpilation and bundling of Typescript code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev typescript tsup @swc/core concurrently</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>typescript</code> will enable support of Typescript language by adding syntax for type declarations and annotations</p>
+</li>
+<li>
+<p><code>tsup</code> is a TypeScript bundler powered by esbuild</p>
+</li>
+<li>
+<p><code>@swc/core</code> is a TypeScript / JavaScript compiler</p>
+</li>
+<li>
+<p><code>concurrently</code> is a tool to run multiple commands concurrently</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -477,87 +543,554 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="configure"><a class="link" href="#configure">Configure</a></h2>
 <div class="sectionbody">
 <div class="sect2">
+<h3 id="file_processing"><a class="link" href="#file_processing">File processing</a></h3>
+<div class="paragraph">
+<p>We need a cross-platform way to check whether there are any files to process before invoking a tool, so here are a couple of helper scripts that do just that. Each globs for <code>.ts</code> files in the given directory and skips the step entirely when none are found:</p>
+</div>
+<div class="listingblock">
+<div class="title">tsup/build.js</div>
+<div class="content">
+<pre class="highlight"><code class="language-JavaScript" data-lang="JavaScript">const { execSync } = require("child_process");
+const { globSync } = require("glob");
+const process = require("process");
+const path = require("path");
+
+const dir = process.argv[2];
+const outDir = process.argv[3]; // destination directory
+
+if (!dir || !outDir) {
+  console.error("Usage: node tsup/build.js &lt;srcDir&gt; &lt;outDir&gt; [excludeDir]");
+  process.exit(1);
+}
+
+const pattern = path.join(dir, "**/*.ts");
+
+// Find all .ts files to build
+let files = globSync(pattern, { nodir: true });
+
+if (files.length === 0) {
+  console.log(`No TypeScript files found in ${dir}. Skipping build.`);
+  process.exit(0);
+}
+
+try {
+  console.log(`Building TypeScript files from ${dir} → ${outDir}...`);
+  execSync(`npx tsup -d "${outDir}"`, { stdio: "inherit" });
+} catch (e) {
+  process.exit(1);
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">tsup/check.js</div>
+<div class="content">
+<pre class="highlight"><code class="language-JavaScript" data-lang="JavaScript">const { execSync } = require("child_process");
+const { globSync } = require("glob");
+const process = require("process");
+const path = require("path");
+
+const dir = process.argv[2];
+const excludeDir = process.argv[3]; // optional
+
+if (!dir) {
+  console.error("Usage: node tsup/check.js &lt;dir&gt; [excludeDir]");
+  process.exit(1);
+}
+
+const pattern = path.join(dir, "**/*.ts");
+const excludePattern = excludeDir ? path.join(excludeDir, "**/*.ts") : null;
+
+// Get all matching .ts files
+let files = globSync(pattern, { nodir: true });
+
+// Exclude any in the excluded directory
+if (excludePattern) {
+  const excluded = new Set(globSync(excludePattern, { nodir: true }));
+  files = files.filter(f =&gt; !excluded.has(f));
+}
+
+if (files.length === 0) {
+  console.log(`No TypeScript files found in ${dir}${excludeDir ? ` (excluding ${excludeDir})` : ""}. Skipping type check.`);
+  process.exit(0);
+}
+
+// Build path to tsconfig.json
+const tsconfigPath = path.join(dir, "tsconfig.json");
+
+try {
+  console.log(`Running type check in ${dir}${excludeDir ? ` (excluding ${excludeDir})` : ""}...`);
+  execSync(`npx tsc --noEmit -p "${tsconfigPath}"`, { stdio: "inherit" });
+} catch {
+  process.exit(1);
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="package_json"><a class="link" href="#package_json">package.json</a></h3>
 <div class="paragraph">
-<p>Add the following scripts to the package.json file:</p>
+<p>Add the following scripts to the package.json file (the first script concurrently executes the other two):</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-JSON" data-lang="JSON">{
   "scripts": {
-    "check": "concurrently -c auto -g --timings npm:check:types npm:lint",
-    "lint": "eslint --cache",
+    "build": "concurrently -c auto -g --timings npm:build:*",
+    "build:assets": "node tsup/build.js src/main/resources/assets build/resources/main/assets",
+    "build:server": "node tsup/build.js src/main/resources build/resources/main",
   }
 }</code></pre>
 </div>
 </div>
-<div class="admonitionblock tip">
+<div class="admonitionblock caution">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
+<i class="fa icon-caution" title="Caution"></i>
 </td>
 <td class="content">
-Note that <code>check</code> command was added to package.json in the previous chapter about type checking. Here we just modify it to execute linting as a part of the <code>check</code> command.
+You will typically NOT publish an Enonic XP project to npm, so it&#8217;s a good idea to add the following to the package.json file:
 </td>
 </tr>
 </table>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  "private": true
+}</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="eslint_config_mjs"><a class="link" href="#eslint_config_mjs">eslint.config.mjs</a></h3>
+<h3 id="typescript_configuration"><a class="link" href="#typescript_configuration">TypeScript configuration</a></h3>
 <div class="paragraph">
-<p>Create the following file:</p>
+<p>Add the following config files to the project:</p>
 </div>
 <div class="listingblock">
-<div class="title">eslint.config.mjs</div>
+<div class="title">tsconfig.json</div>
 <div class="content">
-<pre class="highlight"><code class="language-Javascript" data-lang="Javascript">import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  // This file should only include files that configures the build system.
+  // It should ignore all actual source files.
 
-export default tseslint.config(
+  // Read more about tsconfig.json at:
+  // https://www.typescriptlang.org/tsconfig
 
-  // If ignores is used without any other keys in the configuration object,
-  // then the patterns act as global ignores.
-  {
-    // An array of glob patterns indicating the files that the configuration
-    // object should not apply to. If not specified, the configuration
-    // object applies to all files matched by files.
-    ignores: [
-      'build/**/*.*',
-      'src/jest/server/setupFile.ts',
-      'tsup/*.*',
+  // Specifies an array of filenames or patterns to include in the program.
+  // These filenames are resolved relative to the directory containing the
+  // tsconfig.json file.
+  "include": [
+    "**/*.ts"
+  ],
+
+  // Specifies an array of filenames or patterns that should be skipped when
+  // resolving include.
+  // Important: exclude only changes which files are included as a result of
+  // the include setting. A file specified by exclude can still become part of
+  // your codebase due to an import statement in your code, a types inclusion,
+  // a /// &lt;reference directive, or being specified in the files list.
+  // It is not a mechanism that prevents a file from being included in the
+  // codebase - it simply changes what the include setting finds.
+  "exclude": [
+    "**/*.d.ts",
+    "src/**/*.*", // Avoid Enonic XP source files
+  ],
+
+  "compilerOptions": {
+    // Do NOT add this as it will resolve tsup to the local tsup folder, rather
+    // than the tsup node_module.
+    // "baseUrl": ".",
+
+    "lib": [
+      "es2023" // string.replaceAll
+    ],
+
+    // By default all visible ”@types” packages are included in your compilation.
+    // Packages in node_modules/@types of any enclosing folder are considered visible.
+    // For example, that means packages within ./node_modules/@types/,
+    // ../node_modules/@types/, ../../node_modules/@types/, and so on.
+    // If types is specified, only packages listed will be included in the global scope.
+    // This feature differs from typeRoots in that it is about specifying only the exact
+    // types you want included, whereas typeRoots supports saying you want particular folders.
+    "types": [
+      "node"
     ],
   },
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">src/main/resources/tsconfig.json</div>
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  // This file should only include Enonic XP server-side source files.
+  // It should exclude any client-side source files.
 
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
+  // Read more about tsconfig.json at:
+  // https://www.typescriptlang.org/tsconfig
 
-  {
-    // An array of glob patterns indicating the files that the configuration
-    // object should apply to. If not specified, the configuration object
-    // applies to all files matched by any other configuration object.
-    files: [
-      './src/**/*.ts',
-      './src/**/*.tsx'
+  // Specifies an array of filenames or patterns to include in the program.
+  // These filenames are resolved relative to the directory containing the
+  // tsconfig.json file.
+  "include": [
+    "**/*.ts"
+  ],
+
+  // Specifies an array of filenames or patterns that should be skipped when
+  // resolving include.
+  // Important: exclude only changes which files are included as a result of
+  // the include setting. A file specified by exclude can still become part of
+  // your codebase due to an import statement in your code, a types inclusion,
+  // a /// &lt;reference directive, or being specified in the files list.
+  // It is not a mechanism that prevents a file from being included in the
+  // codebase - it simply changes what the include setting finds.
+  "exclude": [
+    "**/*.d.ts",
+    "assets/**/*.*",
+    // "static/**/*.*",
+  ],
+
+  "compilerOptions": {
+    // A series of entries which re-map imports to lookup locations relative
+    // to the baseUrl if set, or to the tsconfig file itself otherwise.
+    "paths": {
+      "/lib/xp/*": ["../../../node_modules/@enonic-types/lib-*"],
+      "/*": ["./*"],
+    },
+
+    "skipLibCheck": true,
+
+    // By default all visible ”@types” packages are included in your compilation.
+    // Packages in node_modules/@types of any enclosing folder are considered visible.
+    // For example, that means packages within ./node_modules/@types/,
+    // ../node_modules/@types/, ../../node_modules/@types/, and so on.
+    // If types is specified, only packages listed will be included in the global scope.
+    // This feature differs from typeRoots in that it is about specifying only the exact
+    // types you want included, whereas typeRoots supports saying you want particular folders.
+    "types": [
+      // Make the types for the Enonic XP Global objects and functions
+      // available in the global scope.
+      // https://developer.enonic.com/docs/xp/stable/framework/globals
+      // app, exports, log, require, resolve
+      // https://developer.enonic.com/docs/xp/stable/framework/java-bridge
+      // __.newBean, __.toNativeObject, __.nullOrValue
+      "@enonic-types/global"
     ],
+  },
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">src/main/resources/assets/tsconfig.json</div>
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  // This file configures TypeScript for client-side assets.
+
+  // Read more about tsconfig.json at:
+  // https://www.typescriptlang.org/tsconfig
+
+  // Specifies an array of filenames or patterns to include in the program.
+  // These filenames are resolved relative to the directory containing the
+  // tsconfig.json file.
+  "include": [
+    "./**/*.ts",
+    "./**/*.tsx",
+  ],
+
+  // Specifies an array of filenames or patterns that should be skipped when
+  // resolving include.
+  // Important: exclude only changes which files are included as a result of
+  // the include setting. A file specified by exclude can still become part of
+  // your codebase due to an import statement in your code, a types inclusion,
+  // a /// &lt;reference directive, or being specified in the files list.
+  // It is not a mechanism that prevents a file from being included in the
+  // codebase - it simply changes what the include setting finds.
+  "exclude": [
+    "./**/*.d.ts",
+  ],
+
+  "compilerOptions": {
+    "lib": [
+      "DOM", // console, document, window, etc...
+    ],
+  },
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="tsup_configuration"><a class="link" href="#tsup_configuration">TSup configuration</a></h3>
+<div class="paragraph">
+<p>Add the following config files to the project:</p>
+</div>
+<div class="listingblock">
+<div class="title">tsup.config.ts</div>
+<div class="content">
+<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">import type { Options } from './tsup';
 
 
-    rules: {
-      '@typescript-eslint/no-unused-vars': [
-        "warn",
-        {
-          "argsIgnorePattern": "^_"
-        }
-      ]
+import { defineConfig } from 'tsup';
+import { DIR_DST, DIR_DST_ASSETS } from './tsup/constants';
+
+
+export default defineConfig(async (options: Options) =&gt; {
+  if (options.d === DIR_DST) {
+    return import('./tsup/server').then(m =&gt; m.default());
+  }
+  if (options.d === DIR_DST_ASSETS) {
+    return import('./tsup/client').then(m =&gt; m.default());
+  }
+  throw new Error(`Unconfigured directory:${options.d}!`)
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">tsup/index.d.ts</div>
+<div class="content">
+<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">import type { Options as TsupOptions } from 'tsup';
+
+export declare interface Options extends TsupOptions {
+  d?: string
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">tsup/constants.ts</div>
+<div class="content">
+<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">export const AND_BELOW = '**';
+
+export const DIR_DST = 'build/resources/main';
+export const DIR_DST_ASSETS = `${DIR_DST}/assets`;
+
+export const DIR_SRC = 'src/main/resources';
+export const DIR_SRC_ASSETS = `${DIR_SRC}/assets`;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">tsup/client.ts</div>
+<div class="content">
+<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">import type { Options } from '.';
+
+
+import { globSync } from 'glob';
+import { AND_BELOW, DIR_SRC_ASSETS } from './constants';
+import { dict } from './dict';
+
+
+export default function buildAssetConfig(): Options {
+
+  const GLOB_EXTENSIONS_ASSETS = '{tsx,ts,jsx,js}';
+
+  const FILES_ASSETS = globSync(
+    `${DIR_SRC_ASSETS}/${AND_BELOW}/*.${GLOB_EXTENSIONS_ASSETS}`,
+    {
+      posix: true
     }
+  );
+
+  const ASSETS_JS_ENTRY = dict(FILES_ASSETS.map(k =&gt; [
+		k.replace(`${DIR_SRC_ASSETS}/`, '').replace(/\.[^.]*$/, ''), // name
+    k
+	]));
+
+  return {
+    bundle: true,
+    dts: false, // d.ts files are use useless at runtime
+    entry: ASSETS_JS_ENTRY,
+    esbuildPlugins: [],
+
+    // By default tsup bundles all imported modules, but dependencies
+    // and peerDependencies in your packages.json are always excluded
+    // external: [ // Must be loaded into global scope instead
+    // ],
+
+    format: ['esm'],
+    minify: process.env.NODE_ENV === 'development' ? false : true,
+    // noExternal: [],
+    platform: 'browser',
+
+    silent: ['QUIET', 'WARN']
+      .includes(process.env.LOG_LEVEL_FROM_GRADLE||''),
+
+    splitting: true,
+    sourcemap: process.env.NODE_ENV === 'development' ? false : true,
+    tsconfig:`${DIR_SRC_ASSETS}/tsconfig.json`,
+  };
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">tsup/server.ts</div>
+<div class="content">
+<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">import type { Options } from '.';
+
+
+import { globSync } from 'glob';
+import {
+  AND_BELOW,
+  DIR_SRC,
+  DIR_SRC_ASSETS,
+} from './constants';
+import { dict } from './dict';
+
+
+export default function buildServerConfig(): Options {
+
+  const GLOB_EXTENSIONS_SERVER = '{ts,js}';
+  const GLOB_CONFIG = {
+    absolute: false,
+    posix: true
   }
 
-);</code></pre>
+  const FILES_SERVER = globSync(
+    `${DIR_SRC}/${AND_BELOW}/*.${GLOB_EXTENSIONS_SERVER}`,
+    {
+      ...GLOB_CONFIG,
+      ignore: globSync(
+        `${DIR_SRC_ASSETS}/${AND_BELOW}/*.${GLOB_EXTENSIONS_SERVER}`,
+        GLOB_CONFIG
+      )
+    }
+  );
+
+  const SERVER_JS_ENTRY = dict(FILES_SERVER.map(k =&gt; [
+		k.replace(`${DIR_SRC}/`, '').replace(/\.[^.]*$/, ''), // name
+    k
+	]));
+
+  return {
+    bundle: true,
+    dts: false, // d.ts files are use useless at runtime
+    entry: SERVER_JS_ENTRY,
+    env: {
+      BROWSER_SYNC_PORT: '3100',
+    },
+    esbuildOptions(options, context) {
+      // If you have libs with chunks, use this to avoid collisions
+      options.chunkNames = '_chunks/[name]-[hash]';
+
+      options.mainFields = ['module', 'main'];
+    },
+
+    external: [
+      '/lib/cache',
+      '/lib/enonic/static',
+      /^\/lib\/guillotine/,
+      '/lib/graphql',
+      '/lib/graphql-connection',
+      '/lib/http-client',
+      '/lib/license',
+      '/lib/mustache',
+      '/lib/router',
+      '/lib/util',
+      '/lib/vanilla',
+      '/lib/text-encoding',
+      '/lib/thymeleaf',
+      /^\/lib\/xp\//,
+    ],
+    format: 'cjs',
+    minify: false, // Minifying server files makes debugging harder
+    // noExternal: [],
+    platform: 'neutral',
+
+    silent: ['QUIET', 'WARN']
+      .includes(process.env.LOG_LEVEL_FROM_GRADLE || ''),
+
+    shims: false,
+    splitting: true,
+    sourcemap: false,
+    target: 'es5',
+    tsconfig: `${DIR_SRC}/tsconfig.json`,
+  };
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gradle_configuration"><a class="link" href="#gradle_configuration">Gradle configuration</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="node_gradle_plugin"><a class="link" href="#node_gradle_plugin">Node-gradle plugin</a></h3>
+<div class="paragraph">
+<p>In order for Gradle to be able to run npm scripts, you need to use the node-gradle plugin.</p>
+</div>
+<div class="paragraph">
+<p>Add the following to the build.gradle file:</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="highlight"><code class="language-Groovy" data-lang="Groovy">plugins {
+  id 'com.github.node-gradle.node' version '7.0.2'
+}
+
+node {
+  // Whether to download and install a specific Node.js version or not
+  // If false, it will use the globally installed Node.js
+  // If true, it will download node using above parameters
+  // Note that npm is bundled with Node.js
+  download = true
+
+  // Version of node to download and install (only used if download is true)
+  // It will be unpacked in the workDir
+  version = '20.12.2'
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="npmbuild_task"><a class="link" href="#npmbuild_task">npmBuild task</a></h3>
+<div class="paragraph">
+<p>Add the following task to the build.gradle file, which will run the npm build script defined in package.json:</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="highlight"><code class="language-Groovy" data-lang="Groovy">tasks.register('npmBuild', NpmTask) {
+  args = [
+    'run',
+    '--silent',
+    'build'
+  ]
+  dependsOn npmInstall
+  environment = [
+    'FORCE_COLOR': 'true',
+    'LOG_LEVEL_FROM_GRADLE': gradle.startParameter.logLevel.toString(),
+    'NODE_ENV': project.hasProperty('dev') || project.hasProperty('development') ? 'development' : 'production'
+  ]
+  inputs.dir 'src/main/resources'
+  outputs.dir 'build/resources/main'
+}
+
+jar.dependsOn npmBuild</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="clean_up_jar_file"><a class="link" href="#clean_up_jar_file">Clean up jar file</a></h3>
+<div class="paragraph">
+<p>Add the following to the build.gradle file:</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="highlight"><code class="language-Groovy" data-lang="Groovy">tasks.withType(Copy).configureEach {
+  includeEmptyDirs = false
+}
+
+processResources {
+  exclude '**/.gitkeep'
+  exclude '**/*.json'
+  exclude '**/*.ts'
+  exclude '**/*.tsx'
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Linting will now be executed as a part of the <code>check</code> command and, therefore, as a part of the build process.</p>
+<p>This will make sure that assembled jar file contains only required assets and none of the original source TypeScript files.</p>
 </div>
 </div>
 </div>
@@ -566,15 +1099,15 @@ export default tseslint.config(
 <h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Now, you have activated linting - and only one step remains.
-Prepare your project for <a href="test.ahtml">testing</a>.</p>
+<p>You should now be able to perform basic builds that transpile TypeScript code to JavaScript.
+In the next chapter we&#8217;ll have a look at <a href="check.ahtml">Type checking</a>.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-08-14 11:55:12 UTC
+Last updated 2026-06-18 16:28:57 UTC
 </div>
 </div>
 </body>

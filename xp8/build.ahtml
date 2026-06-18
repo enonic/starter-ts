@@ -4,9 +4,8 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.23">
-<meta name="author" content="To establish a common ground, we introduce some basic concepts">
-<title>Concepts</title>
+<meta name="generator" content="Asciidoctor 2.0.26">
+<title>Building</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -117,7 +116,6 @@ h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title str
 :not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
 pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
-pre>code{display:block}
 pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
 em em{font-style:normal}
 strong strong{font-weight:400}
@@ -220,6 +218,7 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
 .literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
 .listingblock>.content{position:relative}
+.listingblock pre>code{display:block}
 .listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
 .listingblock:hover code[data-lang]::before{display:block}
 .listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
@@ -438,254 +437,488 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Concepts</h1>
-<div class="details">
-<span id="author" class="author">To establish a common ground, we introduce some basic concepts</span><br>
-</div>
+<h1>Building</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#environments">Environments</a></li>
-<li><a href="#globals">Globals</a>
+<li><a href="#create_project">Create project</a></li>
+<li><a href="#npm_modules">NPM modules</a>
 <ul class="sectlevel2">
-<li><a href="#browser">Browser</a></li>
-<li><a href="#xp_framework">XP Framework</a></li>
+<li><a href="#types">Types</a></li>
+<li><a href="#tools">Tools</a></li>
 </ul>
 </li>
-<li><a href="#transpiling">Transpiling</a></li>
-<li><a href="#module_format">Module format</a></li>
-<li><a href="#bundling">Bundling</a></li>
-<li><a href="#tsup">Tsup</a></li>
+<li><a href="#configure">Configure</a>
+<ul class="sectlevel2">
+<li><a href="#package_json">package.json</a></li>
+<li><a href="#typescript_configuration">TypeScript configuration</a></li>
+<li><a href="#tsdown_configuration">tsdown configuration</a></li>
+</ul>
+</li>
+<li><a href="#gradle_configuration">Gradle configuration</a>
+<ul class="sectlevel2">
+<li><a href="#node_gradle_plugin">Node-gradle plugin</a></li>
+<li><a href="#npmbuild_task">npmBuild task</a></li>
+<li><a href="#clean_up_jar_file">Clean up jar file</a></li>
+</ul>
+</li>
 <li><a href="#summary">Summary</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="environments"><a class="link" href="#environments">Environments</a></h2>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are multiple <code>environments</code> to consider:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Build</strong>: The environment in which compilation steps run.</p>
-</li>
-<li>
-<p><strong>Test</strong>: The environment in which tests run.</p>
-</li>
-<li>
-<p><strong>Run</strong>: The environment in which the built application runs.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>In addition the <strong>Test</strong> and <strong>Run</strong> environments can be further divided into:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Client</strong>: The environment in which the client-side of the application (or tests) runs.</p>
-</li>
-<li>
-<p><strong>Server</strong>: The environment in which the server-side of the application (or tests) runs.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>All these environments support <strong>different features</strong>, and consequently also has <strong>differing limitations</strong>.</p>
-</div>
-<div class="paragraph">
-<p>Typically a test environment is more limited than the run environment, and in order to write useful tests, some runtime features must be simulated.</p>
+<p>In this chapter we will learn how to set up transpilation of Typescript code - both client- and server-side - to JavaScript.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="globals"><a class="link" href="#globals">Globals</a></h2>
+<h2 id="create_project"><a class="link" href="#create_project">Create project</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>When programming in Javascript there is always a global scope. Depending on which Javascript engine/environment you are in, the global scope is different.</p>
+<p>We start this tutorial with the most basic setup possible, a vanilla XP project:</p>
 </div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-Useful reading: <a href="https://developer.mozilla.org/en-US/docs/Glossary/Global_object" target="_blank" rel="noopener">Global object</a>
-</td>
-</tr>
-</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">enonic create myproject -r starter-vanilla</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="npm_modules"><a class="link" href="#npm_modules">NPM modules</a></h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="browser"><a class="link" href="#browser">Browser</a></h3>
+<h3 id="types"><a class="link" href="#types">Types</a></h3>
 <div class="paragraph">
-<p>In the browser, the global scope is the <code>window</code> object. The <code>window</code> object contains the <code>document</code> object that represents the current web page. The <code>document</code> object contains functions and properties that allow you to inspect and manipulate the web page.</p>
+<p>Install types needed to configure the build system:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev @types/node</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Install types needed to work with Enonic Core API:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev @enonic-types/core @enonic-types/lib-content @enonic-types/lib-portal @enonic-types/global @enonic-types/lib-context @enonic-types/lib-auth @enonic-types/lib-event @enonic-types/lib-common @enonic-types/lib-repo @enonic-types/lib-websocket @enonic-types/lib-node @enonic-types/lib-i18n @enonic-types/lib-task @enonic-types/lib-io @enonic-types/lib-project @enonic-types/lib-mail @enonic-types/lib-export @enonic-types/lib-scheduler @enonic-types/lib-admin @enonic-types/lib-cluster @enonic-types/lib-value</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="xp_framework"><a class="link" href="#xp_framework">XP Framework</a></h3>
+<h3 id="tools"><a class="link" href="#tools">Tools</a></h3>
 <div class="paragraph">
-<p>In the Enonic XP Framework the global scope contains a bunch of objects and functions that are useful when developing applications.</p>
+<p>Install tools required to set up transpilation and bundling of Typescript code:</p>
 </div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-You can read about them <a href="https://developer.enonic.com/docs/xp/stable/framework/globals" target="_blank" rel="noopener">here</a>.
-</td>
-</tr>
-</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev typescript tsdown glob concurrently</code></pre>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="transpiling"><a class="link" href="#transpiling">Transpiling</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>There are currently very few "JavaScript" engines capable of running TypeScript code directly. This is where TypeScript <code>transpilation</code> comes in.</p>
-</div>
-<div class="paragraph">
-<p>A transpiler is a compilator that converts TypeScript code into JavaScript code. This JavaScript code can then be run by any JavaScript engine. Enonic XP 7.x supports <code>JavaScript 1.9</code> (2011) with some <code>ECMAScript 2015</code> (ES6) features. This is because the code is executed by the <code>Nashorn</code> JavaScript engine.</p>
-</div>
-<div class="paragraph">
-<p>The TypeScript transpiler will automatically convert your TypeScript code into JS code that works with Enonic XP.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-The next major release of Enonic XP is expected to be using GraalJS which supports the latest ECMAScript standard, which currently is ECMAScript 2023.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="module_format"><a class="link" href="#module_format">Module format</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In JavaScript, a module is a way to structure your code into reusable, self-contained units called modules. It defines how you:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Export functionality</strong>: Specify which parts of your code (functions, variables, classes) can be used by other code.</p>
-</li>
-<li>
-<p><strong>Import functionality</strong>: Access and utilize the exported functionality from other modules in your program.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>The <strong>Nashorn JavaScript engine</strong> doesn&#8217;t support any module formats. It has no concept of modules. It simply interprets JavaScript code lines.</p>
-</div>
-<div class="paragraph">
-<p>Enonic XP adds supports for the CommonJS module format version 1. This is why you can use <code>require</code> and <code>exports</code> in your server-side code.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>There are several other module formats:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>CommonJS (CJS)</strong> version 2 which uses <code>require</code> and <code>module.exports</code>.</p>
+<p><code>typescript</code> will enable support of Typescript language by adding syntax for type declarations and annotations</p>
 </li>
 <li>
-<p><strong>Asynchronous Module Definition (AMD)</strong>: Designed for asynchronous loading of modules, often used in web development with libraries like RequireJS.</p>
+<p><code>tsdown</code> is a TypeScript bundler powered by Rolldown (the successor to the now-deprecated <code>tsup</code>)</p>
 </li>
 <li>
-<p><strong>Universal Module Definition (UMD)</strong>: Aims to be compatible with both CommonJS and AMD environments.</p>
+<p><code>glob</code> is used by the build config to discover the source files to bundle</p>
 </li>
 <li>
-<p><strong>ECMAScript Modules (ESM)</strong>: is the new standard for JavaScript modules and uses <code>import</code> and <code>export</code>.</p>
+<p><code>concurrently</code> is a tool to run multiple commands concurrently</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>AMD and UMD are typically used in client-side code, but are quickly being replaced by ESM.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>TypeScript files are typically written in the ECMAScript module format, which is why (in addition to transpiling the language itself): they have to be transformed into to CommonJS version 1 before they can run in Enonic XP.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-The next major release of Enonic XP is expected to support both CommonJS version 1 and 2 and the new ECMAScript module format. 🎉
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="bundling"><a class="link" href="#bundling">Bundling</a></h2>
+<h2 id="configure"><a class="link" href="#configure">Configure</a></h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="package_json"><a class="link" href="#package_json">package.json</a></h3>
 <div class="paragraph">
-<p>In addition to the transpilation and transformation of separate TypeScript files, you may want to use code that other people have written. This code is typically distributed as <code>npm</code> packages. This is where bundling comes in.</p>
+<p>Add the following build script to the package.json file:</p>
 </div>
-<div class="paragraph">
-<p>Bundling is the process of combining all the code you need into a single file. Such a bundle is known as an entry point.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  "scripts": {
+    "build": "tsdown"
+  }
+}</code></pre>
 </div>
-<div class="paragraph">
-<p>In a project you may want to have multiple entry points, each representing a different part of your application.</p>
 </div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+You will typically NOT publish an Enonic XP project to npm, so it&#8217;s a good idea to add the following to the package.json file:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  "private": true
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="typescript_configuration"><a class="link" href="#typescript_configuration">TypeScript configuration</a></h3>
 <div class="paragraph">
-<p>Bundlers are also smart enough to separate shared code into separate bundles, such bundles are known as chunks.</p>
+<p>Add the following config files to the project:</p>
+</div>
+<div class="listingblock">
+<div class="title">tsconfig.json</div>
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  // This file should only include files that configures the build system.
+  // It should ignore all actual source files.
+
+  // Read more about tsconfig.json at:
+  // https://www.typescriptlang.org/tsconfig
+
+  // Specifies an array of filenames or patterns to include in the program.
+  // These filenames are resolved relative to the directory containing the
+  // tsconfig.json file.
+  "include": [
+    "**/*.ts"
+  ],
+
+  // Specifies an array of filenames or patterns that should be skipped when
+  // resolving include.
+  // Important: exclude only changes which files are included as a result of
+  // the include setting. A file specified by exclude can still become part of
+  // your codebase due to an import statement in your code, a types inclusion,
+  // a /// &lt;reference directive, or being specified in the files list.
+  // It is not a mechanism that prevents a file from being included in the
+  // codebase - it simply changes what the include setting finds.
+  "exclude": [
+    "**/*.d.ts",
+    "src/**/*.*", // Avoid Enonic XP source files
+  ],
+
+  "compilerOptions": {
+    // Leave baseUrl unset: setting it would let bare module specifiers resolve
+    // against the project root instead of node_modules, which can shadow real
+    // packages with same-named local folders.
+    // "baseUrl": ".",
+
+    "lib": [
+      "es2023" // string.replaceAll
+    ],
+
+    // By default all visible ”@types” packages are included in your compilation.
+    // Packages in node_modules/@types of any enclosing folder are considered visible.
+    // For example, that means packages within ./node_modules/@types/,
+    // ../node_modules/@types/, ../../node_modules/@types/, and so on.
+    // If types is specified, only packages listed will be included in the global scope.
+    // This feature differs from typeRoots in that it is about specifying only the exact
+    // types you want included, whereas typeRoots supports saying you want particular folders.
+    "types": [
+      "node"
+    ],
+    // tsdown's types reference `exports`-subpath imports and ship .d.ts using
+    // private (#) fields; these let the build config type-check cleanly.
+    "skipLibCheck": true,
+    "module": "preserve",
+    "moduleResolution": "bundler"
+  },
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">src/main/resources/tsconfig.json</div>
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  // This file should only include Enonic XP server-side source files.
+  // It should exclude any client-side source files.
+
+  // Read more about tsconfig.json at:
+  // https://www.typescriptlang.org/tsconfig
+
+  // Specifies an array of filenames or patterns to include in the program.
+  // These filenames are resolved relative to the directory containing the
+  // tsconfig.json file.
+  "include": [
+    "**/*.ts"
+  ],
+
+  // Specifies an array of filenames or patterns that should be skipped when
+  // resolving include.
+  // Important: exclude only changes which files are included as a result of
+  // the include setting. A file specified by exclude can still become part of
+  // your codebase due to an import statement in your code, a types inclusion,
+  // a /// &lt;reference directive, or being specified in the files list.
+  // It is not a mechanism that prevents a file from being included in the
+  // codebase - it simply changes what the include setting finds.
+  "exclude": [
+    "**/*.d.ts",
+    "assets/**/*.*",
+    // "static/**/*.*",
+  ],
+
+  "compilerOptions": {
+    // A series of entries which re-map imports to lookup locations relative
+    // to the baseUrl if set, or to the tsconfig file itself otherwise.
+    "paths": {
+      "/lib/xp/*": ["../../../node_modules/@enonic-types/lib-*"],
+      "/*": ["./*"],
+    },
+
+    "skipLibCheck": true,
+
+    // By default all visible ”@types” packages are included in your compilation.
+    // Packages in node_modules/@types of any enclosing folder are considered visible.
+    // For example, that means packages within ./node_modules/@types/,
+    // ../node_modules/@types/, ../../node_modules/@types/, and so on.
+    // If types is specified, only packages listed will be included in the global scope.
+    // This feature differs from typeRoots in that it is about specifying only the exact
+    // types you want included, whereas typeRoots supports saying you want particular folders.
+    "types": [
+      // Make the types for the Enonic XP Global objects and functions
+      // available in the global scope.
+      // https://developer.enonic.com/docs/xp/stable/framework/globals
+      // app, exports, log, require, resolve
+      // https://developer.enonic.com/docs/xp/stable/framework/java-bridge
+      // __.newBean, __.toNativeObject, __.nullOrValue
+      "@enonic-types/global"
+    ],
+  },
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">src/main/resources/assets/tsconfig.json</div>
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  // This file configures TypeScript for client-side assets.
+
+  // Read more about tsconfig.json at:
+  // https://www.typescriptlang.org/tsconfig
+
+  // Specifies an array of filenames or patterns to include in the program.
+  // These filenames are resolved relative to the directory containing the
+  // tsconfig.json file.
+  "include": [
+    "./**/*.ts",
+    "./**/*.tsx",
+  ],
+
+  // Specifies an array of filenames or patterns that should be skipped when
+  // resolving include.
+  // Important: exclude only changes which files are included as a result of
+  // the include setting. A file specified by exclude can still become part of
+  // your codebase due to an import statement in your code, a types inclusion,
+  // a /// &lt;reference directive, or being specified in the files list.
+  // It is not a mechanism that prevents a file from being included in the
+  // codebase - it simply changes what the include setting finds.
+  "exclude": [
+    "./**/*.d.ts",
+  ],
+
+  "compilerOptions": {
+    "lib": [
+      "DOM", // console, document, window, etc...
+    ],
+  },
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="tsdown_configuration"><a class="link" href="#tsdown_configuration">tsdown configuration</a></h3>
+<div class="paragraph">
+<p>A single config file defines both build targets (server and client/assets). It discovers
+every source file with <code>glob</code> and emits one output file per input, keeping the directory
+tree intact — Enonic XP loads each controller/service/task by its resource path. XP runtime
+libraries (<code>/lib/xp/*</code> etc.) are marked <code>external</code> so they are never bundled, and a target
+is skipped entirely when it has no source files.</p>
+</div>
+<div class="listingblock">
+<div class="title">tsdown.config.ts</div>
+<div class="content">
+<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">import {globSync} from 'glob';
+import {defineConfig} from 'tsdown';
+
+
+const SRC = 'src/main/resources';
+const SRC_ASSETS = `${SRC}/assets`;
+const DST = 'build/resources/main';
+const DST_ASSETS = `${DST}/assets`;
+
+const dev = process.env.NODE_ENV === 'development';
+const logLevel: 'silent' | 'info' = ['QUIET', 'WARN'].includes(process.env.LOG_LEVEL_FROM_GRADLE || '') ? 'silent' : 'info';
+
+// Enonic XP loads each controller/service/task by its resource path, so every
+// source file must become its own output file with the directory tree intact.
+// Turn a glob into a tsdown `entry` map ({ "relative/name": "src/path/file.ts" }).
+function entries(dir: string, exts: string, ignore: string[] = []): Record&lt;string, string&gt; {
+  return Object.fromEntries(
+    globSync(`${dir}/**/*.${exts}`, {posix: true, ignore})
+      .map(file =&gt; [file.slice(dir.length + 1).replace(/\.[^.]+$/, ''), file]),
+  );
+}
+
+const serverEntry = entries(SRC, '{ts,js}', [`${SRC_ASSETS}/**`]);
+const assetEntry = entries(SRC_ASSETS, '{tsx,ts,jsx,js}');
+
+// XP runtime libraries are provided by the platform — never bundle them.
+const xpExternal = [
+  '/lib/cache',
+  '/lib/enonic/static',
+  /^\/lib\/guillotine/,
+  '/lib/graphql',
+  '/lib/graphql-connection',
+  '/lib/http-client',
+  '/lib/license',
+  '/lib/mustache',
+  '/lib/router',
+  '/lib/util',
+  '/lib/vanilla',
+  '/lib/text-encoding',
+  '/lib/thymeleaf',
+  /^\/lib\/xp\//,
+];
+
+// Skip a target that has no source files (e.g. a server-only or client-only app).
+export default defineConfig([
+  ...(Object.keys(serverEntry).length ? [{
+    entry: serverEntry,
+    outDir: DST,
+    format: 'cjs' as const,
+    target: 'es2015', // Rolldown/oxc floor; runs on XP 8's GraalJS engine
+    platform: 'neutral' as const,
+    clean: false, // outDir also holds Gradle-copied resources + the assets/ subfolder
+    dts: false, // d.ts files are useless at runtime
+    minify: false, // minifying server files makes debugging harder
+    sourcemap: false,
+    logLevel,
+    tsconfig: `${SRC}/tsconfig.json`,
+    inputOptions: {
+      external: xpExternal,
+      resolve: {
+        mainFields: ['module', 'main'],
+      },
+    },
+    outputOptions: {
+      chunkFileNames: '_chunks/[name]-[hash].js', // avoid chunk-name collisions
+    },
+  }] : []),
+  ...(Object.keys(assetEntry).length ? [{
+    entry: assetEntry,
+    outDir: DST_ASSETS,
+    format: 'esm' as const,
+    target: 'es2015',
+    platform: 'browser' as const,
+    clean: false,
+    dts: false,
+    minify: !dev,
+    sourcemap: !dev,
+    logLevel,
+    tsconfig: `${SRC_ASSETS}/tsconfig.json`,
+  }] : []),
+]);</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="tsup"><a class="link" href="#tsup">Tsup</a></h2>
+<h2 id="gradle_configuration"><a class="link" href="#gradle_configuration">Gradle configuration</a></h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="node_gradle_plugin"><a class="link" href="#node_gradle_plugin">Node-gradle plugin</a></h3>
 <div class="paragraph">
-<p>There are a bunch of transpilers, transformers🤖 and bundlers out there, each of them with their own strengths and weaknesses.</p>
+<p>In order for Gradle to be able to run npm scripts, you need to use the node-gradle plugin.</p>
 </div>
 <div class="paragraph">
-<p>It has been difficult to find a single tool that supports all the required features. Each tool typically only solves a subset of the problem.</p>
+<p>Add the following to the build.gradle file:</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="highlight"><code class="language-Groovy" data-lang="Groovy">plugins {
+  id 'com.github.node-gradle.node' version '7.0.2'
+}
+
+node {
+  // Whether to download and install a specific Node.js version or not
+  // If false, it will use the globally installed Node.js
+  // If true, it will download node using above parameters
+  // Note that npm is bundled with Node.js
+  download = true
+
+  // Version of node to download and install (only used if download is true)
+  // It will be unpacked in the workDir
+  version = '20.12.2'
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="npmbuild_task"><a class="link" href="#npmbuild_task">npmBuild task</a></h3>
+<div class="paragraph">
+<p>Add the following task to the build.gradle file, which will run the npm build script defined in package.json:</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="highlight"><code class="language-Groovy" data-lang="Groovy">tasks.register('npmBuild', NpmTask) {
+  args = [
+    'run',
+    '--silent',
+    'build'
+  ]
+  dependsOn npmInstall
+  environment = [
+    'FORCE_COLOR': 'true',
+    'LOG_LEVEL_FROM_GRADLE': gradle.startParameter.logLevel.toString(),
+    'NODE_ENV': project.hasProperty('dev') || project.hasProperty('development') ? 'development' : 'production'
+  ]
+  inputs.dir 'src/main/resources'
+  outputs.dir 'build/resources/main'
+}
+
+jar.dependsOn npmBuild</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="clean_up_jar_file"><a class="link" href="#clean_up_jar_file">Clean up jar file</a></h3>
+<div class="paragraph">
+<p>Add the following to the build.gradle file:</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="highlight"><code class="language-Groovy" data-lang="Groovy">tasks.withType(Copy).configureEach {
+  includeEmptyDirs = false
+}
+
+processResources {
+  exclude '**/.gitkeep'
+  exclude '**/*.json'
+  exclude '**/*.ts'
+  exclude '**/*.tsx'
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>This is where meta-tools come in. Meta-tools are tools that combine multiple tools to solve a larger problem. For many years Webpack has been the most common tool for working with JavaScript code. It is very powerful and flexible, but also very complex and difficult to configure. In addition, it is not very fast.</p>
+<p>This will make sure that assembled jar file contains only required assets and none of the original source TypeScript files.</p>
 </div>
-<div class="paragraph">
-<p><strong>TSup</strong> is a new kid on the block. TSup is a simple and fast tool that is specifically designed for TypeScript code. It is easy to use and configure. It also has all the features you need to work with server-side code in Enonic XP. Our setup will be using TSup as the meta-tool.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<code>bun</code> is an even faster up and upcoming tool, but is still missing some features to work with Enonic XP server-side code. It receives regular updates, so hopefully we will be able to use it soon.
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -693,15 +926,15 @@ The next major release of Enonic XP is expected to support both CommonJS version
 <h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The fundamental concepts should now be established.
-Moving forward, let&#8217;s create a project and <a href="build.ahtml">the build system</a>.</p>
+<p>You should now be able to perform basic builds that transpile TypeScript code to JavaScript.
+In the next chapter we&#8217;ll have a look at <a href="check.ahtml">Type checking</a>.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-08-14 11:55:12 UTC
+Last updated 2026-06-18 16:28:32 UTC
 </div>
 </div>
 </body>

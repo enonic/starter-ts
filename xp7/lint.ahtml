@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.23">
-<title>Type checking</title>
+<meta name="generator" content="Asciidoctor 2.0.26">
+<title>Linting</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -116,7 +116,6 @@ h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title str
 :not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
 pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
-pre>code{display:block}
 pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
 em em{font-style:normal}
 strong strong{font-weight:400}
@@ -219,6 +218,7 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
 .literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
 .listingblock>.content{position:relative}
+.listingblock pre>code{display:block}
 .listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
 .listingblock:hover code[data-lang]::before{display:block}
 .listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
@@ -437,14 +437,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Type checking</h1>
+<h1>Linting</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
+<li><a href="#install">Install</a></li>
 <li><a href="#configure">Configure</a>
 <ul class="sectlevel2">
 <li><a href="#package_json">package.json</a></li>
-<li><a href="#build_gradle">build.gradle</a></li>
+<li><a href="#eslint_config_mjs">eslint.config.mjs</a></li>
 </ul>
 </li>
 <li><a href="#summary">Summary</a></li>
@@ -455,7 +456,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Type checking is useful to catch errors early in the development process. This chapter will explain how to set up type checking for your project.</p>
+<p>ESLint is a static code analysis tool for identifying problematic patterns found in JavaScript code.</p>
+</div>
+<div class="paragraph">
+<p>ESlint is highly configurable and can be used to enforce a consistent coding style. Having linting as a part of the build process is considered a good practice.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="install"><a class="link" href="#install">Install</a></h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev eslint @eslint/js typescript-eslint</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -471,44 +485,80 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight"><code class="language-JSON" data-lang="JSON">{
   "scripts": {
-    "check": "concurrently -c auto -g --timings npm:check:types",
-    "check:types": "concurrently -g -r --timings npm:check:types:*",
-    "check:types:assets": "node tsup/anyAssetFiles.js &amp;&amp; npx tsc --noEmit -p src/main/resources/assets/tsconfig.json || exit 0",
-    "check:types:server": "node tsup/anyServerFiles.js &amp;&amp; npx tsc --noEmit -p src/main/resources/tsconfig.json || exit 0",
+    "check": "concurrently -c auto -g --timings npm:check:types npm:lint",
+    "lint": "eslint --cache",
   }
 }</code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Note that <code>check</code> command was added to package.json in the previous chapter about type checking. Here we just modify it to execute linting as a part of the <code>check</code> command.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
-<h3 id="build_gradle"><a class="link" href="#build_gradle">build.gradle</a></h3>
+<h3 id="eslint_config_mjs"><a class="link" href="#eslint_config_mjs">eslint.config.mjs</a></h3>
 <div class="paragraph">
-<p>Add the following task to the build.gradle file, which will run the npm check script defined in package.json:</p>
+<p>Create the following file:</p>
 </div>
 <div class="listingblock">
-<div class="title">build.gradle</div>
+<div class="title">eslint.config.mjs</div>
 <div class="content">
-<pre class="highlight"><code class="language-Groovy" data-lang="Groovy">tasks.register('npmCheck', NpmTask) {
-	dependsOn npmInstall
-	args = [
-		'run',
-		'check'
-	]
-	environment = [
-		'FORCE_COLOR': 'true',
-	]
-}
+<pre class="highlight"><code class="language-Javascript" data-lang="Javascript">import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
 
-check.dependsOn npmCheck</code></pre>
+export default tseslint.config(
+
+  // If ignores is used without any other keys in the configuration object,
+  // then the patterns act as global ignores.
+  {
+    // An array of glob patterns indicating the files that the configuration
+    // object should not apply to. If not specified, the configuration
+    // object applies to all files matched by files.
+    ignores: [
+      'build/**/*.*',
+      'src/jest/server/setupFile.ts',
+      'tsup/*.*',
+      'src/**/*.js'
+    ],
+  },
+
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended,
+
+  {
+    // An array of glob patterns indicating the files that the configuration
+    // object should apply to. If not specified, the configuration object
+    // applies to all files matched by any other configuration object.
+    files: [
+      './src/**/*.ts',
+      './src/**/*.tsx'
+    ],
+
+
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        "warn",
+        {
+          "argsIgnorePattern": "^_"
+        }
+      ]
+    }
+  }
+
+);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The last command makes sure that type checking is executed as a part of the build, but it can also be run separately (to skip the entire build process and just check for errors) with the following command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">./gradlew check</code></pre>
-</div>
+<p>Linting will now be executed as a part of the <code>check</code> command and, therefore, as a part of the build process.</p>
 </div>
 </div>
 </div>
@@ -517,15 +567,15 @@ check.dependsOn npmCheck</code></pre>
 <h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>When building your app, it will now automatically perform type checking.
-In the next chapter we enable <a href="lint.ahtml">Linting</a> of TypeScript code.</p>
+<p>Now, you have activated linting - and only one step remains.
+Prepare your project for <a href="test.ahtml">testing</a>.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-08-14 11:55:12 UTC
+Last updated 2026-06-18 16:28:57 UTC
 </div>
 </div>
 </body>

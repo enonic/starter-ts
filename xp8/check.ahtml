@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.23">
-<title>TypeScript Starter and best practices</title>
+<meta name="generator" content="Asciidoctor 2.0.26">
+<title>Type checking</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -116,7 +116,6 @@ h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title str
 :not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
 pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
-pre>code{display:block}
 pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
 em em{font-style:normal}
 strong strong{font-weight:400}
@@ -219,6 +218,7 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
 .literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
 .listingblock>.content{position:relative}
+.listingblock pre>code{display:block}
 .listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
 .listingblock:hover code[data-lang]::before{display:block}
 .listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
@@ -437,12 +437,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>TypeScript Starter and best practices</h1>
+<h1>Type checking</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#tldr">TL;DR</a></li>
-<li><a href="#introduction">Introduction</a></li>
+<li><a href="#configure">Configure</a>
+<ul class="sectlevel2">
+<li><a href="#package_json">package.json</a></li>
+<li><a href="#build_gradle">build.gradle</a></li>
+</ul>
+</li>
+<li><a href="#summary">Summary</a></li>
 </ul>
 </div>
 </div>
@@ -450,67 +455,77 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Take advantage of our development best practices via <a href="https://market.enonic.com/starters/typescript-starter">TypeScript Starter</a></p>
+<p>Type checking is useful to catch errors early in the development process. This chapter will explain how to set up type checking for your project.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="tldr"><a class="link" href="#tldr">TL;DR</a></h2>
+<h2 id="configure"><a class="link" href="#configure">Configure</a></h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="package_json"><a class="link" href="#package_json">package.json</a></h3>
 <div class="paragraph">
-<p>For new Enonic apps, simply run <code>enonic project create -r starter-ts</code>.</p>
+<p>Add the following scripts to the package.json file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  "scripts": {
+    "check": "concurrently -c auto -g --timings npm:check:types",
+    "check:types": "concurrently -g -r --timings npm:check:types:*",
+    "check:types:assets": "tsc --noEmit -p src/main/resources/assets/tsconfig.json",
+    "check:types:server": "tsc --noEmit -p src/main/resources/tsconfig.json",
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="build_gradle"><a class="link" href="#build_gradle">build.gradle</a></h3>
+<div class="paragraph">
+<p>Add the following task to the build.gradle file, which will run the npm check script defined in package.json:</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="highlight"><code class="language-Groovy" data-lang="Groovy">tasks.register('npmCheck', NpmTask) {
+	dependsOn npmInstall
+	args = [
+		'run',
+		'check'
+	]
+	environment = [
+		'FORCE_COLOR': 'true',
+	]
+}
+
+check.dependsOn npmCheck</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The last command makes sure that type checking is executed as a part of the build, but it can also be run separately (to skip the entire build process and just check for errors) with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">./gradlew check</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="introduction"><a class="link" href="#introduction">Introduction</a></h2>
+<h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Most projects start with a simple setup and then grow in complexity as more and more features are added. TypeScript can help keep your codebase clean and maintainable.</p>
-</div>
-<div class="paragraph">
-<p>This tutorial is aimed at developers that want to understand how the TypeScript starter was created, and/or want to make use of the same setup in an existing Enonic project.</p>
-</div>
-<div class="paragraph">
-<p>The tutorial covers:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Essential <a href="concepts.ahtml">concepts</a></p>
-</li>
-<li>
-<p>Setting up the <a href="build.ahtml">Build system</a></p>
-</li>
-<li>
-<p>How to enable <a href="check.ahtml">Type checking</a></p>
-</li>
-<li>
-<p>Activating <a href="lint.ahtml">Linting</a></p>
-</li>
-<li>
-<p>Preparing for <a href="test.ahtml">Testing</a></p>
-</li>
-</ul>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-If you want to learn more about writing tests in TypeScript, you can check out the <a href="https://developer.enonic.com/docs/testing-with-jest-and-mock-xp">Testing with Jest and Mock XP</a> tutorial.
-</td>
-</tr>
-</table>
+<p>When building your app, it will now automatically perform type checking.
+In the next chapter we enable <a href="lint.ahtml">Linting</a> of TypeScript code.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-08-14 11:55:12 UTC
+Last updated 2026-06-18 16:28:32 UTC
 </div>
 </div>
 </body>
