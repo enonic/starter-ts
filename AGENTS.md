@@ -34,9 +34,7 @@ The Enonic CLI automatically selects the sandbox associated with the project. If
 ### npm scripts (TypeScript tooling)
 
 ```bash
-npm run build                 # Build server + assets concurrently (via tsup/esbuild)
-npm run build:server          # Server code only
-npm run build:assets          # Client/asset code only
+npm run build                 # Build server + assets in one tsdown run (both targets in tsdown.config.ts)
 
 npm run check                 # Types + lint concurrently
 npm run check:types           # Type check only (server + assets)
@@ -67,18 +65,18 @@ For GitHub Actions, the project uses `enonic/action-app-build@v1` which handles 
 
 ### Dual build: server vs. client
 
-The codebase has two distinct build targets with separate tsup configs:
+The codebase has two distinct build targets, both defined in a single `tsdown.config.ts` (an array of two configs):
 
 **Server** (`src/main/resources/**/*.ts`, excluding `assets/`):
-- Target: ES5, CommonJS format, `platform: 'neutral'`
+- Target: ES2015, CommonJS format, `platform: 'neutral'`
 - Output: `build/resources/main/`
 - XP framework libraries (`/lib/xp/*`, `/lib/cache`, etc.) are marked `external` — provided by the runtime
-- Config: `tsup/server.ts`, tsconfig: `src/main/resources/tsconfig.json`
+- tsconfig: `src/main/resources/tsconfig.json`
 
 **Client** (`src/main/resources/assets/**/*.ts`):
-- Target: ESM, `platform: 'browser'`, minified in production
+- Target: ES2015, ESM format, `platform: 'browser'`, minified in production
 - Output: `build/resources/main/assets/`
-- Config: `tsup/client.ts`, tsconfig: `src/main/resources/assets/tsconfig.json`
+- tsconfig: `src/main/resources/assets/tsconfig.json`
 
 ### Path mappings
 

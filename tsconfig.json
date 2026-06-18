@@ -26,8 +26,9 @@
   ],
 
   "compilerOptions": {
-    // Do NOT add this as it will resolve tsup to the local tsup folder, rather
-    // than the tsup node_module.
+    // Leave baseUrl unset: setting it would let bare module specifiers resolve
+    // against the project root instead of node_modules, which can shadow real
+    // packages with same-named local folders.
     // "baseUrl": ".",
 
     "lib": [

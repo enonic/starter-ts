@@ -81,7 +81,7 @@ In a project you may want to have multiple entry points, each representing a dif
 
 Bundlers are also smart enough to separate shared code into separate bundles, such bundles are known as chunks.
 
-== Tsup
+== tsdown
 
 There are a bunch of transpilers, transformers🤖 and bundlers out there, each of them with their own strengths and weaknesses.
 
@@ -89,9 +89,9 @@ It has been difficult to find a single tool that supports all the required featu
 
 This is where meta-tools come in. Meta-tools are tools that combine multiple tools to solve a larger problem. For many years Webpack has been the most common tool for working with JavaScript code. It is very powerful and flexible, but also very complex and difficult to configure. In addition, it is not very fast.
 
-*TSup* is a new kid on the block. TSup is a simple and fast tool that is specifically designed for TypeScript code. It is easy to use and configure. It also has all the features you need to work with server-side code in Enonic XP. Our setup will be using TSup as the meta-tool.
+*tsdown* is a simple and fast bundler specifically designed for TypeScript code. Powered by https://rolldown.rs/[Rolldown] (a Rust-based bundler built on the same `oxc` toolchain), it is easy to use and configure, and has all the features needed to work with both server- and client-side code in Enonic XP. Our setup uses tsdown as the meta-tool.
 
-TIP: `bun` is an even faster up and upcoming tool, but is still missing some features to work with Enonic XP server-side code. It receives regular updates, so hopefully we will be able to use it soon.
+TIP: tsdown is the actively maintained successor to `tsup`, which this starter previously used. `tsup` is now deprecated, and migrating to tsdown keeps the build on a supported, faster toolchain.
 
 == Summary
 
