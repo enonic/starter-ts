@@ -1,6 +1,10 @@
 {
   "menuItems": [
     {
+      "title": "About",
+      "document": "index"
+    },
+    {
       "title": "1 - Concepts",
       "document": "concepts"
     },
