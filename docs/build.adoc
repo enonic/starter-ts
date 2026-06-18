@@ -39,43 +39,25 @@ Install tools required to set up transpilation and bundling of Typescript code:
 
 [source, Terminal]
 ----
-npm install --save-dev typescript tsup @swc/core concurrently
+npm install --save-dev typescript tsdown glob concurrently
 ----
 
 * `typescript` will enable support of Typescript language by adding syntax for type declarations and annotations
-* `tsup` is a TypeScript bundler powered by esbuild
-* `@swc/core` is a TypeScript / JavaScript compiler
+* `tsdown` is a TypeScript bundler powered by Rolldown (the successor to the now-deprecated `tsup`)
+* `glob` is used by the build config to discover the source files to bundle
 * `concurrently` is a tool to run multiple commands concurrently
 
 == Configure
 
-=== File processing
-
-We need a cross-platform way to check if there are any files to build, so here are a couple scripts that do just that:
-
-.tsup/anyAssetFiles.js
-[source, JavaScript]
-----
-include::{sourcedir}tsup/anyAssetFiles.js[]
-----
-
-.tsup/anyServerFiles.js
-[source, JavaScript]
-----
-include::{sourcedir}tsup/anyServerFiles.js[]
-----
-
 === package.json
 
-Add the following scripts to the package.json file (the first script concurrently executes the other two):
+Add the following build script to the package.json file:
 
 [source, JSON]
 ----
 {
   "scripts": {
-    "build": "concurrently -c auto -g --timings npm:build:*",
-    "build:assets": "node tsup/anyAssetFiles.js && npx tsup -d build/resources/main/assets || exit 0",
-    "build:server": "node tsup/anyServerFiles.js && npx tsup -d build/resources/main || exit 0",
+    "build": "tsdown"
   }
 }
 ----
@@ -111,38 +93,18 @@ include::{sourcedir}src/main/resources/tsconfig.json[]
 include::{sourcedir}src/main/resources/assets/tsconfig.json[]
 ----
 
-=== TSup configuration
+=== tsdown configuration
 
-Add the following config files to the project:
+A single config file defines both build targets (server and client/assets). It discovers
+every source file with `glob` and emits one output file per input, keeping the directory
+tree intact — Enonic XP loads each controller/service/task by its resource path. XP runtime
+libraries (`/lib/xp/*` etc.) are marked `external` so they are never bundled, and a target
+is skipped entirely when it has no source files.
 
-.tsup.config.ts
+.tsdown.config.ts
 [source, Typescript]
 ----
-include::{sourcedir}tsup.config.ts[]
-----
-
-.tsup/index.d.ts
-[source, Typescript]
-----
-include::{sourcedir}tsup/index.d.ts[]
-----
-
-.tsup/constants.ts
-[source, Typescript]
-----
-include::{sourcedir}tsup/constants.ts[]
-----
-
-.tsup/client.ts
-[source, Typescript]
-----
-include::{sourcedir}tsup/client.ts[]
-----
-
-.tsup/server.ts
-[source, Typescript]
-----
-include::{sourcedir}tsup/server.ts[]
+include::{sourcedir}tsdown.config.ts[]
 ----
 
 == Gradle configuration
