@@ -510,7 +510,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev @enonic-types/core @enonic-types/global @enonic-types/lib-admin @enonic-types/lib-app @enonic-types/lib-auditlog @enonic-types/lib-auth @enonic-types/lib-cluster @enonic-types/lib-common @enonic-types/lib-content @enonic-types/lib-context @enonic-types/lib-event @enonic-types/lib-export @enonic-types/lib-grid @enonic-types/lib-i18n @enonic-types/lib-io @enonic-types/lib-mail @enonic-types/lib-node @enonic-types/lib-portal @enonic-types/lib-project @enonic-types/lib-repo @enonic-types/lib-schema @enonic-types/lib-scheduler @enonic-types/lib-task @enonic-types/lib-value @enonic-types/lib-vhost @enonic-types/lib-websocket</code></pre>
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev @enonic-types/core @enonic-types/global @enonic-types/lib-admin @enonic-types/lib-app @enonic-types/lib-auditlog @enonic-types/lib-auth @enonic-types/lib-cluster @enonic-types/lib-common @enonic-types/lib-content @enonic-types/lib-context @enonic-types/lib-event @enonic-types/lib-export @enonic-types/lib-grid @enonic-types/lib-i18n @enonic-types/lib-io @enonic-types/lib-mail @enonic-types/lib-node @enonic-types/lib-portal @enonic-types/lib-project @enonic-types/lib-repo @enonic-types/lib-schema @enonic-types/lib-scheduler @enonic-types/lib-sse @enonic-types/lib-task @enonic-types/lib-value @enonic-types/lib-vhost @enonic-types/lib-websocket</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -1004,7 +1004,7 @@ In the next chapter we&#8217;ll have a look at <a href="check.ahtml">Type checki
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-06-19 10:30:19 UTC
+Last updated 2026-06-19 13:13:28 UTC
 </div>
 </div>
 </body>
