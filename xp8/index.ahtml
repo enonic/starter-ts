@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
-<title>The Enonic TypeScript Starter</title>
+<title>Best practices with the Enonic TypeScript Starter</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,7 +437,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>The Enonic TypeScript Starter</h1>
+<h1>Best practices with the Enonic TypeScript Starter</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -511,7 +511,7 @@ You do not need to read this tutorial to use the TypeScript starter, Skip direct
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-If you want to learn more about writing tests in TypeScript, you can check out the <a href="https://developer.enonic.com/docs/testing-with-jest-and-mock-xp">Testing with Jest and Mock XP</a> tutorial.
+If you want to learn more about writing tests in TypeScript, you can check out the <a href="https://developer.enonic.com/learn/testing-with-jest-and-mock-xp/stable">Testing with Jest and Mock XP</a> tutorial.
 </td>
 </tr>
 </table>
@@ -521,7 +521,7 @@ If you want to learn more about writing tests in TypeScript, you can check out t
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-06-19 08:01:56 UTC
+Last updated 2026-06-19 10:30:19 UTC
 </div>
 </div>
 </body>

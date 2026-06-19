@@ -469,7 +469,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev jest-environment-jsdom ts-node ts-jest</code></pre>
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev jest @jest/types jest-environment-jsdom ts-node ts-jest</code></pre>
 </div>
 </div>
 </div>
@@ -716,6 +716,18 @@ globalThis.log = {
 }</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This setup file only mocks the XP <em>globals</em> (<code>app</code>, <code>log</code>). To mock XP <em>library</em> APIs and state — such as <code>/lib/xp/content</code> or <code>/lib/xp/portal</code> — add the official <a href="https://www.npmjs.com/package/@enonic/mock-xp"><code>@enonic/mock-xp</code></a> library (<code>npm install --save-dev @enonic/mock-xp</code>) and use it in your tests.
+</td>
+</tr>
+</table>
+</div>
 <div class="listingblock">
 <div class="title">src/jest/server/tsconfig.json</div>
 <div class="content">
@@ -791,6 +803,7 @@ globalThis.log = {
 	]
   inputs.dir 'src/jest'
   outputs.dir 'coverage'
+  outputs.upToDateWhen { false }
 }
 
 test.dependsOn npmTest</code></pre>
@@ -811,7 +824,7 @@ test.dependsOn npmTest</code></pre>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-If you want to learn more about writing tests for your Enonic project, check out the <a href="https://developer.enonic.com/docs/testing-with-jest-and-mock-xp">Testing with Jest and Mock-XP</a> tutorial.
+If you want to learn more about writing tests for your Enonic project, check out the <a href="https://developer.enonic.com/learn/testing-with-jest-and-mock-xp/stable">Testing with Jest and Mock-XP</a> tutorial.
 </td>
 </tr>
 </table>
@@ -848,7 +861,7 @@ The <a href="https://market.enonic.com/starters/typescript-starter">TypeScript S
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-06-19 08:01:56 UTC
+Last updated 2026-06-19 10:30:19 UTC
 </div>
 </div>
 </body>
