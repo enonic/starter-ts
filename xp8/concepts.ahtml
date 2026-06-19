@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
 <meta name="author" content="To establish a common ground, we introduce some basic concepts">
-<title>Concepts</title>
+<title>Key concepts and terminology</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,7 +438,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Concepts</h1>
+<h1>Key concepts and terminology</h1>
 <div class="details">
 <span id="author" class="author">To establish a common ground, we introduce some basic concepts</span><br>
 </div>
@@ -448,8 +448,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#environments">Environments</a></li>
 <li><a href="#globals">Globals</a>
 <ul class="sectlevel2">
-<li><a href="#browser">Browser</a></li>
-<li><a href="#xp_framework">XP Framework</a></li>
+<li><a href="#client">Client</a></li>
+<li><a href="#server">Server</a></li>
 </ul>
 </li>
 <li><a href="#transpiling">Transpiling</a></li>
@@ -520,27 +520,15 @@ Useful reading: <a href="https://developer.mozilla.org/en-US/docs/Glossary/Globa
 </table>
 </div>
 <div class="sect2">
-<h3 id="browser"><a class="link" href="#browser">Browser</a></h3>
+<h3 id="client"><a class="link" href="#client">Client</a></h3>
 <div class="paragraph">
 <p>In the browser, the global scope is the <code>window</code> object. The <code>window</code> object contains the <code>document</code> object that represents the current web page. The <code>document</code> object contains functions and properties that allow you to inspect and manipulate the web page.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="xp_framework"><a class="link" href="#xp_framework">XP Framework</a></h3>
+<h3 id="server"><a class="link" href="#server">Server</a></h3>
 <div class="paragraph">
-<p>In the Enonic XP Framework the global scope contains a bunch of objects and functions that are useful when developing applications.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-You can read about them <a href="https://developer.enonic.com/docs/xp/stable/framework/globals" target="_blank" rel="noopener">here</a>.
-</td>
-</tr>
-</table>
+<p>For code executing on the server (XP), the global scope contains a variety of objects and functions that are useful when developing applications. For more details, visit the <a href="https://developer.enonic.com/docs/code/xp8/fundamentals/globals">Enonic XP Globals</a> documentation.</p>
 </div>
 </div>
 </div>
@@ -549,13 +537,7 @@ You can read about them <a href="https://developer.enonic.com/docs/xp/stable/fra
 <h2 id="transpiling"><a class="link" href="#transpiling">Transpiling</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are currently very few "JavaScript" engines capable of running TypeScript code directly. This is where TypeScript <code>transpilation</code> comes in.</p>
-</div>
-<div class="paragraph">
-<p>A transpiler is a compilator that converts TypeScript code into JavaScript code. This JavaScript code can then be run by any JavaScript engine. Enonic XP 7.x supports <code>JavaScript 1.9</code> (2011) with some <code>ECMAScript 2015</code> (ES6) features. This is because the code is executed by the <code>Nashorn</code> JavaScript engine.</p>
-</div>
-<div class="paragraph">
-<p>The TypeScript transpiler will automatically convert your TypeScript code into JS code that works with Enonic XP.</p>
+<p>There are currently few JavaScript engines capable of running TypeScript directly, so a build step must <code>transpile</code> your TypeScript to JavaScript before it can be deployed to Enonic XP. The build also targets a conservative language level, because XP&#8217;s default engine supports an older version of JavaScript.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -564,10 +546,13 @@ You can read about them <a href="https://developer.enonic.com/docs/xp/stable/fra
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-The next major release of Enonic XP is expected to be using GraalJS which supports the latest ECMAScript standard, which currently is ECMAScript 2023.
+XP8 bundles GraalJS which supports the latest ECMAScript standard. However, this is in beta mode, and not yet the default engine.
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>For the execution model, the JavaScript engines XP ships, and the exact language level they support, see the Enonic Development Kit reference: <a href="https://developer.enonic.com/docs/code/xp8/fundamentals/runtime" target="_blank" rel="noopener">Runtime</a> and <a href="https://developer.enonic.com/docs/code/xp8/fundamentals/typescript" target="_blank" rel="noopener">TypeScript</a>.</p>
 </div>
 </div>
 </div>
@@ -575,59 +560,10 @@ The next major release of Enonic XP is expected to be using GraalJS which suppor
 <h2 id="module_format"><a class="link" href="#module_format">Module format</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In JavaScript, a module is a way to structure your code into reusable, self-contained units called modules. It defines how you:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Export functionality</strong>: Specify which parts of your code (functions, variables, classes) can be used by other code.</p>
-</li>
-<li>
-<p><strong>Import functionality</strong>: Access and utilize the exported functionality from other modules in your program.</p>
-</li>
-</ol>
+<p>A module is a way to structure your code into reusable, self-contained units that <strong>export</strong> functionality for other modules to <strong>import</strong>.</p>
 </div>
 <div class="paragraph">
-<p>The <strong>Nashorn JavaScript engine</strong> doesn&#8217;t support any module formats. It has no concept of modules. It simply interprets JavaScript code lines.</p>
-</div>
-<div class="paragraph">
-<p>Enonic XP adds supports for the CommonJS module format version 1. This is why you can use <code>require</code> and <code>exports</code> in your server-side code.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>There are several other module formats:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>CommonJS (CJS)</strong> version 2 which uses <code>require</code> and <code>module.exports</code>.</p>
-</li>
-<li>
-<p><strong>Asynchronous Module Definition (AMD)</strong>: Designed for asynchronous loading of modules, often used in web development with libraries like RequireJS.</p>
-</li>
-<li>
-<p><strong>Universal Module Definition (UMD)</strong>: Aims to be compatible with both CommonJS and AMD environments.</p>
-</li>
-<li>
-<p><strong>ECMAScript Modules (ESM)</strong>: is the new standard for JavaScript modules and uses <code>import</code> and <code>export</code>.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>AMD and UMD are typically used in client-side code, but are quickly being replaced by ESM.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>TypeScript files are typically written in the ECMAScript module format, which is why (in addition to transpiling the language itself): they have to be transformed into to CommonJS version 1 before they can run in Enonic XP.</p>
+<p>Enonic XP uses the <strong>CommonJS</strong> module format on the server, which is why you use <code>require</code> and <code>exports</code> in server-side code. TypeScript is authored as ECMAScript Modules (ESM), so the build transforms server files to CommonJS, while client-side assets are emitted as ESM for the browser.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -636,7 +572,7 @@ The next major release of Enonic XP is expected to be using GraalJS which suppor
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-The next major release of Enonic XP is expected to support both CommonJS version 1 and 2 and the new ECMAScript module format. 🎉
+For the module system, path resolution, and the bundle boundary, see <a href="https://developer.enonic.com/docs/code/xp8/fundamentals/runtime" target="_blank" rel="noopener">Runtime: Modules and bundling</a>.
 </td>
 </tr>
 </table>
@@ -682,7 +618,7 @@ The next major release of Enonic XP is expected to support both CommonJS version
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-tsdown is the actively maintained successor to <code>tsup</code>, which this starter previously used. <code>tsup</code> is now deprecated, and migrating to tsdown keeps the build on a supported, faster toolchain.
+tsdown is the actively maintained successor to <code>tsup</code>, which the XP7 version of this starter was using. <code>tsup</code> is now deprecated, and migrating to tsdown keeps the build on a supported, faster toolchain.
 </td>
 </tr>
 </table>
@@ -701,7 +637,7 @@ Moving forward, let&#8217;s create a project and <a href="build.ahtml">the build
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-06-18 16:58:17 UTC
+Last updated 2026-06-19 08:01:56 UTC
 </div>
 </div>
 </body>

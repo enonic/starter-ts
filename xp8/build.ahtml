@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
-<title>Building</title>
+<title>Setting up the build system</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,7 +437,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Building</h1>
+<h1>Setting up the build system</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -445,6 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#npm_modules">NPM modules</a>
 <ul class="sectlevel2">
 <li><a href="#types">Types</a></li>
+<li><a href="#additional_libraries">Additional libraries</a></li>
 <li><a href="#tools">Tools</a></li>
 </ul>
 </li>
@@ -458,8 +459,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#gradle_configuration">Gradle configuration</a>
 <ul class="sectlevel2">
 <li><a href="#node_gradle_plugin">Node-gradle plugin</a></li>
+<li><a href="#node_js">Node.js</a></li>
 <li><a href="#npmbuild_task">npmBuild task</a></li>
-<li><a href="#clean_up_jar_file">Clean up jar file</a></li>
+<li><a href="#clean_up">Clean up</a></li>
 </ul>
 </li>
 <li><a href="#summary">Summary</a></li>
@@ -478,11 +480,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="create_project"><a class="link" href="#create_project">Create project</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We start this tutorial with the most basic setup possible, a vanilla XP project:</p>
+<p>This chapter rebuilds the TypeScript setup from the ground up, so you can see how every piece fits together. If you just want to <strong>use</strong> it, scaffold a ready-made project with <code>enonic project create -r starter-ts</code> and skip this tutorial entirely.</p>
+</div>
+<div class="paragraph">
+<p>To follow along, we start from the most basic setup possible — a vanilla XP project, a minimal JavaScript app with no TypeScript or npm tooling. The same steps also apply when adding TypeScript to an existing Enonic project.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">enonic create myproject -r starter-vanilla</code></pre>
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">enonic project create myproject -r starter-vanilla</code></pre>
 </div>
 </div>
 </div>
@@ -501,12 +506,65 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>Install types needed to work with Enonic Core API:</p>
+<p>Install the types for the libraries that ship with Enonic XP. These libraries are released and versioned together with XP, so the starter bundles all of them — giving you full type-checking and editor autocompletion for every <code>/lib/xp/*</code> import out of the box:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev @enonic-types/core @enonic-types/lib-content @enonic-types/lib-portal @enonic-types/global @enonic-types/lib-context @enonic-types/lib-auth @enonic-types/lib-event @enonic-types/lib-common @enonic-types/lib-repo @enonic-types/lib-websocket @enonic-types/lib-node @enonic-types/lib-i18n @enonic-types/lib-task @enonic-types/lib-io @enonic-types/lib-project @enonic-types/lib-mail @enonic-types/lib-export @enonic-types/lib-scheduler @enonic-types/lib-admin @enonic-types/lib-cluster @enonic-types/lib-value</code></pre>
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev @enonic-types/core @enonic-types/global @enonic-types/lib-admin @enonic-types/lib-app @enonic-types/lib-auditlog @enonic-types/lib-auth @enonic-types/lib-cluster @enonic-types/lib-common @enonic-types/lib-content @enonic-types/lib-context @enonic-types/lib-event @enonic-types/lib-export @enonic-types/lib-grid @enonic-types/lib-i18n @enonic-types/lib-io @enonic-types/lib-mail @enonic-types/lib-node @enonic-types/lib-portal @enonic-types/lib-project @enonic-types/lib-repo @enonic-types/lib-schema @enonic-types/lib-scheduler @enonic-types/lib-task @enonic-types/lib-value @enonic-types/lib-vhost @enonic-types/lib-websocket</code></pre>
 </div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+The <code>@enonic-types/*</code> packages are versioned in lock-step with Enonic XP. Keep them aligned with the <code>xpVersion</code> in <code>gradle.properties</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="additional_libraries"><a class="link" href="#additional_libraries">Additional libraries</a></h3>
+<div class="paragraph">
+<p>The packages above cover only the libraries bundled with Enonic XP. Enonic also maintains standalone libraries that are released independently of XP — for example <code>lib-static</code>, <code>lib-router</code> and <code>lib-mustache</code>. These are <strong>not</strong> included by default; add them as you need them.</p>
+</div>
+<div class="paragraph">
+<p>As an example, here is how to add <a href="https://market.enonic.com/vendors/enonic/static-library">lib-static</a>. First, declare its runtime dependency in <code>build.gradle</code> so the library is bundled with your app:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Groovy" data-lang="Groovy">dependencies {
+  include 'com.enonic.lib:lib-static:3.0.0'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then install its type definitions as a dev dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev @enonic-types/lib-static</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Unlike the XP-native libraries — which register their own import path for you — a standalone library does not, so <code>require()</code> won&#8217;t pick up its types automatically. Map the library&#8217;s path to the installed types by augmenting the <code>XpLibraries</code> interface, for example in a <code>src/main/resources/types.d.ts</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">declare global {
+  interface XpLibraries {
+    '/lib/enonic/static': typeof import('@enonic-types/lib-static');
+  }
+}
+
+export {};</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With that in place, <code>require('/lib/enonic/static')</code> is fully typed. See the <a href="https://developer.enonic.com/docs/code/xp8/fundamentals/typescript" target="_blank" rel="noopener">Enonic Development Kit TypeScript reference</a> for more on typing custom and third-party libraries.</p>
 </div>
 </div>
 <div class="sect2">
@@ -839,22 +897,33 @@ export default defineConfig([
 <div class="sect1">
 <h2 id="gradle_configuration"><a class="link" href="#gradle_configuration">Gradle configuration</a></h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>A vanilla project already ships a complete Enonic Gradle build: <code>settings.gradle</code> applies the <code>com.enonic.xp.settings</code> plugin (which pins the Enonic plugin versions — <code>4.0.0</code> at the time of writing), <code>build.gradle</code> applies the <code>com.enonic.xp.app</code> plugin, and the repositories — including the Enonic repo via <code>xp.enonicRepo()</code> — are already configured. You only need to extend the build so Gradle also runs the TypeScript tooling.</p>
+</div>
 <div class="sect2">
 <h3 id="node_gradle_plugin"><a class="link" href="#node_gradle_plugin">Node-gradle plugin</a></h3>
 <div class="paragraph">
-<p>In order for Gradle to be able to run npm scripts, you need to use the node-gradle plugin.</p>
-</div>
-<div class="paragraph">
-<p>Add the following to the build.gradle file:</p>
+<p>Add the <a href="https://github.com/node-gradle/gradle-node-plugin">node-gradle</a> plugin to the existing <code>plugins</code> block in <code>build.gradle</code>, so Gradle can run the npm scripts:</p>
 </div>
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="highlight"><code class="language-Groovy" data-lang="Groovy">plugins {
-  id 'com.github.node-gradle.node' version '7.0.2'
-}
-
-node {
+  id 'com.enonic.xp.app'                            // already present
+  id 'com.github.node-gradle.node' version '7.1.0'  // add this
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="node_js"><a class="link" href="#node_js">Node.js</a></h3>
+<div class="paragraph">
+<p>Configure the node-gradle plugin to download a pinned Node.js version, so builds are reproducible regardless of what is installed locally:</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="highlight"><code class="language-Groovy" data-lang="Groovy">node {
   // Whether to download and install a specific Node.js version or not
   // If false, it will use the globally installed Node.js
   // If true, it will download node using above parameters
@@ -863,7 +932,7 @@ node {
 
   // Version of node to download and install (only used if download is true)
   // It will be unpacked in the workDir
-  version = '20.12.2'
+  version = '24.11.0'
 }</code></pre>
 </div>
 </div>
@@ -890,6 +959,7 @@ node {
   ]
   inputs.dir 'src/main/resources'
   outputs.dir 'build/resources/main'
+  outputs.upToDateWhen { false }
 }
 
 jar.dependsOn npmBuild</code></pre>
@@ -897,7 +967,7 @@ jar.dependsOn npmBuild</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="clean_up_jar_file"><a class="link" href="#clean_up_jar_file">Clean up jar file</a></h3>
+<h3 id="clean_up"><a class="link" href="#clean_up">Clean up</a></h3>
 <div class="paragraph">
 <p>Add the following to the build.gradle file:</p>
 </div>
@@ -917,7 +987,7 @@ processResources {
 </div>
 </div>
 <div class="paragraph">
-<p>This will make sure that assembled jar file contains only required assets and none of the original source TypeScript files.</p>
+<p>This will make sure that assembled application bundle contains only required assets and none of the original source TypeScript files.</p>
 </div>
 </div>
 </div>
@@ -934,7 +1004,7 @@ In the next chapter we&#8217;ll have a look at <a href="check.ahtml">Type checki
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-06-18 16:58:17 UTC
+Last updated 2026-06-19 08:01:56 UTC
 </div>
 </div>
 </body>
