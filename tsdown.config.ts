@@ -47,7 +47,7 @@ export default defineConfig([
     entry: serverEntry,
     outDir: DST,
     format: 'cjs' as const,
-    target: 'es2015', // Rolldown/oxc floor; runs on XP 8's GraalJS engine
+    target: 'es2015', // Rolldown/oxc floor; XP runs an older JS engine (Nashorn) by default
     platform: 'neutral' as const,
     clean: false, // outDir also holds Gradle-copied resources + the assets/ subfolder
     dts: false, // d.ts files are useless at runtime

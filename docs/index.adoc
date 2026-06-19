@@ -1,4 +1,4 @@
-= The Enonic TypeScript Starter
+= Best practices with the Enonic TypeScript Starter
 :toc: right
 
 Covers the details of the Enonic TypeScript starter, and how to set up a similar environment in existing Enonic projects.
@@ -21,4 +21,4 @@ The tutorial covers:
 
 
 
-TIP: If you want to learn more about writing tests in TypeScript, you can check out the https://developer.enonic.com/docs/testing-with-jest-and-mock-xp[Testing with Jest and Mock XP] tutorial.
+TIP: If you want to learn more about writing tests in TypeScript, you can check out the https://developer.enonic.com/learn/testing-with-jest-and-mock-xp/stable[Testing with Jest and Mock XP] tutorial.

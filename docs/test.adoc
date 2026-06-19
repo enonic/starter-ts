@@ -9,7 +9,7 @@ If you are writing Typescript code, chances are you want to write tests for that
 
 [source, Terminal]
 ----
-npm install --save-dev jest-environment-jsdom ts-node ts-jest
+npm install --save-dev jest @jest/types jest-environment-jsdom ts-node ts-jest
 ----
 
 
@@ -49,6 +49,8 @@ This Jest setupFile is used to mock the XP Framework, injecting standard Globals
 ----
 include::{sourcedir}src/jest/server/setupFile.ts[]
 ----
+
+NOTE: This setup file only mocks the XP _globals_ (`app`, `log`). To mock XP _library_ APIs and state — such as `/lib/xp/content` or `/lib/xp/portal` — add the official https://www.npmjs.com/package/@enonic/mock-xp[`@enonic/mock-xp`] library (`npm install --save-dev @enonic/mock-xp`) and use it in your tests.
 
 .src/jest/server/tsconfig.json
 [source, JSON]
@@ -90,6 +92,7 @@ tasks.register('npmTest', NpmTask) {
 	]
   inputs.dir 'src/jest'
   outputs.dir 'coverage'
+  outputs.upToDateWhen { false }
 }
 
 test.dependsOn npmTest
@@ -102,7 +105,7 @@ With this setup tests will be executed on every build, but you can also run them
 ./gradlew test
 ----
 
-TIP: If you want to learn more about writing tests for your Enonic project, check out the https://developer.enonic.com/docs/testing-with-jest-and-mock-xp[Testing with Jest and Mock-XP] tutorial.
+TIP: If you want to learn more about writing tests for your Enonic project, check out the https://developer.enonic.com/learn/testing-with-jest-and-mock-xp/stable[Testing with Jest and Mock-XP] tutorial.
 
 == Summary
 
