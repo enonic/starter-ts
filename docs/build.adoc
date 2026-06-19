@@ -31,7 +31,7 @@ Install the types for the libraries that ship with Enonic XP. These libraries ar
 
 [source, Terminal]
 ----
-npm install --save-dev @enonic-types/core @enonic-types/global @enonic-types/lib-admin @enonic-types/lib-app @enonic-types/lib-auditlog @enonic-types/lib-auth @enonic-types/lib-cluster @enonic-types/lib-common @enonic-types/lib-content @enonic-types/lib-context @enonic-types/lib-event @enonic-types/lib-export @enonic-types/lib-grid @enonic-types/lib-i18n @enonic-types/lib-io @enonic-types/lib-mail @enonic-types/lib-node @enonic-types/lib-portal @enonic-types/lib-project @enonic-types/lib-repo @enonic-types/lib-schema @enonic-types/lib-scheduler @enonic-types/lib-task @enonic-types/lib-value @enonic-types/lib-vhost @enonic-types/lib-websocket
+npm install --save-dev @enonic-types/core @enonic-types/global @enonic-types/lib-admin @enonic-types/lib-app @enonic-types/lib-auditlog @enonic-types/lib-auth @enonic-types/lib-cluster @enonic-types/lib-common @enonic-types/lib-content @enonic-types/lib-context @enonic-types/lib-event @enonic-types/lib-export @enonic-types/lib-grid @enonic-types/lib-i18n @enonic-types/lib-io @enonic-types/lib-mail @enonic-types/lib-node @enonic-types/lib-portal @enonic-types/lib-project @enonic-types/lib-repo @enonic-types/lib-schema @enonic-types/lib-scheduler @enonic-types/lib-sse @enonic-types/lib-task @enonic-types/lib-value @enonic-types/lib-vhost @enonic-types/lib-websocket
 ----
 
 TIP: The `@enonic-types/*` packages are versioned in lock-step with Enonic XP. Keep them aligned with the `xpVersion` in `gradle.properties`.
