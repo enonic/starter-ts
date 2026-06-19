@@ -1,4 +1,4 @@
-= Building
+= Setting up the build system
 :sourcedir: ../
 
 In this chapter we will learn how to set up transpilation of Typescript code - both client- and server-side - to JavaScript.
@@ -6,13 +6,14 @@ In this chapter we will learn how to set up transpilation of Typescript code - b
 
 == Create project
 
-We start this tutorial with the most basic setup possible, a vanilla XP project:
+This chapter rebuilds the TypeScript setup from the ground up, so you can see how every piece fits together. If you just want to *use* it, scaffold a ready-made project with `enonic project create -r starter-ts` and skip this tutorial entirely.
+
+To follow along, we start from the most basic setup possible — a vanilla XP project, a minimal JavaScript app with no TypeScript or npm tooling. The same steps also apply when adding TypeScript to an existing Enonic project.
 
 [source, Terminal]
 ----
-enonic create myproject -r starter-vanilla
+enonic project create myproject -r starter-vanilla
 ----
-
 
 == NPM modules
 
@@ -26,11 +27,49 @@ npm install --save-dev @types/node
 ----
 
 
-Install types needed to work with Enonic Core API:
+Install the types for the libraries that ship with Enonic XP. These libraries are released and versioned together with XP, so the starter bundles all of them — giving you full type-checking and editor autocompletion for every `/lib/xp/*` import out of the box:
+
 [source, Terminal]
 ----
-npm install --save-dev @enonic-types/core @enonic-types/lib-content @enonic-types/lib-portal @enonic-types/global @enonic-types/lib-context @enonic-types/lib-auth @enonic-types/lib-event @enonic-types/lib-common @enonic-types/lib-repo @enonic-types/lib-websocket @enonic-types/lib-node @enonic-types/lib-i18n @enonic-types/lib-task @enonic-types/lib-io @enonic-types/lib-project @enonic-types/lib-mail @enonic-types/lib-export @enonic-types/lib-scheduler @enonic-types/lib-admin @enonic-types/lib-cluster @enonic-types/lib-value
+npm install --save-dev @enonic-types/core @enonic-types/global @enonic-types/lib-admin @enonic-types/lib-app @enonic-types/lib-auditlog @enonic-types/lib-auth @enonic-types/lib-cluster @enonic-types/lib-common @enonic-types/lib-content @enonic-types/lib-context @enonic-types/lib-event @enonic-types/lib-export @enonic-types/lib-grid @enonic-types/lib-i18n @enonic-types/lib-io @enonic-types/lib-mail @enonic-types/lib-node @enonic-types/lib-portal @enonic-types/lib-project @enonic-types/lib-repo @enonic-types/lib-schema @enonic-types/lib-scheduler @enonic-types/lib-task @enonic-types/lib-value @enonic-types/lib-vhost @enonic-types/lib-websocket
 ----
+
+TIP: The `@enonic-types/*` packages are versioned in lock-step with Enonic XP. Keep them aligned with the `xpVersion` in `gradle.properties`.
+
+=== Additional libraries
+
+The packages above cover only the libraries bundled with Enonic XP. Enonic also maintains standalone libraries that are released independently of XP — for example `lib-static`, `lib-router` and `lib-mustache`. These are *not* included by default; add them as you need them.
+
+As an example, here is how to add https://market.enonic.com/vendors/enonic/static-library[lib-static]. First, declare its runtime dependency in `build.gradle` so the library is bundled with your app:
+
+[source, Groovy]
+----
+dependencies {
+  include 'com.enonic.lib:lib-static:3.0.0'
+}
+----
+
+Then install its type definitions as a dev dependency:
+
+[source, Terminal]
+----
+npm install --save-dev @enonic-types/lib-static
+----
+
+Unlike the XP-native libraries — which register their own import path for you — a standalone library does not, so `require()` won't pick up its types automatically. Map the library's path to the installed types by augmenting the `XpLibraries` interface, for example in a `src/main/resources/types.d.ts` file:
+
+[source, Typescript]
+----
+declare global {
+  interface XpLibraries {
+    '/lib/enonic/static': typeof import('@enonic-types/lib-static');
+  }
+}
+
+export {};
+----
+
+With that in place, `require('/lib/enonic/static')` is fully typed. See the https://developer.enonic.com/docs/code/xp8/fundamentals/typescript[Enonic Development Kit TypeScript reference^] for more on typing custom and third-party libraries.
 
 
 === Tools
@@ -109,19 +148,28 @@ include::{sourcedir}tsdown.config.ts[]
 
 == Gradle configuration
 
+A vanilla project already ships a complete Enonic Gradle build: `settings.gradle` applies the `com.enonic.xp.settings` plugin (which pins the Enonic plugin versions — `4.0.0` at the time of writing), `build.gradle` applies the `com.enonic.xp.app` plugin, and the repositories — including the Enonic repo via `xp.enonicRepo()` — are already configured. You only need to extend the build so Gradle also runs the TypeScript tooling.
+
 === Node-gradle plugin
 
-In order for Gradle to be able to run npm scripts, you need to use the node-gradle plugin.
-
-Add the following to the build.gradle file:
+Add the https://github.com/node-gradle/gradle-node-plugin[node-gradle] plugin to the existing `plugins` block in `build.gradle`, so Gradle can run the npm scripts:
 
 .build.gradle
 [source, Groovy]
 ----
 plugins {
-  id 'com.github.node-gradle.node' version '7.0.2'
+  id 'com.enonic.xp.app'                            // already present
+  id 'com.github.node-gradle.node' version '7.1.0'  // add this
 }
+----
 
+=== Node.js
+
+Configure the node-gradle plugin to download a pinned Node.js version, so builds are reproducible regardless of what is installed locally:
+
+.build.gradle
+[source, Groovy]
+----
 node {
   // Whether to download and install a specific Node.js version or not
   // If false, it will use the globally installed Node.js
@@ -131,7 +179,7 @@ node {
 
   // Version of node to download and install (only used if download is true)
   // It will be unpacked in the workDir
-  version = '20.12.2'
+  version = '24.11.0'
 }
 ----
 
@@ -156,12 +204,13 @@ tasks.register('npmBuild', NpmTask) {
   ]
   inputs.dir 'src/main/resources'
   outputs.dir 'build/resources/main'
+  outputs.upToDateWhen { false }
 }
 
 jar.dependsOn npmBuild
 ----
 
-=== Clean up jar file
+=== Clean up
 
 Add the following to the build.gradle file:
 
@@ -180,7 +229,7 @@ processResources {
 }
 ----
 
-This will make sure that assembled jar file contains only required assets and none of the original source TypeScript files.
+This will make sure that assembled application bundle contains only required assets and none of the original source TypeScript files.
 
 == Summary
 

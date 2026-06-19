@@ -1,4 +1,4 @@
-= Concepts
+= Key concepts and terminology
 To establish a common ground, we introduce some basic concepts
 
 == Environments
@@ -24,52 +24,29 @@ When programming in Javascript there is always a global scope. Depending on whic
 
 TIP: Useful reading: https://developer.mozilla.org/en-US/docs/Glossary/Global_object[Global object^]
 
-=== Browser
+=== Client
 
 In the browser, the global scope is the `window` object. The `window` object contains the `document` object that represents the current web page. The `document` object contains functions and properties that allow you to inspect and manipulate the web page.
 
-=== XP Framework
+=== Server
 
-In the Enonic XP Framework the global scope contains a bunch of objects and functions that are useful when developing applications.
-
-TIP: You can read about them https://developer.enonic.com/docs/xp/stable/framework/globals[here^].
+For code executing on the server (XP), the global scope contains a variety of objects and functions that are useful when developing applications. For more details, visit the https://developer.enonic.com/docs/code/xp8/fundamentals/globals[Enonic XP Globals] documentation.
 
 == Transpiling
 
-There are currently very few "JavaScript" engines capable of running TypeScript code directly. This is where TypeScript `transpilation` comes in.
+There are currently few JavaScript engines capable of running TypeScript directly, so a build step must `transpile` your TypeScript to JavaScript before it can be deployed to Enonic XP. The build also targets a conservative language level, because XP's default engine supports an older version of JavaScript.
 
-A transpiler is a compilator that converts TypeScript code into JavaScript code. This JavaScript code can then be run by any JavaScript engine. Enonic XP 7.x supports `JavaScript 1.9` (2011) with some `ECMAScript 2015` (ES6) features. This is because the code is executed by the `Nashorn` JavaScript engine.
+TIP: XP8 bundles GraalJS which supports the latest ECMAScript standard. However, this is in beta mode, and not yet the default engine.
 
-The TypeScript transpiler will automatically convert your TypeScript code into JS code that works with Enonic XP.
-
-TIP: The next major release of Enonic XP is expected to be using GraalJS which supports the latest ECMAScript standard, which currently is ECMAScript 2023.
+For the execution model, the JavaScript engines XP ships, and the exact language level they support, see the Enonic Development Kit reference: https://developer.enonic.com/docs/code/xp8/fundamentals/runtime[Runtime^] and https://developer.enonic.com/docs/code/xp8/fundamentals/typescript[TypeScript^].
 
 == Module format
 
-In JavaScript, a module is a way to structure your code into reusable, self-contained units called modules. It defines how you:
+A module is a way to structure your code into reusable, self-contained units that *export* functionality for other modules to *import*.
 
-1. *Export functionality*: Specify which parts of your code (functions, variables, classes) can be used by other code.
-2. *Import functionality*: Access and utilize the exported functionality from other modules in your program.
+Enonic XP uses the *CommonJS* module format on the server, which is why you use `require` and `exports` in server-side code. TypeScript is authored as ECMAScript Modules (ESM), so the build transforms server files to CommonJS, while client-side assets are emitted as ESM for the browser.
 
-The *Nashorn JavaScript engine* doesn't support any module formats. It has no concept of modules. It simply interprets JavaScript code lines.
-
-Enonic XP adds supports for the CommonJS module format version 1. This is why you can use `require` and `exports` in your server-side code.
-
-[NOTE]
---
-There are several other module formats:
-
-* *CommonJS (CJS)* version 2 which uses `require` and `module.exports`.
-* *Asynchronous Module Definition (AMD)*: Designed for asynchronous loading of modules, often used in web development with libraries like RequireJS.
-* *Universal Module Definition (UMD)*: Aims to be compatible with both CommonJS and AMD environments.
-* *ECMAScript Modules (ESM)*: is the new standard for JavaScript modules and uses `import` and `export`.
-
-AMD and UMD are typically used in client-side code, but are quickly being replaced by ESM.
---
-
-TypeScript files are typically written in the ECMAScript module format, which is why (in addition to transpiling the language itself): they have to be transformed into to CommonJS version 1 before they can run in Enonic XP.
-
-TIP: The next major release of Enonic XP is expected to support both CommonJS version 1 and 2 and the new ECMAScript module format. 🎉
+TIP: For the module system, path resolution, and the bundle boundary, see https://developer.enonic.com/docs/code/xp8/fundamentals/runtime[Runtime: Modules and bundling^].
 
 == Bundling
 
@@ -91,7 +68,7 @@ This is where meta-tools come in. Meta-tools are tools that combine multiple too
 
 *tsdown* is a simple and fast bundler specifically designed for TypeScript code. Powered by https://rolldown.rs/[Rolldown] (a Rust-based bundler built on the same `oxc` toolchain), it is easy to use and configure, and has all the features needed to work with both server- and client-side code in Enonic XP. Our setup uses tsdown as the meta-tool.
 
-TIP: tsdown is the actively maintained successor to `tsup`, which this starter previously used. `tsup` is now deprecated, and migrating to tsdown keeps the build on a supported, faster toolchain.
+TIP: tsdown is the actively maintained successor to `tsup`, which the XP7 version of this starter was using. `tsup` is now deprecated, and migrating to tsdown keeps the build on a supported, faster toolchain.
 
 == Summary
 

@@ -1,4 +1,4 @@
-= Testing
+= Setting up testing
 :sourcedir: ../
 
 Setting up Jest, a JavaScript testing framework designed to ensure correctness of your JavaScript codebase.

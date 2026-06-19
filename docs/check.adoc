@@ -1,4 +1,4 @@
-= Type checking
+= Setting up type checking
 
 Type checking is useful to catch errors early in the development process. This chapter will explain how to set up type checking for your project.
 
