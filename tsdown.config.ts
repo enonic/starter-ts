@@ -1,3 +1,4 @@
+import {transform} from '@swc/core';
 import {globSync} from 'glob';
 import {defineConfig} from 'tsdown';
 
@@ -41,19 +42,41 @@ const xpExternal = [
   /^\/lib\/xp\//,
 ];
 
+// Nashorn (XP's server-side JS engine) lacks ES2015 destructuring, but Oxc —
+// tsdown's transformer — can't target below es2015. Re-lower the bundled server
+// output to es5 with SWC after bundling, so bundled deps are covered too.
+const nashornEs5 = {
+  name: 'nashorn-es5',
+  async renderChunk(code: string) {
+    const out = await transform(code, {
+      jsc: {
+        parser: {syntax: 'ecmascript'},
+        target: 'es5',
+        loose: true,
+        externalHelpers: false,
+      },
+      isModule: false,
+      minify: false,
+      sourceMaps: false,
+    });
+    return {code: out.code, map: null};
+  },
+};
+
 // Skip a target that has no source files (e.g. a server-only or client-only app).
 export default defineConfig([
   ...(Object.keys(serverEntry).length ? [{
     entry: serverEntry,
     outDir: DST,
     format: 'cjs' as const,
-    target: 'es2015', // Rolldown/oxc floor; runs on XP 8's GraalJS engine
+    target: 'es2015', // Rolldown/oxc floor; nashornEs5 plugin re-lowers to es5 for Nashorn
     platform: 'neutral' as const,
     clean: false, // outDir also holds Gradle-copied resources + the assets/ subfolder
     dts: false, // d.ts files are useless at runtime
     minify: false, // minifying server files makes debugging harder
     sourcemap: false,
     logLevel,
+    plugins: [nashornEs5],
     tsconfig: `${SRC}/tsconfig.json`,
     inputOptions: {
       external: xpExternal,
