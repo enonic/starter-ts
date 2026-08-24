@@ -9,7 +9,7 @@ If you are writing Typescript code, chances are you want to write tests for that
 
 [source, Terminal]
 ----
-npm install --save-dev jest @jest/types jest-environment-jsdom ts-node ts-jest
+npm install --save-dev jest jest-environment-jsdom @swc/core @swc/jest
 ----
 
 
@@ -19,12 +19,14 @@ npm install --save-dev jest @jest/types jest-environment-jsdom ts-node ts-jest
 
 In our example we will configure processing of both client-side and server-side Typescript code.
 
-Create a file called jest.config.ts in the root of the project with the following content:
+Create a file called jest.config.mjs in the root of the project with the following content:
 
-[source, TypeScript]
+[source, JavaScript]
 ----
-include::{sourcedir}jest.config.ts[]
+include::{sourcedir}jest.config.mjs[]
 ----
+
+Test files are transpiled by SWC (via `@swc/jest`), which strips types without checking them — type errors in tests are caught by your editor, based on the tsconfig.json files below.
 
 With this config Jest will find and execute test files in the 'src/jest/client' and 'src/jest/server' folders called `*.test.ts` (or `.tsx`) or `*.spec.ts` (or `.tsx`).
 

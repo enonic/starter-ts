@@ -14,7 +14,7 @@ In the file gradle.properties, if appName has changed from com.example.typescrip
 
 Gradle is the primary build tool, with a Node.js plugin for npm integration. However, builds require a contextual Enonic XP sandbox — the sandbox holds the specific XP version and the Java compiler needed to package the app into a JAR.
 
-The `xpVersion` property in `gradle.properties` declares the target XP version (e.g. `7.16.1`). This determines which XP dependencies are used at build time, regardless of the sandbox version. The `@enonic-types/*` packages in `package.json` should match this version.
+The `xpVersion` property in `gradle.properties` declares the target XP version (e.g. `8.0.2`). This determines which XP dependencies are used at build time, regardless of the sandbox version. The `@enonic-types/*` packages in `package.json` should match this version.
 
 The normal approach is to use **Enonic CLI** commands, which wire the build to the correct sandbox and compiler. Direct `./gradlew` or `npm` commands work for TypeScript-only tasks (type checking, linting, testing) but the full build and deploy cycle should go through the Enonic CLI.
 
@@ -38,7 +38,7 @@ npm run build                 # Build server + assets in one tsdown run (both ta
 
 npm run check                 # Types + lint concurrently
 npm run check:types           # Type check only (server + assets)
-npm run lint                  # ESLint with cache
+npm run lint                  # oxlint (configured in .oxlintrc.json)
 
 npm test                      # All tests (server + client projects)
 npm test -- --testPathPattern="server"   # Server tests only
@@ -78,10 +78,22 @@ The codebase has two distinct build targets, both defined in a single `tsdown.co
 - Output: `build/resources/main/assets/`
 - tsconfig: `src/main/resources/assets/tsconfig.json`
 
+The server output is additionally re-lowered to ES5 by an SWC plugin in `tsdown.config.ts` (`nashornEs5`), because XP's Nashorn engine lacks some ES2015 syntax.
+
+### TypeScript toolchain
+
+The project uses TypeScript 7 — the native (Go-based) compiler. Its npm package ships only the `tsc` binary, not the JavaScript compiler API, which constrains the rest of the toolchain:
+
+- `tsc` is used exclusively for type checking (`--noEmit`); all transpilation is done by tsdown (Oxc) and SWC, so the TypeScript version never affects build output or targets.
+- Linting is done by **oxlint** (`.oxlintrc.json`), not ESLint — typescript-eslint requires the TS compiler API.
+- Jest transpiles tests with **@swc/jest**, not ts-jest, and the Jest config is plain ESM (`jest.config.mjs`), not TypeScript — ts-jest and ts-node also require the TS compiler API.
+
+Do not add ts-jest, ts-node, or typescript-eslint (or other packages with a `typescript <7` peer dependency): `npm install` will fail to resolve, and the TS7 package lacks the API they need at runtime.
+
 ### Path mappings
 
 Server tsconfig maps:
-- `/lib/xp/*` → `node_modules/@enonic-types/lib-*` (XP framework types)
+- `/lib/xp/<name>` → `node_modules/@enonic-types/lib-<name>` (XP framework types) — one explicit entry per XP library plus a `/lib/xp/*` wildcard fallback. The explicit entries, combined with `typescript.preferences.autoImportSpecifierExcludeRegexes` in `.vscode/settings.json`, make IDE auto-import suggest the runtime-correct `/lib/xp/<name>` specifier instead of `@enonic-types/lib-<name>`. Add an entry (here and in `src/jest/server/tsconfig.json`) when installing a new `@enonic-types/lib-*` package.
 - `/*` → `./src/main/resources/*` (app-local imports)
 
 Jest moduleNameMapper mirrors these for tests:
@@ -94,7 +106,7 @@ Two Jest projects with different environments:
 - **Server tests** (`src/jest/server/`): Node.js environment, XP globals (`app`, `log`, etc.) mocked in `setupFile.ts`
 - **Client tests** (`src/jest/client/`): jsdom environment
 
-Both use ts-jest with their own tsconfig extending the respective source tsconfig.
+Both transpile test files with @swc/jest (no type checking; the tsconfig in each test folder, extending the respective source tsconfig, serves the editor).
 
 ### XP globals
 

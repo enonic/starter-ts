@@ -1,15 +1,15 @@
 = Setting up linting
 :sourcedir: ../
 
-ESLint is a static code analysis tool for identifying problematic patterns found in JavaScript code. 
+oxlint is a static code analysis tool for identifying problematic patterns in JavaScript and TypeScript code.
 
-ESlint is highly configurable and can be used to enforce a consistent coding style. Having linting as a part of the build process is considered a good practice.
+oxlint is part of the same Oxc toolchain that powers tsdown, implements the most common ESLint (and typescript-eslint) rules, and lints TypeScript natively — without depending on the `typescript` package. Having linting as a part of the build process is considered a good practice.
 
 == Install
 
 [source, Terminal]
 ----
-npm install --save-dev eslint @eslint/js typescript-eslint
+npm install --save-dev oxlint
 ----
 
 == Configure
@@ -23,21 +23,21 @@ Add the following scripts to the package.json file:
 {
   "scripts": {
     "check": "concurrently -c auto -g --timings npm:check:types npm:lint",
-    "lint": "eslint --cache",
+    "lint": "oxlint src",
   }
 }
 ----
 
 TIP: Note that `check` command was added to package.json in the previous chapter about type checking. Here we just modify it to execute linting as a part of the `check` command.
 
-=== eslint.config.mjs
+=== .oxlintrc.json
 
 Create the following file:
 
-.eslint.config.mjs
-[source, Javascript]
+..oxlintrc.json
+[source, JSON]
 ----
-include::{sourcedir}eslint.config.mjs[]
+include::{sourcedir}.oxlintrc.json[]
 ----
 
 Linting will now be executed as a part of the `check` command and, therefore, as a part of the build process.
