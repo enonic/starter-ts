@@ -1,3 +1,5 @@
+import {existsSync} from 'node:fs';
+
 import {transform} from '@swc/core';
 import {globSync} from 'glob';
 import {defineConfig} from 'tsdown';
@@ -24,23 +26,19 @@ function entries(dir: string, exts: string, ignore: string[] = []): Record<strin
 const serverEntry = entries(SRC, '{ts,js}', [`${SRC_ASSETS}/**`]);
 const assetEntry = entries(SRC_ASSETS, '{tsx,ts,jsx,js}');
 
-// XP runtime libraries are provided by the platform — never bundle them.
-const xpExternal = [
-  '/lib/cache',
-  '/lib/enonic/static',
-  /^\/lib\/guillotine/,
-  '/lib/graphql',
-  '/lib/graphql-connection',
-  '/lib/http-client',
-  '/lib/license',
-  '/lib/mustache',
-  '/lib/router',
-  '/lib/util',
-  '/lib/vanilla',
-  '/lib/text-encoding',
-  '/lib/thymeleaf',
-  /^\/lib\/xp\//,
-];
+// XP resolves an absolute import at runtime against the app's own resources
+// first, then against the libraries on its classpath (/lib/xp/*, Market libs
+// from build.gradle, …). Mirror that rule at build time: bundle an absolute
+// import only when it is a source file of this app, and leave everything else
+// to the runtime. This avoids hand-maintaining a list of runtime libraries —
+// but it also means a typo in an absolute import surfaces at runtime, not at
+// build time.
+const SRC_EXTS = ['.ts', '.tsx', '.js', '.jsx'];
+function isAppSource(id: string): boolean {
+  return SRC_EXTS.some(ext => existsSync(`${SRC}${id}${ext}`) || existsSync(`${SRC}${id}/index${ext}`));
+}
+const xpExternal = (id: string, _importer: string | undefined, isResolved: boolean): boolean =>
+  !isResolved && id.startsWith('/') && !isAppSource(id) && !existsSync(id);
 
 // Nashorn (XP's server-side JS engine) lacks ES2015 destructuring, but Oxc —
 // tsdown's transformer — can't target below es2015. Re-lower the bundled server

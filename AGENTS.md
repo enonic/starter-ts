@@ -70,7 +70,7 @@ The codebase has two distinct build targets, both defined in a single `tsdown.co
 **Server** (`src/main/resources/**/*.ts`, excluding `assets/`):
 - Target: ES2015, CommonJS format, `platform: 'neutral'`
 - Output: `build/resources/main/`
-- XP framework libraries (`/lib/xp/*`, `/lib/cache`, etc.) are marked `external` — provided by the runtime
+- Runtime libraries are marked `external` by rule, not by list: an absolute import (`/lib/xp/*`, `/lib/graphql`, etc.) is bundled only when it is a source file of the app itself, otherwise it is left for the XP runtime to resolve. Consequence: a typo in an absolute import fails at runtime, not at build time.
 - tsconfig: `src/main/resources/tsconfig.json`
 
 **Client** (`src/main/resources/assets/**/*.ts`):
