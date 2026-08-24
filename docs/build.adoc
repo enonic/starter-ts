@@ -38,9 +38,11 @@ TIP: The `@enonic-types/*` packages are versioned in lock-step with Enonic XP. K
 
 === Additional libraries
 
-The packages above cover only the libraries bundled with Enonic XP. Enonic also maintains standalone libraries that are released independently of XP — for example `lib-static`, `lib-router` and `lib-mustache`. These are *not* included by default; add them as you need them.
+The packages above cover only the libraries bundled with Enonic XP. Enonic also maintains standalone libraries that are released independently of XP — for example `lib-asset`, `lib-static`, `lib-router` and `lib-mustache`. These are *not* included by default; add them as you need them.
 
-As an example, here is how to add https://market.enonic.com/vendors/enonic/static-library[lib-static]. First, declare its runtime dependency in `build.gradle` so the library is bundled with your app:
+TIP: To serve the compiled client-side files, add https://market.enonic.com/vendors/enonic/lib-asset[lib-asset] — the `assets/` folder this starter ships follows its convention. The related https://market.enonic.com/vendors/enonic/lib-static[lib-static] serves a folder of your choice (`static/` by convention) instead.
+
+As an example, here is how to add https://market.enonic.com/vendors/enonic/lib-static[lib-static]. First, declare its runtime dependency in `build.gradle` so the library is bundled with your app:
 
 [source, Groovy]
 ----
