@@ -136,9 +136,12 @@ include::{sourcedir}src/main/resources/assets/tsconfig.json[]
 
 A single config file defines both build targets (server and client/assets). It discovers
 every source file with `glob` and emits one output file per input, keeping the directory
-tree intact — Enonic XP loads each controller/service/task by its resource path. XP runtime
-libraries (`/lib/xp/*` etc.) are marked `external` so they are never bundled, and a target
-is skipped entirely when it has no source files.
+tree intact — Enonic XP loads each controller/service/task by its resource path. Runtime
+libraries (`/lib/xp/*`, Market libraries such as `/lib/graphql` etc.) are marked `external`
+so they are never bundled: an absolute import is bundled only when it is a source file of
+the app itself, and left to the XP runtime otherwise — mirroring how XP resolves `require()`
+at runtime, with no list of libraries to maintain. A target is skipped entirely when it has
+no source files.
 
 .tsdown.config.ts
 [source, Typescript]
