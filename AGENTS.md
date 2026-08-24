@@ -80,6 +80,8 @@ The codebase has two distinct build targets, both defined in a single `tsdown.co
 
 The server output is additionally re-lowered to ES5 by an SWC plugin in `tsdown.config.ts` (`nashornEs5`), because XP's Nashorn engine lacks some ES2015 syntax.
 
+The `assets/` folder name follows the convention of **lib-asset** (`/lib/enonic/asset`, see the commented `include` in `build.gradle`), which serves that folder at runtime. To adopt **lib-static**'s `static/` convention instead, rename the folder and update every place the name is wired in: `SRC_ASSETS` in `tsdown.config.ts`, the `assets/**/*.*` exclude in `src/main/resources/tsconfig.json`, the `/assets/` moduleNameMapper in `jest.config.mjs`, the `extends` and `paths` in `src/jest/client/tsconfig.json`, and the `check:types:client` script in `package.json`.
+
 ### TypeScript toolchain
 
 The project uses TypeScript 7 — the native (Go-based) compiler. Its npm package ships only the `tsc` binary, not the JavaScript compiler API, which constrains the rest of the toolchain:

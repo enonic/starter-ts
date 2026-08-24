@@ -35,6 +35,9 @@ dependencies {
   // Libraries from the Enonic Market ( https://market.enonic.com/libraries )
   // ─────────────────────────────────────────────────────────────────────────
 
+  // https://market.enonic.com/vendors/enonic/lib-asset
+  // include 'com.enonic.lib:lib-asset:2.0.1'
+
   // https://market.enonic.com/vendors/enonic/cache-lib
   // include 'com.enonic.lib:lib-cache:2.2.0'
 
@@ -47,8 +50,8 @@ dependencies {
   // https://market.enonic.com/vendors/enonic/router-lib
   // include 'com.enonic.lib:lib-router:3.1.0'
 
-  // https://market.enonic.com/vendors/enonic/static-asset-lib
-  // include 'com.enonic.lib:lib-static:1.0.3'
+  // https://market.enonic.com/vendors/enonic/lib-static
+  // include 'com.enonic.lib:lib-static:3.0.0'
 
   // https://market.enonic.com/vendors/enonic/text-encoding
   // include 'com.enonic.lib:lib-text-encoding:2.1.1'
