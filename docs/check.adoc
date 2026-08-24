@@ -20,6 +20,8 @@ Add the following scripts to the package.json file:
 }
 ----
 
+Type checking is performed by TypeScript 7 — the native compiler. It only checks types here: the actual transpilation of both server-side and client-side code is done by tsdown, so the compilation targets (ES2015/CommonJS for the server, ES2015/ESM for the client) are unaffected by the TypeScript version. Note that the rest of the toolchain (Jest via `@swc/jest`, linting via `oxlint`) is chosen to not depend on the TypeScript JavaScript compiler API, which the native compiler no longer provides.
+
 === build.gradle
 
 Add the following task to the build.gradle file, which will run the npm check script defined in package.json:

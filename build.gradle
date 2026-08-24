@@ -6,7 +6,7 @@ plugins {
 dependencies {
 
   // ─────────────────────────────────────────────────────────────────────────
-  // include "com.enonic.xp:lib-admin:${xpVersion}"
+  include "com.enonic.xp:lib-admin:${xpVersion}"
   // include "com.enonic.xp:lib-app:${xpVersion}"
   // include "com.enonic.xp:lib-auditlog:${xpVersion}"
   // include "com.enonic.xp:lib-auth:${xpVersion}"
