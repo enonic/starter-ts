@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
-<title>Setting up linting</title>
+<title>Setting up testing</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,15 +437,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Setting up linting</h1>
+<h1>Setting up testing</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#install">Install</a></li>
 <li><a href="#configure">Configure</a>
 <ul class="sectlevel2">
+<li><a href="#jest">Jest</a></li>
 <li><a href="#package_json">package.json</a></li>
-<li><a href="#eslint_config_mjs">eslint.config.mjs</a></li>
+<li><a href="#build_gradle">build.gradle</a></li>
 </ul>
 </li>
 <li><a href="#summary">Summary</a></li>
@@ -456,10 +457,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>ESLint is a static code analysis tool for identifying problematic patterns found in JavaScript code.</p>
+<p>Setting up Jest, a JavaScript testing framework designed to ensure correctness of your JavaScript codebase.</p>
 </div>
 <div class="paragraph">
-<p>ESlint is highly configurable and can be used to enforce a consistent coding style. Having linting as a part of the build process is considered a good practice.</p>
+<p>If you are writing Typescript code, chances are you want to write tests for that code, and you want to write them in Typescript. Here&#8217;s how to configure test runs in your application.</p>
 </div>
 </div>
 </div>
@@ -468,7 +469,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev eslint @eslint/js typescript-eslint</code></pre>
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev jest jest-environment-jsdom @swc/core @swc/jest</code></pre>
 </div>
 </div>
 </div>
@@ -476,6 +477,322 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="configure"><a class="link" href="#configure">Configure</a></h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="jest"><a class="link" href="#jest">Jest</a></h3>
+<div class="paragraph">
+<p>In our example we will configure processing of both client-side and server-side Typescript code.</p>
+</div>
+<div class="paragraph">
+<p>Create a file called jest.config.mjs in the root of the project with the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-JavaScript" data-lang="JavaScript">const DIR_SRC = 'src/main/resources';
+const DIR_SRC_JEST = 'src/jest';
+const DIR_SRC_JEST_CLIENT = `${DIR_SRC_JEST}/client`;
+const DIR_SRC_JEST_SERVER = `${DIR_SRC_JEST}/server`;
+const AND_BELOW = '**';
+const SOURCE_FILES = `*.{ts,tsx}`;
+const TEST_EXT = `{spec,test}.{ts,tsx}`;
+const TEST_FILES = `*.${TEST_EXT}`;
+
+
+// TypeScript (and TSX) test files are transpiled by SWC. Unlike ts-jest, SWC
+// only strips types — it does not type-check. Type errors in tests are caught
+// by your editor and the `check:types` script.
+const transform = {
+  '^.+\\.(ts|js)x?$': [
+    '@swc/jest',
+    {
+      jsc: {
+        parser: {
+          syntax: 'typescript',
+          tsx: true,
+        },
+        target: 'es2022',
+      },
+      sourceMaps: 'inline', // Important to get correct line numbers when running coverage tests
+    },
+  ],
+};
+
+const commonConfig = {
+  collectCoverageFrom: [
+    `${DIR_SRC}/${AND_BELOW}/${SOURCE_FILES}`,
+  ],
+
+  transform,
+};
+
+const clientSideConfig = {
+  ...commonConfig,
+  displayName: {
+    color: 'white',
+    name: 'CLIENT',
+  },
+
+  // A map from regular expressions to module names or to arrays of module
+  // names that allow to stub out resources, like images or styles with a
+  // single module.
+  // Use &lt;rootDir&gt; string token to refer to rootDir value if you want to use
+  // file paths.
+  // Additionally, you can substitute captured regex groups using numbered
+  // backreferences.
+  moduleNameMapper: {
+    '/assets/(.*)': `&lt;rootDir&gt;/${DIR_SRC}/assets/$1`,
+  },
+
+  // Run clientside tests with DOM globals such as document and window
+  testEnvironment: 'jsdom',
+
+  // The glob patterns Jest uses to detect test files. By default it looks for
+  // .js, .jsx, .ts and .tsx files inside of __tests__ folders, as well as any
+  // files with a suffix of .test or .spec (e.g. Component.test.js or
+  // Component.spec.js). It will also find files called test.js or spec.js.
+  // (default: [
+  //   "**/__tests__/**/*.[jt]s?(x)",
+  //   "**/?(*.)+(spec|test).[jt]s?(x)"
+  // ])
+  testMatch: [
+    `&lt;rootDir&gt;/${DIR_SRC_JEST_CLIENT}/${AND_BELOW}/${TEST_FILES}`,
+  ],
+};
+
+const serverSideConfig = {
+  ...commonConfig,
+  displayName: {
+    color: 'blue',
+    name: 'SERVER',
+  },
+
+  // A set of global variables that need to be available in all test
+  // environments.
+  // If you specify a global reference value (like an object or array) here,
+  // and some code mutates that value in the midst of running a test, that
+  // mutation will not be persisted across test runs for other test files.
+  // In addition, the globals object must be json-serializable, so it can't be
+  // used to specify global functions. For that, you should use setupFiles.
+  globals: {
+    app: {
+      name: 'com.example.myproject',
+      config: {},
+      version: '1.0.0'
+    },
+  },
+
+  // A map from regular expressions to module names or to arrays of module
+  // names that allow to stub out resources, like images or styles with a
+  // single module.
+  // Use &lt;rootDir&gt; string token to refer to rootDir value if you want to use
+  // file paths.
+  // Additionally, you can substitute captured regex groups using numbered
+  // backreferences.
+  moduleNameMapper: {
+    '/lib/myproject/(.*)': `&lt;rootDir&gt;/${DIR_SRC}/lib/myproject/$1`,
+  },
+
+  // A list of paths to modules that run some code to configure or set up the
+  // testing environment. Each setupFile will be run once per test file. Since
+  // every test runs in its own environment, these scripts will be executed in
+  // the testing environment before executing setupFilesAfterEnv and before
+  // the test code itself.
+  setupFiles: [
+    `&lt;rootDir&gt;/${DIR_SRC_JEST_SERVER}/setupFile.ts`
+  ],
+
+  // Run serverside tests without DOM globals such as document and window
+  testEnvironment: 'node',
+
+  // The glob patterns Jest uses to detect test files. By default it looks for
+  // .js, .jsx, .ts and .tsx files inside of __tests__ folders, as well as any
+  // files with a suffix of .test or .spec (e.g. Component.test.js or
+  // Component.spec.js). It will also find files called test.js or spec.js.
+  // (default: [
+  //   "**/__tests__/**/*.[jt]s?(x)",
+  //   "**/?(*.)+(spec|test).[jt]s?(x)"
+  // ])
+  testMatch: [
+    `&lt;rootDir&gt;/${DIR_SRC_JEST_SERVER}/${AND_BELOW}/${TEST_FILES}`,
+  ],
+};
+
+/** @type {import('jest').Config} */
+const customJestConfig = {
+  coverageProvider: 'v8', // To get correct line numbers under jsdom
+  passWithNoTests: true,
+  projects: [clientSideConfig, serverSideConfig],
+};
+
+export default customJestConfig;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Test files are transpiled by SWC (via <code>@swc/jest</code>), which strips types without checking them — type errors in tests are caught by your editor, based on the tsconfig.json files below.</p>
+</div>
+<div class="paragraph">
+<p>With this config Jest will find and execute test files in the 'src/jest/client' and 'src/jest/server' folders called <code><strong>.test.ts</code> (or <code>.tsx</code>) or <code></strong>.spec.ts</code> (or <code>.tsx</code>).</p>
+</div>
+<div class="paragraph">
+<p>Set up <code>src/jest</code> folder structure with thess files inside:</p>
+</div>
+<div class="listingblock">
+<div class="title">src/jest/client/tsconfig.json</div>
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  "extends": "../../main/resources/assets/tsconfig.json",
+
+  "include": [
+    "./**/*.spec.ts",
+    "./**/*.spec.tsx",
+    "./**/*.test.ts",
+    "./**/*.test.tsx",
+  ],
+
+  "compilerOptions": {
+    // "baseUrl": ".",
+
+    // A series of entries which re-map imports to lookup locations relative
+    // to the baseUrl if set, or to the tsconfig file itself otherwise.
+    "paths": {
+      "/assets/*": ["../../main/resources/assets/*"],
+    },
+
+    "sourceMap": true, // Important to get correct line numbers when running coverage tests
+
+    // By default all visible ”@types” packages are included in your
+    // compilation. Packages in node_modules/@types of any enclosing folder
+    // are considered visible. For example, that means packages within
+    // ./node_modules/@types/, ../node_modules/@types/,
+    // ../../node_modules/@types/, and so on.
+    // If types is specified, only packages listed will be included in the
+    // global scope.
+    // This feature differs from typeRoots in that it is about specifying
+    // only the exact types you want included, whereas typeRoots supports
+    // saying you want particular folders.
+    // "types": [
+      // "jest", // Doesn't even work for test files in this folder?
+    // ],
+
+  }, // compilerOptions
+
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">src/jest/server/global.d.ts</div>
+<div class="content">
+<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">/// &lt;reference types="@enonic-types/global" /&gt;
+
+export declare type App = typeof app;
+export declare type Log = typeof log;
+export declare type DoubleUnderscore = typeof __;
+export declare type Require = typeof require;
+export declare type Resolve = typeof resolve;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This Jest setupFile is used to mock the XP Framework, injecting standard Globals into the server-side test environment:</p>
+</div>
+<div class="listingblock">
+<div class="title">src/jest/server/setupFile.ts</div>
+<div class="content">
+<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">import type {App, Log} from './global.d';
+
+
+// Avoid type errors
+declare module globalThis {
+    var app: App
+    var log: Log
+}
+
+
+// In order for console to exist in the global scope when running tests in
+// testEnvironment: 'node' the @types/node package must be installed and
+// potentially listed under types in tsconfig.json.
+globalThis.log = {
+    debug: console.debug,
+    info: console.info,
+    error: console.error,
+    warning: console.warn
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This setup file only mocks the XP <em>globals</em> (<code>app</code>, <code>log</code>). To mock XP <em>library</em> APIs and state — such as <code>/lib/xp/content</code> or <code>/lib/xp/portal</code> — add the official <a href="https://www.npmjs.com/package/@enonic/mock-xp"><code>@enonic/mock-xp</code></a> library (<code>npm install --save-dev @enonic/mock-xp</code>) and use it in your tests.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">src/jest/server/tsconfig.json</div>
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  "extends": "../../main/resources/tsconfig.json",
+
+  // Specifies an array of filenames or patterns to include in the program.
+  // These filenames are resolved relative to the directory containing the
+  // tsconfig.json file.
+  "include": [
+    "./**/*.spec.ts",
+    "./**/*.spec.tsx",
+    "./**/*.test.ts",
+    "./**/*.test.tsx",
+  ],
+
+  "compilerOptions": {
+    // Import CommonJS modules in compliance with es6 modules spec
+    "esModuleInterop": true,
+
+    // A series of entries which re-map imports to lookup locations relative
+    // to the baseUrl if set, or to the tsconfig file itself otherwise.
+    "paths": {
+      // Keep in sync with src/main/resources/tsconfig.json — explicit entries
+      // make the IDE's auto-import suggest the runtime-correct specifiers.
+      "/lib/xp/admin": ["../../../node_modules/@enonic-types/lib-admin/admin"],
+      "/lib/xp/app": ["../../../node_modules/@enonic-types/lib-app/app"],
+      "/lib/xp/auditlog": ["../../../node_modules/@enonic-types/lib-auditlog/auditlog"],
+      "/lib/xp/auth": ["../../../node_modules/@enonic-types/lib-auth/auth"],
+      "/lib/xp/cluster": ["../../../node_modules/@enonic-types/lib-cluster/cluster"],
+      "/lib/xp/common": ["../../../node_modules/@enonic-types/lib-common/common"],
+      "/lib/xp/content": ["../../../node_modules/@enonic-types/lib-content/content"],
+      "/lib/xp/context": ["../../../node_modules/@enonic-types/lib-context/context"],
+      "/lib/xp/event": ["../../../node_modules/@enonic-types/lib-event/event"],
+      "/lib/xp/export": ["../../../node_modules/@enonic-types/lib-export/export"],
+      "/lib/xp/grid": ["../../../node_modules/@enonic-types/lib-grid/grid"],
+      "/lib/xp/i18n": ["../../../node_modules/@enonic-types/lib-i18n/i18n"],
+      "/lib/xp/io": ["../../../node_modules/@enonic-types/lib-io/io"],
+      "/lib/xp/mail": ["../../../node_modules/@enonic-types/lib-mail/mail"],
+      "/lib/xp/node": ["../../../node_modules/@enonic-types/lib-node/node"],
+      "/lib/xp/portal": ["../../../node_modules/@enonic-types/lib-portal/portal"],
+      "/lib/xp/project": ["../../../node_modules/@enonic-types/lib-project/project"],
+      "/lib/xp/repo": ["../../../node_modules/@enonic-types/lib-repo/repo"],
+      "/lib/xp/scheduler": ["../../../node_modules/@enonic-types/lib-scheduler/scheduler"],
+      "/lib/xp/schema": ["../../../node_modules/@enonic-types/lib-schema/schema"],
+      "/lib/xp/sse": ["../../../node_modules/@enonic-types/lib-sse/sse"],
+      "/lib/xp/task": ["../../../node_modules/@enonic-types/lib-task/task"],
+      "/lib/xp/value": ["../../../node_modules/@enonic-types/lib-value/value"],
+      "/lib/xp/vhost": ["../../../node_modules/@enonic-types/lib-vhost/vhost"],
+      "/lib/xp/websocket": ["../../../node_modules/@enonic-types/lib-websocket/websocket"],
+      "/lib/xp/*": ["../../../node_modules/@enonic-types/lib-*"],
+      "/*": ["../../main/resources/*"],
+    },
+    "sourceMap": true, // Important to get correct line numbers when running coverage tests
+    "types": [
+      "@enonic-types/global",
+      // "jest", // Doesn't even work for test files in this folder?
+      "node", // console
+    ],
+  }, // compilerOptions
+}</code></pre>
+</div>
+</div>
+</div>
 <div class="sect2">
 <h3 id="package_json"><a class="link" href="#package_json">package.json</a></h3>
 <div class="paragraph">
@@ -485,10 +802,47 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight"><code class="language-JSON" data-lang="JSON">{
   "scripts": {
-    "check": "concurrently -c auto -g --timings npm:check:types npm:lint",
-    "lint": "eslint --cache",
+    "cov": "jest --no-cache --coverage",
+    "test": "jest --no-cache"
   }
 }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>test</code> command starts execution of tests. <code>cov</code> command does exactly the same, but also generates coverage report.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="build_gradle"><a class="link" href="#build_gradle">build.gradle</a></h3>
+<div class="paragraph">
+<p>Add the following task to the build.gradle file:</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="highlight"><code class="language-Groovy" data-lang="Groovy">tasks.register('npmTest', NpmTask) {
+	args = [
+		'run',
+		'test'
+	]
+	dependsOn npmInstall
+	environment = [
+		'FORCE_COLOR': 'true',
+	]
+  inputs.dir 'src/jest'
+  outputs.dir 'coverage'
+  outputs.upToDateWhen { false }
+}
+
+test.dependsOn npmTest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With this setup tests will be executed on every build, but you can also run them separately with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">./gradlew test</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -498,67 +852,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Note that <code>check</code> command was added to package.json in the previous chapter about type checking. Here we just modify it to execute linting as a part of the <code>check</code> command.
+If you want to learn more about writing tests for your Enonic project, check out the <a href="https://developer.enonic.com/learn/testing-with-jest-and-mock-xp/stable">Testing with Jest and Mock-XP</a> tutorial.
 </td>
 </tr>
 </table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="eslint_config_mjs"><a class="link" href="#eslint_config_mjs">eslint.config.mjs</a></h3>
-<div class="paragraph">
-<p>Create the following file:</p>
-</div>
-<div class="listingblock">
-<div class="title">eslint.config.mjs</div>
-<div class="content">
-<pre class="highlight"><code class="language-Javascript" data-lang="Javascript">import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-
-export default tseslint.config(
-
-  // If ignores is used without any other keys in the configuration object,
-  // then the patterns act as global ignores.
-  {
-    // An array of glob patterns indicating the files that the configuration
-    // object should not apply to. If not specified, the configuration
-    // object applies to all files matched by files.
-    ignores: [
-      'build/**/*.*',
-      'src/jest/server/setupFile.ts',
-      'tsdown.config.ts',
-      'src/**/*.js'
-    ],
-  },
-
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
-
-  {
-    // An array of glob patterns indicating the files that the configuration
-    // object should apply to. If not specified, the configuration object
-    // applies to all files matched by any other configuration object.
-    files: [
-      './src/**/*.ts',
-      './src/**/*.tsx'
-    ],
-
-
-    rules: {
-      '@typescript-eslint/no-unused-vars': [
-        "warn",
-        {
-          "argsIgnorePattern": "^_"
-        }
-      ]
-    }
-  }
-
-);</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Linting will now be executed as a part of the <code>check</code> command and, therefore, as a part of the build process.</p>
 </div>
 </div>
 </div>
@@ -567,15 +864,32 @@ export default tseslint.config(
 <h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Now, you have activated linting - and only one step remains.
-Prepare your project for <a href="test.ahtml">testing</a>.</p>
+<p>With testing enabled, you have reached the end of this tutorial.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+The <a href="https://market.enonic.com/starters/typescript-starter">TypeScript Starter</a> is basically the end result of this tutorial, so when creating your next project - simply run <code>enonic project create -r starter-ts</code> to get a best practice development setup, just like that!
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Enjoy!</p>
+</div>
+<div class="paragraph">
+<p>- With <span class="red">♥</span> from the Enonic team</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-25 12:22:44 UTC
+Last updated 2026-08-25 12:23:17 UTC
 </div>
 </div>
 </body>

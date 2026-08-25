@@ -5,7 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
-<title>Setting up linting</title>
+<meta name="author" content="To establish a common ground, we introduce some basic concepts">
+<title>Key concepts and terminology</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,59 +438,74 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Setting up linting</h1>
+<h1>Key concepts and terminology</h1>
+<div class="details">
+<span id="author" class="author">To establish a common ground, we introduce some basic concepts</span><br>
+</div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#install">Install</a></li>
-<li><a href="#configure">Configure</a>
+<li><a href="#environments">Environments</a></li>
+<li><a href="#globals">Globals</a>
 <ul class="sectlevel2">
-<li><a href="#package_json">package.json</a></li>
-<li><a href="#eslint_config_mjs">eslint.config.mjs</a></li>
+<li><a href="#client">Client</a></li>
+<li><a href="#server">Server</a></li>
 </ul>
 </li>
+<li><a href="#transpiling">Transpiling</a></li>
+<li><a href="#module_format">Module format</a></li>
+<li><a href="#bundling">Bundling</a></li>
+<li><a href="#tsdown">tsdown</a></li>
 <li><a href="#summary">Summary</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div id="preamble">
+<div class="sect1">
+<h2 id="environments"><a class="link" href="#environments">Environments</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>ESLint is a static code analysis tool for identifying problematic patterns found in JavaScript code.</p>
+<p>There are multiple <code>environments</code> to consider:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Build</strong>: The environment in which compilation steps run.</p>
+</li>
+<li>
+<p><strong>Test</strong>: The environment in which tests run.</p>
+</li>
+<li>
+<p><strong>Run</strong>: The environment in which the built application runs.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>ESlint is highly configurable and can be used to enforce a consistent coding style. Having linting as a part of the build process is considered a good practice.</p>
+<p>In addition the <strong>Test</strong> and <strong>Run</strong> environments can be further divided into:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Client</strong>: The environment in which the client-side of the application (or tests) runs.</p>
+</li>
+<li>
+<p><strong>Server</strong>: The environment in which the server-side of the application (or tests) runs.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>All these environments support <strong>different features</strong>, and consequently also has <strong>differing limitations</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Typically a test environment is more limited than the run environment, and in order to write useful tests, some runtime features must be simulated.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="install"><a class="link" href="#install">Install</a></h2>
+<h2 id="globals"><a class="link" href="#globals">Globals</a></h2>
 <div class="sectionbody">
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev eslint @eslint/js typescript-eslint</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="configure"><a class="link" href="#configure">Configure</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="package_json"><a class="link" href="#package_json">package.json</a></h3>
 <div class="paragraph">
-<p>Add the following scripts to the package.json file:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
-  "scripts": {
-    "check": "concurrently -c auto -g --timings npm:check:types npm:lint",
-    "lint": "eslint --cache",
-  }
-}</code></pre>
-</div>
+<p>When programming in Javascript there is always a global scope. Depending on which Javascript engine/environment you are in, the global scope is different.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -498,68 +514,114 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Note that <code>check</code> command was added to package.json in the previous chapter about type checking. Here we just modify it to execute linting as a part of the <code>check</code> command.
+Useful reading: <a href="https://developer.mozilla.org/en-US/docs/Glossary/Global_object" target="_blank" rel="noopener">Global object</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="client"><a class="link" href="#client">Client</a></h3>
+<div class="paragraph">
+<p>In the browser, the global scope is the <code>window</code> object. The <code>window</code> object contains the <code>document</code> object that represents the current web page. The <code>document</code> object contains functions and properties that allow you to inspect and manipulate the web page.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="server"><a class="link" href="#server">Server</a></h3>
+<div class="paragraph">
+<p>For code executing on the server (XP), the global scope contains a variety of objects and functions that are useful when developing applications. For more details, visit the <a href="https://developer.enonic.com/docs/code/xp8/fundamentals/globals">Enonic XP Globals</a> documentation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="transpiling"><a class="link" href="#transpiling">Transpiling</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are currently few JavaScript engines capable of running TypeScript directly, so a build step must <code>transpile</code> your TypeScript to JavaScript before it can be deployed to Enonic XP. The build also targets a conservative language level, because XP&#8217;s default engine supports an older version of JavaScript.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+XP8 bundles GraalJS which supports the latest ECMAScript standard. However, this is in beta mode, and not yet the default engine.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For the execution model, the JavaScript engines XP ships, and the exact language level they support, see the Enonic Development Kit reference: <a href="https://developer.enonic.com/docs/code/xp8/fundamentals/runtime" target="_blank" rel="noopener">Runtime</a> and <a href="https://developer.enonic.com/docs/code/xp8/fundamentals/typescript" target="_blank" rel="noopener">TypeScript</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="module_format"><a class="link" href="#module_format">Module format</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A module is a way to structure your code into reusable, self-contained units that <strong>export</strong> functionality for other modules to <strong>import</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Enonic XP uses the <strong>CommonJS</strong> module format on the server, which is why you use <code>require</code> and <code>exports</code> in server-side code. TypeScript is authored as ECMAScript Modules (ESM), so the build transforms server files to CommonJS, while client-side assets are emitted as ESM for the browser.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+For the module system, path resolution, and the bundle boundary, see <a href="https://developer.enonic.com/docs/code/xp8/fundamentals/runtime" target="_blank" rel="noopener">Runtime: Modules and bundling</a>.
 </td>
 </tr>
 </table>
 </div>
 </div>
-<div class="sect2">
-<h3 id="eslint_config_mjs"><a class="link" href="#eslint_config_mjs">eslint.config.mjs</a></h3>
+</div>
+<div class="sect1">
+<h2 id="bundling"><a class="link" href="#bundling">Bundling</a></h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Create the following file:</p>
-</div>
-<div class="listingblock">
-<div class="title">eslint.config.mjs</div>
-<div class="content">
-<pre class="highlight"><code class="language-Javascript" data-lang="Javascript">import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-
-export default tseslint.config(
-
-  // If ignores is used without any other keys in the configuration object,
-  // then the patterns act as global ignores.
-  {
-    // An array of glob patterns indicating the files that the configuration
-    // object should not apply to. If not specified, the configuration
-    // object applies to all files matched by files.
-    ignores: [
-      'build/**/*.*',
-      'src/jest/server/setupFile.ts',
-      'tsdown.config.ts',
-      'src/**/*.js'
-    ],
-  },
-
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
-
-  {
-    // An array of glob patterns indicating the files that the configuration
-    // object should apply to. If not specified, the configuration object
-    // applies to all files matched by any other configuration object.
-    files: [
-      './src/**/*.ts',
-      './src/**/*.tsx'
-    ],
-
-
-    rules: {
-      '@typescript-eslint/no-unused-vars': [
-        "warn",
-        {
-          "argsIgnorePattern": "^_"
-        }
-      ]
-    }
-  }
-
-);</code></pre>
-</div>
+<p>In addition to the transpilation and transformation of separate TypeScript files, you may want to use code that other people have written. This code is typically distributed as <code>npm</code> packages. This is where bundling comes in.</p>
 </div>
 <div class="paragraph">
-<p>Linting will now be executed as a part of the <code>check</code> command and, therefore, as a part of the build process.</p>
+<p>Bundling is the process of combining all the code you need into a single file. Such a bundle is known as an entry point.</p>
 </div>
+<div class="paragraph">
+<p>In a project you may want to have multiple entry points, each representing a different part of your application.</p>
+</div>
+<div class="paragraph">
+<p>Bundlers are also smart enough to separate shared code into separate bundles, such bundles are known as chunks.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="tsdown"><a class="link" href="#tsdown">tsdown</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are a bunch of transpilers, transformers🤖 and bundlers out there, each of them with their own strengths and weaknesses.</p>
+</div>
+<div class="paragraph">
+<p>It has been difficult to find a single tool that supports all the required features. Each tool typically only solves a subset of the problem.</p>
+</div>
+<div class="paragraph">
+<p>This is where meta-tools come in. Meta-tools are tools that combine multiple tools to solve a larger problem. For many years Webpack has been the most common tool for working with JavaScript code. It is very powerful and flexible, but also very complex and difficult to configure. In addition, it is not very fast.</p>
+</div>
+<div class="paragraph">
+<p><strong>tsdown</strong> is a simple and fast bundler specifically designed for TypeScript code. Powered by <a href="https://rolldown.rs/">Rolldown</a> (a Rust-based bundler built on the same <code>oxc</code> toolchain), it is easy to use and configure, and has all the features needed to work with both server- and client-side code in Enonic XP. Our setup uses tsdown as the meta-tool.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+tsdown is the actively maintained successor to <code>tsup</code>, which the XP7 version of this starter was using. <code>tsup</code> is now deprecated, and migrating to tsdown keeps the build on a supported, faster toolchain.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -567,15 +629,15 @@ export default tseslint.config(
 <h2 id="summary"><a class="link" href="#summary">Summary</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Now, you have activated linting - and only one step remains.
-Prepare your project for <a href="test.ahtml">testing</a>.</p>
+<p>The fundamental concepts should now be established.
+Moving forward, let&#8217;s create a project and <a href="build.ahtml">the build system</a>.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-25 12:22:44 UTC
+Last updated 2026-08-25 12:23:17 UTC
 </div>
 </div>
 </body>
