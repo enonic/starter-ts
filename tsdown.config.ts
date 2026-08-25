@@ -27,17 +27,17 @@ const serverEntry = entries(SRC, '{ts,js}', [`${SRC_ASSETS}/**`]);
 const assetEntry = entries(SRC_ASSETS, '{tsx,ts,jsx,js}');
 
 // XP resolves an absolute import at runtime against the app's own resources
-// first, then against the libraries on its classpath (/lib/xp/*, Market libs
-// from build.gradle, …). Mirror that rule at build time: bundle an absolute
-// import only when it is a source file of this app, and leave everything else
-// to the runtime. This avoids hand-maintaining a list of runtime libraries —
-// but it also means a typo in an absolute import surfaces at runtime, not at
-// build time.
+// first, then against the modules provided by the runtime: XP's own libraries
+// (/lib/xp/*), libraries `include`d in build.gradle, modules from other apps.
+// Mirror that rule at build time: bundle an absolute import only when it is a
+// source file of this app, and leave every other one to the runtime — no list
+// of runtime modules to maintain. A mistyped specifier is caught by
+// `check:types` (TS2307), not by the bundler.
 const SRC_EXTS = ['.ts', '.tsx', '.js', '.jsx'];
 function isAppSource(id: string): boolean {
   return SRC_EXTS.some(ext => existsSync(`${SRC}${id}${ext}`) || existsSync(`${SRC}${id}/index${ext}`));
 }
-const xpExternal = (id: string, _importer: string | undefined, isResolved: boolean): boolean =>
+const isRuntimeModule = (id: string, _importer: string | undefined, isResolved: boolean): boolean =>
   !isResolved && id.startsWith('/') && !isAppSource(id) && !existsSync(id);
 
 // Nashorn (XP's server-side JS engine) lacks ES2015 destructuring, but Oxc —
@@ -77,7 +77,7 @@ export default defineConfig([
     plugins: [nashornEs5],
     tsconfig: `${SRC}/tsconfig.json`,
     inputOptions: {
-      external: xpExternal,
+      external: isRuntimeModule,
       resolve: {
         mainFields: ['module', 'main'],
       },
