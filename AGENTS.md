@@ -72,7 +72,7 @@ The codebase has two distinct build targets, both defined in a single `tsdown.co
 **Server** (`src/main/resources/**/*.ts`, excluding `assets/`):
 - Target: ES2015, CommonJS format, `platform: 'neutral'`
 - Output: `build/resources/main/`
-- Runtime libraries are marked `external` by rule, not by list: an absolute import (`/lib/xp/*`, `/lib/graphql`, etc.) is bundled only when it is a source file of the app itself, otherwise it is left for the XP runtime to resolve. Consequence: a typo in an absolute import fails at runtime, not at build time.
+- Runtime-provided modules are marked `external` by rule (`isRuntimeModule` in `tsdown.config.ts`), not by list: an absolute import (`/lib/xp/*`, `/lib/graphql`, etc.) is bundled only when it is a source file of the app itself, otherwise it is left for the XP runtime to resolve. A mistyped specifier is caught by `check:types` (TS2307) rather than by the bundler, so it slips through in workflows that skip `check` (e.g. `deploy`, `dev`) and fails at runtime there.
 - tsconfig: `src/main/resources/tsconfig.json`
 
 **Client** (`src/main/resources/assets/**/*.ts`):
