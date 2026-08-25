@@ -95,7 +95,7 @@ export default defineConfig([
     clean: false,
     dts: false,
     minify: !dev,
-    sourcemap: !dev,
+    sourcemap: dev,
     logLevel,
     tsconfig: `${SRC_ASSETS}/tsconfig.json`,
   }] : []),

@@ -52,7 +52,7 @@ npm run cov                   # Tests with coverage
 
 ```bash
 ./gradlew build               # Full build (npm install + check + test + build + jar)
-./gradlew build -Pdev         # Development build (NODE_ENV=development, no minification)
+./gradlew build -Penv=dev     # Development build (NODE_ENV=development, no minification); `enonic dev` passes this automatically
 ./gradlew check               # Type checking + linting only
 ./gradlew test                # Tests only
 ```
