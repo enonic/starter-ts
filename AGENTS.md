@@ -16,6 +16,8 @@ Gradle is the primary build tool, with a Node.js plugin for npm integration. How
 
 The `xpVersion` property in `gradle.properties` declares the target XP version (e.g. `8.0.2`). This determines which XP dependencies are used at build time, regardless of the sandbox version. The `@enonic-types/*` packages in `package.json` should match this version.
 
+Library dependencies in `build.gradle` use Gradle version catalogs: XP's own libraries come from the `xplibs` catalog (`include xplibs.portal`), which the `com.enonic.xp.settings` plugin generates from `xpVersion`; Enonic Market libraries are declared in `gradle/libs.versions.toml` and referenced as `libs.<alias>` (`include libs.static`). Never hardcode library coordinates or versions in `build.gradle`.
+
 The normal approach is to use **Enonic CLI** commands, which wire the build to the correct sandbox and compiler. Direct `./gradlew` or `npm` commands work for TypeScript-only tasks (type checking, linting, testing) but the full build and deploy cycle should go through the Enonic CLI.
 
 ## Commands

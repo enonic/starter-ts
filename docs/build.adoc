@@ -42,12 +42,25 @@ The packages above cover only the libraries bundled with Enonic XP. Enonic also 
 
 TIP: To serve the compiled client-side files, add https://market.enonic.com/vendors/enonic/lib-asset[lib-asset] — the `assets/` folder this starter ships follows its convention. The related https://market.enonic.com/vendors/enonic/lib-static[lib-static] serves a folder of your choice (`static/` by convention) instead.
 
-As an example, here is how to add https://market.enonic.com/vendors/enonic/lib-static[lib-static]. First, declare its runtime dependency in `build.gradle` so the library is bundled with your app:
+As an example, here is how to add https://market.enonic.com/vendors/enonic/lib-static[lib-static]. Market library versions are declared in the Gradle version catalog `gradle/libs.versions.toml`:
+
+.gradle/libs.versions.toml
+[source, TOML]
+----
+[versions]
+static = "3.0.0"
+
+[libraries]
+static = { module = "com.enonic.lib:lib-static", version.ref = "static" }
+----
+
+Then declare its runtime dependency in `build.gradle` so the library is bundled with your app (Gradle turns dashes in catalog aliases into dots, e.g. `libs.http.client`). Enonic XP's own libraries need no version at all — they come from the `xplibs` catalog provided by the `com.enonic.xp.settings` plugin and follow `xpVersion`:
 
 [source, Groovy]
 ----
 dependencies {
-  include 'com.enonic.lib:lib-static:3.0.0'
+  include xplibs.portal
+  include libs.static
 }
 ----
 
