@@ -95,7 +95,7 @@ tasks.register('npmBuild', NpmTask) {
   environment = [
     'FORCE_COLOR': 'true',
     'LOG_LEVEL_FROM_GRADLE': gradle.startParameter.logLevel.toString(),
-    'NODE_ENV': project.hasProperty('dev') || project.hasProperty('development') ? 'development' : 'production'
+    'NODE_ENV': project.findProperty('env') == 'dev' ? 'development' : 'production'
   ]
   inputs.dir 'src/main/resources'
   outputs.dir 'build/resources/main'

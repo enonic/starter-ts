@@ -218,7 +218,7 @@ tasks.register('npmBuild', NpmTask) {
   environment = [
     'FORCE_COLOR': 'true',
     'LOG_LEVEL_FROM_GRADLE': gradle.startParameter.logLevel.toString(),
-    'NODE_ENV': project.hasProperty('dev') || project.hasProperty('development') ? 'development' : 'production'
+    'NODE_ENV': project.findProperty('env') == 'dev' ? 'development' : 'production'
   ]
   inputs.dir 'src/main/resources'
   outputs.dir 'build/resources/main'
@@ -227,6 +227,8 @@ tasks.register('npmBuild', NpmTask) {
 
 jar.dependsOn npmBuild
 ----
+
+The `env=dev` project property selects a development build of the client-side code (readable, unminified output with source maps; production output is minified and ships no source maps, so your TypeScript source is not exposed). It is what the `dev` task of the `com.enonic.xp.app` plugin — and therefore `enonic dev` — passes automatically, so the sandbox development loop gets debuggable code, while `build` and `deploy` produce production output. To get a development build from a plain Gradle invocation, run `./gradlew build -Penv=dev`.
 
 === Clean up
 
