@@ -38,7 +38,7 @@ function isAppSource(id: string): boolean {
   return SRC_EXTS.some(ext => existsSync(`${SRC}${id}${ext}`) || existsSync(`${SRC}${id}/index${ext}`));
 }
 const isRuntimeModule = (id: string, _importer: string | undefined, isResolved: boolean): boolean =>
-  !isResolved && id.startsWith('/') && !isAppSource(id) && !existsSync(id);
+  !isResolved && id.startsWith('/') && !isAppSource(id);
 
 // Nashorn (XP's server-side JS engine) lacks ES2015 destructuring, but Oxc —
 // tsdown's transformer — can't target below es2015. Re-lower the bundled server
