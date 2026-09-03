@@ -9,7 +9,8 @@
   // These filenames are resolved relative to the directory containing the
   // tsconfig.json file.
   "include": [
-    "**/*.ts"
+    "**/*.ts",
+    "**/*.mts"
   ],
 
   // Specifies an array of filenames or patterns that should be skipped when

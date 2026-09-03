@@ -36,7 +36,7 @@ The Enonic CLI automatically selects the sandbox associated with the project. If
 ### npm scripts (TypeScript tooling)
 
 ```bash
-npm run build                 # Build server + assets in one tsdown run (both targets in tsdown.config.ts)
+npm run build                 # Build server + assets in one tsdown run (both targets in tsdown.config.mts)
 
 npm run check                 # Types + lint concurrently
 npm run check:types           # Type check only (server + assets)
@@ -67,12 +67,12 @@ For GitHub Actions, the project uses `enonic/action-app-build@v1` which handles 
 
 ### Dual build: server vs. client
 
-The codebase has two distinct build targets, both defined in a single `tsdown.config.ts` (an array of two configs):
+The codebase has two distinct build targets, both defined in a single `tsdown.config.mts` (an array of two configs):
 
 **Server** (`src/main/resources/**/*.ts`, excluding `assets/`):
 - Target: ES2015, CommonJS format, `platform: 'neutral'`
 - Output: `build/resources/main/`
-- Runtime-provided modules are marked `external` by rule (`isRuntimeModule` in `tsdown.config.ts`), not by list: an absolute import (`/lib/xp/*`, `/lib/graphql`, etc.) is bundled only when it is a source file of the app itself, otherwise it is left for the XP runtime to resolve. A mistyped specifier is caught by `check:types` (TS2307) rather than by the bundler, so it slips through in workflows that skip `check` (e.g. `deploy`, `dev`) and fails at runtime there.
+- Runtime-provided modules are marked `external` by rule (`isRuntimeModule` in `tsdown.config.mts`), not by list: an absolute import (`/lib/xp/*`, `/lib/graphql`, etc.) is bundled only when it is a source file of the app itself, otherwise it is left for the XP runtime to resolve. A mistyped specifier is caught by `check:types` (TS2307) rather than by the bundler, so it slips through in workflows that skip `check` (e.g. `deploy`, `dev`) and fails at runtime there.
 - tsconfig: `src/main/resources/tsconfig.json`
 
 **Client** (`src/main/resources/assets/**/*.ts`):
@@ -80,9 +80,9 @@ The codebase has two distinct build targets, both defined in a single `tsdown.co
 - Output: `build/resources/main/assets/`
 - tsconfig: `src/main/resources/assets/tsconfig.json`
 
-The server output is additionally re-lowered to ES5 by an SWC plugin in `tsdown.config.ts` (`nashornEs5`), because XP's Nashorn engine lacks some ES2015 syntax.
+The server output is additionally re-lowered to ES5 by an SWC plugin in `tsdown.config.mts` (`nashornEs5`), because XP's Nashorn engine lacks some ES2015 syntax.
 
-The `assets/` folder name follows the convention of **lib-asset** (`/lib/enonic/asset`, see the commented `include` in `build.gradle`), which serves that folder at runtime. To adopt **lib-static**'s `static/` convention instead, rename the folder and update every place the name is wired in: `SRC_ASSETS` in `tsdown.config.ts`, the `assets/**/*.*` exclude in `src/main/resources/tsconfig.json`, the `/assets/` moduleNameMapper in `jest.config.mjs`, the `extends` and `paths` in `src/jest/client/tsconfig.json`, and the `check:types:client` script in `package.json`.
+The `assets/` folder name follows the convention of **lib-asset** (`/lib/enonic/asset`, see the commented `include` in `build.gradle`), which serves that folder at runtime. To adopt **lib-static**'s `static/` convention instead, rename the folder and update every place the name is wired in: `SRC_ASSETS` in `tsdown.config.mts`, the `assets/**/*.*` exclude in `src/main/resources/tsconfig.json`, the `/assets/` moduleNameMapper in `jest.config.mjs`, the `extends` and `paths` in `src/jest/client/tsconfig.json`, and the `check:types:client` script in `package.json`.
 
 ### TypeScript toolchain
 
