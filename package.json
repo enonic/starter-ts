@@ -25,7 +25,7 @@
     "@swc/core": "^1.15.43",
     "@swc/core": "^1",
     "@types/node": "^26.4.0",
-    "concurrently": "^10.0.4",
+    "concurrently": "^10.0.5",
     "eslint": "^10.9.1",
     "glob": "^13.0.6",
     "jest-environment-jsdom": "^30.4.1",
