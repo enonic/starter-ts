@@ -23,8 +23,8 @@ function entries(dir: string, exts: string, ignore: string[] = []): Record<strin
   );
 }
 
-const serverEntry = entries(SRC, '{ts,js}', [`${SRC_ASSETS}/**`]);
-const assetEntry = entries(SRC_ASSETS, '{tsx,ts,jsx,js}');
+const serverEntry = entries(SRC, '{ts,js}', ['**/*.d.ts', `${SRC_ASSETS}/**`]);
+const assetEntry = entries(SRC_ASSETS, '{tsx,ts,jsx,js}', ['**/*.d.ts']);
 
 // XP resolves an absolute import at runtime against the app's own resources
 // first, then against the modules provided by the runtime: XP's own libraries
