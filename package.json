@@ -24,7 +24,7 @@
     "@enonic-types/lib-schema": "^8.0.2",
     "@enonic-types/lib-sse": "^8.0.2",
     "@enonic-types/lib-task": "^8.0.2",
-    "@enonic-types/lib-value": "^8.0.2",
+    "@enonic-types/lib-value": "^8.0.4",
     "@enonic-types/lib-vhost": "^8.0.2",
     "@enonic-types/lib-websocket": "^8.0.2",
     "@swc/core": "^1.15.43",
