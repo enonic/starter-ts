@@ -445,6 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configure">Configure</a>
 <ul class="sectlevel2">
 <li><a href="#jest">Jest</a></li>
+<li><a href="#example_tests">Example tests</a></li>
 <li><a href="#package_json">package.json</a></li>
 <li><a href="#build_gradle">build.gradle</a></li>
 </ul>
@@ -469,7 +470,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev jest @jest/types jest-environment-jsdom ts-node ts-jest</code></pre>
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev jest jest-environment-jsdom @swc/core @swc/jest</code></pre>
 </div>
 </div>
 </div>
@@ -483,14 +484,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>In our example we will configure processing of both client-side and server-side Typescript code.</p>
 </div>
 <div class="paragraph">
-<p>Create a file called jest.config.ts in the root of the project with the following content:</p>
+<p>Create a file called jest.config.mjs in the root of the project with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">import type { Config } from '@jest/types';
-
-
-const DIR_SRC = 'src/main/resources';
+<pre class="highlight"><code class="language-JavaScript" data-lang="JavaScript">const DIR_SRC = 'src/main/resources';
 const DIR_SRC_JEST = 'src/jest';
 const DIR_SRC_JEST_CLIENT = `${DIR_SRC_JEST}/client`;
 const DIR_SRC_JEST_SERVER = `${DIR_SRC_JEST}/server`;
@@ -500,17 +498,39 @@ const TEST_EXT = `{spec,test}.{ts,tsx}`;
 const TEST_FILES = `*.${TEST_EXT}`;
 
 
-const commonConfig: Config.InitialProjectOptions = {
+// TypeScript (and TSX) test files are transpiled by SWC. Unlike ts-jest, SWC
+// only strips types — it does not type-check. Type errors in tests are caught
+// by your editor and the `check:types` script.
+const transform = {
+  '^.+\\.(ts|js)x?$': [
+    '@swc/jest',
+    {
+      jsc: {
+        parser: {
+          syntax: 'typescript',
+          tsx: true,
+        },
+        transform: {
+          react: {
+            runtime: 'automatic',
+          },
+        },
+        target: 'es2022',
+      },
+      sourceMaps: 'inline', // Important to get correct line numbers when running coverage tests
+    },
+  ],
+};
+
+const commonConfig = {
   collectCoverageFrom: [
     `${DIR_SRC}/${AND_BELOW}/${SOURCE_FILES}`,
   ],
 
-  // Insert Jest's globals (expect, test, describe, beforeEach etc.) into the
-  // global environment. If you set this to false, you should import from @jest/globals, e.g.
-  // injectGlobals: true, // Doesn't seem to work?
+  transform,
 };
 
-const clientSideConfig: Config.InitialProjectOptions = {
+const clientSideConfig = {
   ...commonConfig,
   displayName: {
     color: 'white',
@@ -542,17 +562,9 @@ const clientSideConfig: Config.InitialProjectOptions = {
   testMatch: [
     `&lt;rootDir&gt;/${DIR_SRC_JEST_CLIENT}/${AND_BELOW}/${TEST_FILES}`,
   ],
-  transform: {
-    "^.+\\.(ts|js)x?$": [
-      'ts-jest',
-      {
-        tsconfig: `${DIR_SRC_JEST_CLIENT}/tsconfig.json`
-      }
-    ]
-  }
 };
 
-const serverSideConfig: Config.InitialProjectOptions = {
+const serverSideConfig = {
   ...commonConfig,
   displayName: {
     color: 'blue',
@@ -608,18 +620,10 @@ const serverSideConfig: Config.InitialProjectOptions = {
   testMatch: [
     `&lt;rootDir&gt;/${DIR_SRC_JEST_SERVER}/${AND_BELOW}/${TEST_FILES}`,
   ],
-
-  transform: {
-    "^.+\\.(ts|js)x?$": [
-      'ts-jest',
-      {
-          tsconfig: `${DIR_SRC_JEST_SERVER}/tsconfig.json`
-      }
-    ]
-  },
 };
 
-const customJestConfig: Config.InitialOptions = {
+/** @type {import('jest').Config} */
+const customJestConfig = {
   coverageProvider: 'v8', // To get correct line numbers under jsdom
   passWithNoTests: true,
   projects: [clientSideConfig, serverSideConfig],
@@ -629,7 +633,22 @@ export default customJestConfig;</code></pre>
 </div>
 </div>
 <div class="paragraph">
+<p>Test files are transpiled by SWC (via <code>@swc/jest</code>), which strips types without checking them — type errors in tests are caught by your editor, based on the tsconfig.json files below. Those extend the source tsconfigs, but the server one widens <code>lib</code> since tests run in Node rather than in Nashorn, and the client one adds the <code>node</code> types the <code>@jest/globals</code> typings need.</p>
+</div>
+<div class="paragraph">
 <p>With this config Jest will find and execute test files in the 'src/jest/client' and 'src/jest/server' folders called <code><strong>.test.ts</code> (or <code>.tsx</code>) or <code></strong>.spec.ts</code> (or <code>.tsx</code>).</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>.tsx</code> tests are transpiled with the automatic JSX runtime, which imports <code>react/jsx-runtime</code>. Install React, or set <code>jsc.transform.react.importSource</code> to another JSX library, before writing them.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Set up <code>src/jest</code> folder structure with thess files inside:</p>
@@ -668,9 +687,9 @@ export default customJestConfig;</code></pre>
     // This feature differs from typeRoots in that it is about specifying
     // only the exact types you want included, whereas typeRoots supports
     // saying you want particular folders.
-    // "types": [
-      // "jest", // Doesn't even work for test files in this folder?
-    // ],
+    "types": [
+      "node",
+    ],
 
   }, // compilerOptions
 
@@ -690,30 +709,25 @@ export declare type Resolve = typeof resolve;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This Jest setupFile is used to mock the XP Framework, injecting standard Globals into the server-side test environment:</p>
+<p>This Jest setupFile is used to mock the XP Framework, injecting standard Globals into the server-side test environment. <code>log</code> is declared as a <code>const</code> in <code>@enonic-types/global</code>, so it is not a property of <code>globalThis</code> for the type checker — it is defined as one at runtime instead:</p>
 </div>
 <div class="listingblock">
 <div class="title">src/jest/server/setupFile.ts</div>
 <div class="content">
-<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">import type {App, Log} from './global.d';
-
-
-// Avoid type errors
-declare module globalThis {
-    var app: App
-    var log: Log
-}
+<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">import type {Log} from './global.d';
 
 
 // In order for console to exist in the global scope when running tests in
 // testEnvironment: 'node' the @types/node package must be installed and
 // potentially listed under types in tsconfig.json.
-globalThis.log = {
+const log: Log = {
     debug: console.debug,
     info: console.info,
     error: console.error,
     warning: console.warn
-}</code></pre>
+};
+
+Object.defineProperty(globalThis, 'log', {value: log, writable: true, configurable: true});</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -738,6 +752,7 @@ This setup file only mocks the XP <em>globals</em> (<code>app</code>, <code>log<
   // These filenames are resolved relative to the directory containing the
   // tsconfig.json file.
   "include": [
+    "./setupFile.ts",
     "./**/*.spec.ts",
     "./**/*.spec.tsx",
     "./**/*.test.ts",
@@ -745,12 +760,43 @@ This setup file only mocks the XP <em>globals</em> (<code>app</code>, <code>log<
   ],
 
   "compilerOptions": {
+    "lib": [
+      "ES2023",
+    ],
+
     // Import CommonJS modules in compliance with es6 modules spec
     "esModuleInterop": true,
 
     // A series of entries which re-map imports to lookup locations relative
     // to the baseUrl if set, or to the tsconfig file itself otherwise.
     "paths": {
+      // Keep in sync with src/main/resources/tsconfig.json — explicit entries
+      // make the IDE's auto-import suggest the runtime-correct specifiers.
+      "/lib/xp/admin": ["../../../node_modules/@enonic-types/lib-admin/admin"],
+      "/lib/xp/app": ["../../../node_modules/@enonic-types/lib-app/app"],
+      "/lib/xp/auditlog": ["../../../node_modules/@enonic-types/lib-auditlog/auditlog"],
+      "/lib/xp/auth": ["../../../node_modules/@enonic-types/lib-auth/auth"],
+      "/lib/xp/cluster": ["../../../node_modules/@enonic-types/lib-cluster/cluster"],
+      "/lib/xp/common": ["../../../node_modules/@enonic-types/lib-common/common"],
+      "/lib/xp/content": ["../../../node_modules/@enonic-types/lib-content/content"],
+      "/lib/xp/context": ["../../../node_modules/@enonic-types/lib-context/context"],
+      "/lib/xp/event": ["../../../node_modules/@enonic-types/lib-event/event"],
+      "/lib/xp/export": ["../../../node_modules/@enonic-types/lib-export/export"],
+      "/lib/xp/grid": ["../../../node_modules/@enonic-types/lib-grid/grid"],
+      "/lib/xp/i18n": ["../../../node_modules/@enonic-types/lib-i18n/i18n"],
+      "/lib/xp/io": ["../../../node_modules/@enonic-types/lib-io/io"],
+      "/lib/xp/mail": ["../../../node_modules/@enonic-types/lib-mail/mail"],
+      "/lib/xp/node": ["../../../node_modules/@enonic-types/lib-node/node"],
+      "/lib/xp/portal": ["../../../node_modules/@enonic-types/lib-portal/portal"],
+      "/lib/xp/project": ["../../../node_modules/@enonic-types/lib-project/project"],
+      "/lib/xp/repo": ["../../../node_modules/@enonic-types/lib-repo/repo"],
+      "/lib/xp/scheduler": ["../../../node_modules/@enonic-types/lib-scheduler/scheduler"],
+      "/lib/xp/schema": ["../../../node_modules/@enonic-types/lib-schema/schema"],
+      "/lib/xp/sse": ["../../../node_modules/@enonic-types/lib-sse/sse"],
+      "/lib/xp/task": ["../../../node_modules/@enonic-types/lib-task/task"],
+      "/lib/xp/value": ["../../../node_modules/@enonic-types/lib-value/value"],
+      "/lib/xp/vhost": ["../../../node_modules/@enonic-types/lib-vhost/vhost"],
+      "/lib/xp/websocket": ["../../../node_modules/@enonic-types/lib-websocket/websocket"],
       "/lib/xp/*": ["../../../node_modules/@enonic-types/lib-*"],
       "/*": ["../../main/resources/*"],
     },
@@ -763,6 +809,68 @@ This setup file only mocks the XP <em>globals</em> (<code>app</code>, <code>log<
   }, // compilerOptions
 }</code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="example_tests"><a class="link" href="#example_tests">Example tests</a></h3>
+<div class="paragraph">
+<p>The starter ships one test per project, so <code>npm test</code> verifies the setup above. Import <code>describe</code>, <code>it</code>, <code>expect</code> and <code>jest</code> from <code>@jest/globals</code> (bundled with Jest) rather than installing <code>@types/jest</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">src/jest/server/globals.test.ts</div>
+<div class="content">
+<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">import {describe, expect, it} from '@jest/globals';
+
+
+describe('server test environment', () =&gt; {
+  it('provides the mocked XP globals', () =&gt; {
+    expect(app.name).toBe('com.example.myproject');
+    expect(typeof log.info).toBe('function');
+  });
+});</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">src/jest/client/main.test.ts</div>
+<div class="content">
+<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">import {describe, expect, it, jest} from '@jest/globals';
+
+import {init} from '/assets/js/main';
+
+
+describe('main', () =&gt; {
+  it('runs in a DOM environment', () =&gt; {
+    document.body.innerHTML = '&lt;div id="app"&gt;&lt;/div&gt;';
+    expect(document.getElementById('app')).not.toBeNull();
+  });
+
+  it('logs when loaded', () =&gt; {
+    const log = jest.spyOn(console, 'log').mockImplementation(() =&gt; undefined);
+    init();
+    expect(log).toHaveBeenCalledWith('Client asset loaded');
+  });
+
+  it('logs the last message of the root element', () =&gt; {
+    const log = jest.spyOn(console, 'log').mockImplementation(() =&gt; undefined);
+    const root = document.createElement('main');
+    root.dataset.messages = 'first,last';
+    init(root);
+    expect(log).toHaveBeenCalledWith('last');
+  });
+});</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+SWC hoists <code>jest.mock()</code> above the imports only when <code>jest</code> is the global from <code>@types/jest</code>, not when it is imported from <code>@jest/globals</code>. To mock a module imported by the code under test, call <code>jest.doMock()</code> and <code>require()</code> the code under test after it, inside the test.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -861,7 +969,7 @@ The <a href="https://market.enonic.com/starters/typescript-starter">TypeScript S
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-25 12:29:19 UTC
+Last updated 2026-09-03 13:20:06 UTC
 </div>
 </div>
 </body>

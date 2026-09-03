@@ -537,7 +537,7 @@ Useful reading: <a href="https://developer.mozilla.org/en-US/docs/Glossary/Globa
 <h2 id="transpiling"><a class="link" href="#transpiling">Transpiling</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are currently few JavaScript engines capable of running TypeScript directly, so a build step must <code>transpile</code> your TypeScript to JavaScript before it can be deployed to Enonic XP. The build also targets a conservative language level, because XP&#8217;s default engine supports an older version of JavaScript.</p>
+<p>There are currently few JavaScript engines capable of running TypeScript directly, so a build step must <code>transpile</code> your TypeScript to JavaScript before it can be deployed to Enonic XP. For server-side code the build also targets a conservative language level (ES5), because XP&#8217;s default engine supports an older version of JavaScript. Client-side assets run in the browser and are built to modern JavaScript (ES2023) instead.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -637,7 +637,7 @@ Moving forward, let&#8217;s create a project and <a href="build.ahtml">the build
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-25 12:29:19 UTC
+Last updated 2026-09-03 13:20:06 UTC
 </div>
 </div>
 </body>

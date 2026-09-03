@@ -473,11 +473,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "scripts": {
     "check": "concurrently -c auto -g --timings npm:check:types",
     "check:types": "concurrently -g -r --timings npm:check:types:*",
-    "check:types:assets": "tsc --noEmit -p src/main/resources/assets/tsconfig.json",
+    "check:types:client": "tsc --noEmit -p src/main/resources/assets/tsconfig.json",
     "check:types:server": "tsc --noEmit -p src/main/resources/tsconfig.json",
   }
 }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Type checking is performed by TypeScript 7 — the native compiler. It only checks types here: the actual transpilation of both server-side and client-side code is done by tsdown, so the compilation targets (ES2015/CommonJS for the server, ES2023/ESM for the client) are unaffected by the TypeScript version. Note that the rest of the toolchain (Jest via <code>@swc/jest</code>, linting via <code>oxlint</code>) is chosen to not depend on the classic TypeScript compiler API (<code>createProgram</code>, <code>transpileModule</code>), which the native compiler no longer exports — only <code>tsc</code> and an explicitly unstable <code>typescript/unstable/*</code> surface remain.</p>
 </div>
 </div>
 <div class="sect2">
@@ -525,7 +528,7 @@ In the next chapter we enable <a href="lint.ahtml">Linting</a> of TypeScript cod
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-25 12:29:19 UTC
+Last updated 2026-09-03 13:20:06 UTC
 </div>
 </div>
 </body>

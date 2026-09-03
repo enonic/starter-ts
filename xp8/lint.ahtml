@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configure">Configure</a>
 <ul class="sectlevel2">
 <li><a href="#package_json">package.json</a></li>
-<li><a href="#eslint_config_mjs">eslint.config.mjs</a></li>
+<li><a href="#oxlintrc_json">.oxlintrc.json</a></li>
 </ul>
 </li>
 <li><a href="#summary">Summary</a></li>
@@ -456,10 +456,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>ESLint is a static code analysis tool for identifying problematic patterns found in JavaScript code.</p>
+<p>oxlint is a static code analysis tool for identifying problematic patterns in JavaScript and TypeScript code.</p>
 </div>
 <div class="paragraph">
-<p>ESlint is highly configurable and can be used to enforce a consistent coding style. Having linting as a part of the build process is considered a good practice.</p>
+<p>oxlint is part of the same Oxc toolchain that powers tsdown, implements the most common ESLint (and typescript-eslint) rules, and lints TypeScript natively — without depending on the <code>typescript</code> package. Having linting as a part of the build process is considered a good practice.</p>
 </div>
 </div>
 </div>
@@ -468,7 +468,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev eslint @eslint/js typescript-eslint</code></pre>
+<pre class="highlight"><code class="language-Terminal" data-lang="Terminal">npm install --save-dev oxlint</code></pre>
 </div>
 </div>
 </div>
@@ -486,7 +486,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlight"><code class="language-JSON" data-lang="JSON">{
   "scripts": {
     "check": "concurrently -c auto -g --timings npm:check:types npm:lint",
-    "lint": "eslint --cache",
+    "lint": "oxlint src",
   }
 }</code></pre>
 </div>
@@ -505,56 +505,34 @@ Note that <code>check</code> command was added to package.json in the previous c
 </div>
 </div>
 <div class="sect2">
-<h3 id="eslint_config_mjs"><a class="link" href="#eslint_config_mjs">eslint.config.mjs</a></h3>
+<h3 id="oxlintrc_json"><a class="link" href="#oxlintrc_json">.oxlintrc.json</a></h3>
 <div class="paragraph">
 <p>Create the following file:</p>
 </div>
 <div class="listingblock">
-<div class="title">eslint.config.mjs</div>
+<div class="title">.oxlintrc.json</div>
 <div class="content">
-<pre class="highlight"><code class="language-Javascript" data-lang="Javascript">import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
 
-export default tseslint.config(
+  // An array of glob patterns indicating the files that should not be linted.
+  "ignorePatterns": [
+    "src/**/*.js"
+  ],
 
-  // If ignores is used without any other keys in the configuration object,
-  // then the patterns act as global ignores.
-  {
-    // An array of glob patterns indicating the files that the configuration
-    // object should not apply to. If not specified, the configuration
-    // object applies to all files matched by files.
-    ignores: [
-      'build/**/*.*',
-      'src/jest/server/setupFile.ts',
-      'tsdown.config.ts',
-      'src/**/*.js'
-    ],
-  },
-
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
-
-  {
-    // An array of glob patterns indicating the files that the configuration
-    // object should apply to. If not specified, the configuration object
-    // applies to all files matched by any other configuration object.
-    files: [
-      './src/**/*.ts',
-      './src/**/*.tsx'
+  "rules": {
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_"
+      }
     ],
 
-
-    rules: {
-      '@typescript-eslint/no-unused-vars': [
-        "warn",
-        {
-          "argsIgnorePattern": "^_"
-        }
-      ]
-    }
+    // Not part of oxlint's default (correctness-only) rule set, so it has to be
+    // named explicitly to keep failing the build as it did under typescript-eslint.
+    "typescript/no-explicit-any": "error"
   }
-
-);</code></pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -575,7 +553,7 @@ Prepare your project for <a href="test.ahtml">testing</a>.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-25 12:29:19 UTC
+Last updated 2026-09-03 13:20:06 UTC
 </div>
 </div>
 </body>
