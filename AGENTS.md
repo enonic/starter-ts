@@ -14,7 +14,7 @@ In the file gradle.properties, if appName has changed from com.example.typescrip
 
 Gradle is the primary build tool, with a Node.js plugin for npm integration. However, builds require a contextual Enonic XP sandbox — the sandbox holds the specific XP version and the Java compiler needed to package the app into a JAR.
 
-The `xpVersion` property in `gradle.properties` declares the target XP version (e.g. `8.0.2`). This determines which XP dependencies are used at build time, regardless of the sandbox version. The `@enonic-types/*` packages in `package.json` should match this version.
+The `xpVersion` property in `gradle.properties` declares the target XP version (e.g. `8.0.2`). This determines which XP dependencies are used at build time, regardless of the sandbox version. The `@enonic-types/*` packages in `package.json` should be at least this version and no newer than the XP version the app is deployed to; the caret ranges let them drift within the 8.x line, so check them when bumping `xpVersion`.
 
 Library dependencies in `build.gradle` use Gradle version catalogs: XP's own libraries come from the `xplibs` catalog (`include xplibs.portal`), which the `com.enonic.xp.settings` plugin generates from `xpVersion`; Enonic Market libraries are declared in `gradle/libs.versions.toml` and referenced as `libs.<alias>` (`include libs.static`). Never hardcode library coordinates or versions in `build.gradle`.
 
@@ -76,7 +76,7 @@ The codebase has two distinct build targets, both defined in a single `tsdown.co
 - tsconfig: `src/main/resources/tsconfig.json`
 
 **Client** (`src/main/resources/assets/**/*.ts`):
-- Target: ES2015, ESM format, `platform: 'browser'`, minified in production
+- Target: ES2023, ESM format, `platform: 'browser'`, minified in production
 - Output: `build/resources/main/assets/`
 - tsconfig: `src/main/resources/assets/tsconfig.json`
 
@@ -86,7 +86,7 @@ The `assets/` folder name follows the convention of **lib-asset** (`/lib/enonic/
 
 ### TypeScript toolchain
 
-The project uses TypeScript 7 — the native (Go-based) compiler. Its npm package ships only the `tsc` binary, not the JavaScript compiler API, which constrains the rest of the toolchain:
+The project uses TypeScript 7 — the native (Go-based) compiler. Its npm package no longer exports the classic compiler API (`createProgram`, `transpileModule`); only `tsc` and an explicitly unstable `typescript/unstable/*` surface remain, which constrains the rest of the toolchain:
 
 - `tsc` is used exclusively for type checking (`--noEmit`); all transpilation is done by tsdown (Oxc) and SWC, so the TypeScript version never affects build output or targets.
 - Linting is done by **oxlint** (`.oxlintrc.json`), not ESLint — typescript-eslint requires the TS compiler API.
@@ -110,7 +110,7 @@ Two Jest projects with different environments:
 - **Server tests** (`src/jest/server/`): Node.js environment, XP globals (`app`, `log`, etc.) mocked in `setupFile.ts`
 - **Client tests** (`src/jest/client/`): jsdom environment
 
-Both transpile test files with @swc/jest (no type checking; the tsconfig in each test folder, extending the respective source tsconfig, serves the editor).
+Both transpile test files with @swc/jest (no type checking; the tsconfig in each test folder, extending the respective source tsconfig, serves the editor). Each project has one smoke test (`globals.test.ts`, `main.test.ts`) that verifies the setup itself. Tests import `describe`/`it`/`expect`/`jest` from `@jest/globals` — there is no `@types/jest`. Because of that, SWC does not hoist `jest.mock()` above imports: to mock a module imported by the code under test, use `jest.doMock()` followed by `require()` inside the test. `.tsx` tests use the automatic JSX runtime and need `react/jsx-runtime` (or another `importSource`) installed.
 
 ### XP globals
 

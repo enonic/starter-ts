@@ -34,7 +34,7 @@ For code executing on the server (XP), the global scope contains a variety of ob
 
 == Transpiling
 
-There are currently few JavaScript engines capable of running TypeScript directly, so a build step must `transpile` your TypeScript to JavaScript before it can be deployed to Enonic XP. The build also targets a conservative language level, because XP's default engine supports an older version of JavaScript.
+There are currently few JavaScript engines capable of running TypeScript directly, so a build step must `transpile` your TypeScript to JavaScript before it can be deployed to Enonic XP. For server-side code the build also targets a conservative language level (ES5), because XP's default engine supports an older version of JavaScript. Client-side assets run in the browser and are built to modern JavaScript (ES2023) instead.
 
 TIP: XP8 bundles GraalJS which supports the latest ECMAScript standard. However, this is in beta mode, and not yet the default engine.
 
