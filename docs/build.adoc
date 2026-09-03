@@ -161,10 +161,12 @@ at runtime, with no list of libraries to maintain. The server output is re-lower
 the `nashornEs5` plugin, while the client output is kept at ES2023. A target is skipped
 entirely when it has no source files.
 
-.tsdown.config.ts
+The config file has the `.mts` extension so that Node loads it as an ES module without guessing the format (`package.json` declares no `"type"`). Do not fix this by adding `"type": "module"` to `package.json` instead: tsdown derives its output extensions from it, and the server bundle would then be emitted as `.cjs`, which Enonic XP does not load.
+
+.tsdown.config.mts
 [source, Typescript]
 ----
-include::{sourcedir}tsdown.config.ts[]
+include::{sourcedir}tsdown.config.mts[]
 ----
 
 == Gradle configuration
