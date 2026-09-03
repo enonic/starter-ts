@@ -147,6 +147,8 @@ include::{sourcedir}src/main/resources/tsconfig.json[]
 include::{sourcedir}src/main/resources/assets/tsconfig.json[]
 ----
 
+The two source configs set `target` and `lib` explicitly rather than inheriting the TypeScript default, which is a modern ES level and moves between releases. The server config restricts `lib` to `ES5`: tsdown lowers the syntax for Nashorn, but it cannot polyfill built-ins, so a call to e.g. `Array.prototype.findLast` or `Promise` would otherwise type-check and then fail at runtime in XP. The assets config uses `ES2023` since the code runs in the browser.
+
 === tsdown configuration
 
 A single config file defines both build targets (server and client/assets). It discovers
@@ -155,8 +157,9 @@ tree intact — Enonic XP loads each controller/service/task by its resource pat
 libraries (`/lib/xp/*`, Market libraries such as `/lib/graphql` etc.) are marked `external`
 so they are never bundled: an absolute import is bundled only when it is a source file of
 the app itself, and left to the XP runtime otherwise — mirroring how XP resolves `require()`
-at runtime, with no list of libraries to maintain. A target is skipped entirely when it has
-no source files.
+at runtime, with no list of libraries to maintain. The server output is re-lowered to ES5 by
+the `nashornEs5` plugin, while the client output is kept at ES2023. A target is skipped
+entirely when it has no source files.
 
 .tsdown.config.ts
 [source, Typescript]
@@ -197,7 +200,7 @@ node {
 
   // Version of node to download and install (only used if download is true)
   // It will be unpacked in the workDir
-  version = '24.11.0'
+  version = '24.20.0'
 }
 ----
 

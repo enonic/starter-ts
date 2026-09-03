@@ -90,7 +90,7 @@ export default defineConfig([
     entry: assetEntry,
     outDir: DST_ASSETS,
     format: 'esm' as const,
-    target: 'es2015',
+    target: 'es2023',
     platform: 'browser' as const,
     clean: false,
     dts: false,

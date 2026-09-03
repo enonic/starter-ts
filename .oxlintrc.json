@@ -3,7 +3,6 @@
 
   // An array of glob patterns indicating the files that should not be linted.
   "ignorePatterns": [
-    "src/jest/server/setupFile.ts",
     "src/**/*.js"
   ],
 

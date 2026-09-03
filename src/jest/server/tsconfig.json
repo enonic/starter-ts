@@ -5,6 +5,7 @@
   // These filenames are resolved relative to the directory containing the
   // tsconfig.json file.
   "include": [
+    "./setupFile.ts",
     "./**/*.spec.ts",
     "./**/*.spec.tsx",
     "./**/*.test.ts",
@@ -12,6 +13,10 @@
   ],
 
   "compilerOptions": {
+    "lib": [
+      "ES2023",
+    ],
+
     // Import CommonJS modules in compliance with es6 modules spec
     "esModuleInterop": true,
 

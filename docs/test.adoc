@@ -26,9 +26,11 @@ Create a file called jest.config.mjs in the root of the project with the followi
 include::{sourcedir}jest.config.mjs[]
 ----
 
-Test files are transpiled by SWC (via `@swc/jest`), which strips types without checking them — type errors in tests are caught by your editor, based on the tsconfig.json files below.
+Test files are transpiled by SWC (via `@swc/jest`), which strips types without checking them — type errors in tests are caught by your editor, based on the tsconfig.json files below. Those extend the source tsconfigs, but the server one widens `lib` since tests run in Node rather than in Nashorn, and the client one adds the `node` types the `@jest/globals` typings need.
 
 With this config Jest will find and execute test files in the 'src/jest/client' and 'src/jest/server' folders called `*.test.ts` (or `.tsx`) or `*.spec.ts` (or `.tsx`).
+
+NOTE: `.tsx` tests are transpiled with the automatic JSX runtime, which imports `react/jsx-runtime`. Install React, or set `jsc.transform.react.importSource` to another JSX library, before writing them.
 
 Set up `src/jest` folder structure with thess files inside:
 
@@ -44,7 +46,7 @@ include::{sourcedir}src/jest/client/tsconfig.json[]
 include::{sourcedir}src/jest/server/global.d.ts[]
 ----
 
-This Jest setupFile is used to mock the XP Framework, injecting standard Globals into the server-side test environment:
+This Jest setupFile is used to mock the XP Framework, injecting standard Globals into the server-side test environment. `log` is declared as a `const` in `@enonic-types/global`, so it is not a property of `globalThis` for the type checker — it is defined as one at runtime instead:
 
 .src/jest/server/setupFile.ts
 [source, TypeScript]
@@ -59,6 +61,24 @@ NOTE: This setup file only mocks the XP _globals_ (`app`, `log`). To mock XP _li
 ----
 include::{sourcedir}src/jest/server/tsconfig.json[]
 ----
+
+=== Example tests
+
+The starter ships one test per project, so `npm test` verifies the setup above. Import `describe`, `it`, `expect` and `jest` from `@jest/globals` (bundled with Jest) rather than installing `@types/jest`:
+
+.src/jest/server/globals.test.ts
+[source, TypeScript]
+----
+include::{sourcedir}src/jest/server/globals.test.ts[]
+----
+
+.src/jest/client/main.test.ts
+[source, TypeScript]
+----
+include::{sourcedir}src/jest/client/main.test.ts[]
+----
+
+WARNING: SWC hoists `jest.mock()` above the imports only when `jest` is the global from `@types/jest`, not when it is imported from `@jest/globals`. To mock a module imported by the code under test, call `jest.doMock()` and `require()` the code under test after it, inside the test.
 
 === package.json
 
