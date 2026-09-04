@@ -33,6 +33,8 @@ enonic project deploy                 # Build and deploy to the sandbox
 
 The Enonic CLI automatically selects the sandbox associated with the project. If no sandbox is linked, it will prompt to create or select one.
 
+`.npmrc` disables npm's audit and fund requests: they add nothing to a build, and an unreachable audit endpoint stalls every `npm install` for npm's five-minute timeout.
+
 ### npm scripts (TypeScript tooling)
 
 ```bash
