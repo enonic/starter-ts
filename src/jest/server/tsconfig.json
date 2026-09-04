@@ -16,6 +16,7 @@
     "lib": [
       "ES2023",
     ],
+    "module": "commonjs",
 
     // Import CommonJS modules in compliance with es6 modules spec
     "esModuleInterop": true,

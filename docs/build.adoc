@@ -73,7 +73,7 @@ npm install --save-dev @enonic-types/lib-static
 
 Unlike the XP-native libraries — which register their own import path for you — a standalone library does not, so `require()` won't pick up its types automatically. Map the library's path to the installed types by augmenting the `XpLibraries` interface, for example in a `src/main/resources/types.d.ts` file:
 
-[source, Typescript]
+[source, TypeScript]
 ----
 declare global {
   interface XpLibraries {
@@ -164,7 +164,7 @@ entirely when it has no source files.
 The config file has the `.mts` extension so that Node loads it as an ES module without guessing the format (`package.json` declares no `"type"`). Do not fix this by adding `"type": "module"` to `package.json` instead: tsdown derives its output extensions from it, and the server bundle would then be emitted as `.cjs`, which Enonic XP does not load.
 
 .tsdown.config.mts
-[source, Typescript]
+[source, TypeScript]
 ----
 include::{sourcedir}tsdown.config.mts[]
 ----
