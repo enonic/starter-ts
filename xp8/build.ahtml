@@ -580,7 +580,7 @@ static = { module = "com.enonic.lib:lib-static", version.ref = "static" }</code>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">declare global {
+<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">declare global {
   interface XpLibraries {
     '/lib/enonic/static': typeof import('@enonic-types/lib-static');
   }
@@ -882,7 +882,7 @@ entirely when it has no source files.</p>
 <div class="listingblock">
 <div class="title">tsdown.config.mts</div>
 <div class="content">
-<pre class="highlight"><code class="language-Typescript" data-lang="Typescript">import {existsSync} from 'node:fs';
+<pre class="highlight"><code class="language-TypeScript" data-lang="TypeScript">import {existsSync} from 'node:fs';
 
 import {transform} from '@swc/core';
 import {globSync} from 'glob';
@@ -907,8 +907,8 @@ function entries(dir: string, exts: string, ignore: string[] = []): Record&lt;st
   );
 }
 
-const serverEntry = entries(SRC, '{ts,js}', [`${SRC_ASSETS}/**`]);
-const assetEntry = entries(SRC_ASSETS, '{tsx,ts,jsx,js}');
+const serverEntry = entries(SRC, '{ts,js}', ['**/*.d.ts', `${SRC_ASSETS}/**`]);
+const assetEntry = entries(SRC_ASSETS, '{tsx,ts,jsx,js}', ['**/*.d.ts']);
 
 // XP resolves an absolute import at runtime against the app's own resources
 // first, then against the modules provided by the runtime: XP's own libraries
@@ -918,8 +918,14 @@ const assetEntry = entries(SRC_ASSETS, '{tsx,ts,jsx,js}');
 // of runtime modules to maintain. A mistyped specifier is caught by
 // `check:types` (TS2307), not by the bundler.
 const SRC_EXTS = ['.ts', '.tsx', '.js', '.jsx'];
+const appSourceCache = new Map&lt;string, boolean&gt;();
 function isAppSource(id: string): boolean {
-  return SRC_EXTS.some(ext =&gt; existsSync(`${SRC}${id}${ext}`) || existsSync(`${SRC}${id}/index${ext}`));
+  let hit = appSourceCache.get(id);
+  if (hit === undefined) {
+    hit = SRC_EXTS.some(ext =&gt; existsSync(`${SRC}${id}${ext}`) || existsSync(`${SRC}${id}/index${ext}`));
+    appSourceCache.set(id, hit);
+  }
+  return hit;
 }
 const isRuntimeModule = (id: string, _importer: string | undefined, isResolved: boolean): boolean =&gt;
   !isResolved &amp;&amp; id.startsWith('/') &amp;&amp; !isAppSource(id);
@@ -1102,7 +1108,7 @@ In the next chapter we&#8217;ll have a look at <a href="check.ahtml">Type checki
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-03 13:20:06 UTC
+Last updated 2026-09-04 08:39:09 UTC
 </div>
 </div>
 </body>

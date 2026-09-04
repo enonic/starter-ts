@@ -763,6 +763,7 @@ This setup file only mocks the XP <em>globals</em> (<code>app</code>, <code>log<
     "lib": [
       "ES2023",
     ],
+    "module": "commonjs",
 
     // Import CommonJS modules in compliance with es6 modules spec
     "esModuleInterop": true,
@@ -969,7 +970,7 @@ The <a href="https://market.enonic.com/starters/typescript-starter">TypeScript S
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-03 13:20:06 UTC
+Last updated 2026-09-04 08:39:09 UTC
 </div>
 </div>
 </body>
